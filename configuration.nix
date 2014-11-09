@@ -46,8 +46,6 @@
     mg
     mplayer
     nix-repl
-    openconnect
-    powertop
     rxvt_unicode
     scrot
     silver-searcher
