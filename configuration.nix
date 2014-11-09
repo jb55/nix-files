@@ -9,6 +9,9 @@
   # Caused a crash on boot. Sucks, cause it has Thunderbolt patches.
   # boot.kernelPackages = pkgs.linuxPackages_3_17;
 
+  # zfs
+  boot.supportedFilesystems = [ "zfs" ];
+
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
