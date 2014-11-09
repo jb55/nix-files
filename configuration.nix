@@ -28,7 +28,7 @@
     binutils
     chromium
     dmenu
-    emacs
+    vim
     evince
     file
     gitFull
