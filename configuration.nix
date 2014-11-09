@@ -15,7 +15,7 @@
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  time.timeZone = "America/Denver";
+  time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
 
