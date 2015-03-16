@@ -1,3 +1,7 @@
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+
 { config, pkgs, ... }:
 
 {
@@ -6,30 +10,28 @@
       ./hardware-configuration.nix
     ];
 
-  # Caused a crash on boot. Sucks, cause it has Thunderbolt patches.
-  # boot.kernelPackages = pkgs.linuxPackages_3_17;
-
-  # zfs
-  boot.supportedFilesystems = [ "zfs" ];
-
-  boot.loader.gummiboot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # Define on which hard drive you want to install Grub.
+  boot.loader.grub.device = "/dev/sda";
 
   time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
 
+  networking.hostName = "monad"; # Define your hostname.
+  networking.hostId = "900eef22";
+  # networking.wireless.enable = true;  # Enables wireless.
+  hardware.bluetooth.enable = true;
+
   environment.systemPackages = with pkgs; [
-    ack
-    acpi
-    autojump
-    axel
-    bind
-    binutils
     chromium
     dmenu
-    vim
-    evince
+    emacs
+    compton
+    redshift
+    hsetroot
     file
     gitFull
     haskellPackages.cabal2nix
@@ -38,114 +40,72 @@
     haskellPackages.hlint
     haskellPackages.pointfree
     haskellPackages.pointful
-    haskellPackages.xmobar
     haskellPackages.yeganesh
     htop
-    keepassx
-    linuxPackages.virtualbox
-    mg
-    mplayer
     nix-repl
     rxvt_unicode
     scrot
     silver-searcher
-    terminator
-    vagrant
+    vim
+    wget
+    unzip
     xdg_utils
     xlibs.xev
     xlibs.xset
   ];
 
-  services.xserver = {
-    enable = true;
-
-    desktopManager.default = "none";
-    desktopManager.xterm.enable = false;
-    displayManager = {
-      sessionCommands = ''
-        ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
-        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-      '';
-      lightdm.enable = true;
-    };
-    windowManager.default = "xmonad";
-    windowManager.xmonad.enable = true;
-    windowManager.xmonad.enableContribAndExtras = true;
-
-    # TODO: Use the mtrack driver but do better than this.
-    # multitouch.enable = true;
-    # multitouch.invertScroll = true;
-
-    synaptics.additionalOptions = ''
-      Option "VertScrollDelta" "-100"
-      Option "HorizScrollDelta" "-100"
-    '';
-    synaptics.buttonsMap = [ 1 3 2 ];
-    synaptics.enable = true;
-    synaptics.tapButtons = false;
-    synaptics.fingersMap = [ 0 0 0 ];
-    synaptics.twoFingerScroll = true;
-    synaptics.vertEdgeScroll = false;
-
-    videoDrivers = [ "nouveau" ];
-
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
-  };
-
-  # Doesn't work. Maybe pommed-light is something I should package. Or
-  # maybe I should just write a Haskell + DBus replacement.
-  # services.hardware.pommed.enable = true;
-
   nixpkgs.config = {
     allowUnfree = true;
     chromium.enablePepperFlash = true;
     chromium.enablePepperPDF = true;
-    virtualbox.enableExtensionPack = true;
-
-#    packageOverrides = pkgs:
-#      { linux_3_17 = pkgs.linux_3_17.override {
-#          extraConfig =
-#            ''
-#              THUNDERBOLT m
-#            '';
-#        };
-#      };
   };
 
-  users.mutableUsers = false;
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-  users.extraUsers.brian = {
-    name = "brian";
+    desktopManager.default = "none";
+    desktopManager.xterm.enable = true;
+
+    displayManager = {
+      sessionCommands = ''
+#       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+      '';
+      lightdm.enable = true;
+    };
+
+    videoDrivers = [ "nvidia" ];
+
+    windowManager.default = "i3";
+    windowManager.i3.enable = true;
+  };
+
+  hardware.opengl.driSupport32Bit = true;
+
+  users.extraUsers.jb55 = {
+    name = "jb55";
     group = "users";
     uid = 1000;
     extraGroups = [ "wheel" ];
     createHome = true;
-    home = "/home/brian";
+    home = "/home/jb55";
     shell = "/run/current-system/sw/bin/zsh";
   };
 
-  # Should I use this instead? Both are currently broken.
-  # networking.networkmanager.enable = true;
-  # networking.connman.enable = true;
+  users.mutableUsers = true;
 
-  # Sadly wicd worked less than wpa_supplicant
-  # networking.interfaceMonitor.enable = false;
-  # networking.useDHCP = false;
-  # networking.wicd.enable = true;
+  # List services that you want to enable:
 
-  networking.hostName = "bmckenna-nixos";
-  networking.wireless.enable = true;
-  hardware.bluetooth.enable = true;
-
+  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  services.acpid.enable = true;
-  services.acpid.lidEventCommands = ''
-    LID_STATE=/proc/acpi/button/lid/LID0/state
-    if [ $(/run/current-system/sw/bin/awk '{print $2}' $LID_STATE) = 'closed' ]; then
-      systemctl suspend
-    fi
-  '';
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Enable the X11 windowing system.
+  # services.xserver.xkbOptions = "eurosign:e";
 
   virtualisation.docker.enable = true;
 
@@ -175,3 +135,4 @@
       }
     '';
 }
+
