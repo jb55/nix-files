@@ -158,6 +158,10 @@ in
 
     windowManager.default = "xmonad";
     windowManager.xmonad.enable = true;
+    windowManager.xmonad.enableContribAndExtras = true;
+    windowManager.xmonad.extraPackages = haskellPackages: {
+      haskellPackages.taffybar
+    };
   };
 
   users.extraUsers.jb55 = {
