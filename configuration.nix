@@ -4,43 +4,85 @@
 
 { config, pkgs, ... }:
 
+let
+  hsPackages = with pkgs.haskellPackages; [
+    cabal2nix
+    cabalInstall
+    djinn
+    doctest
+    ghc
+    ghcCore
+    ghcid
+    hlint
+    idris
+    pandoc
+    pointfree
+    pointful
+    purescript
+    stylishHaskell
+    taffybar
+    xmobar
+  ];
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda";
+  boot.kernelPackages = pkgs.linuxPackages_3_17;
+  boot.loader.gummiboot.enable = true;
+  boot.loader.gummiboot.timeout = 5;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.cleanTmpDir = true;
 
   time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
 
-  networking.hostName = "monad"; # Define your hostname.
-  networking.hostId = "900eef22";
-  # networking.wireless.enable = true;  # Enables wireless.
   hardware.bluetooth.enable = true;
+
+  # networking
+  networking.hostName = "arrow-nixos";
+  networking.wireless.enable = true;
+
+  # Should I use this instead? Both are currently broken.
+  # networking.networkmanager.enable = true;
+  # networking.connman.enable = true;
+
+  # Sadly wicd worked less than wpa_supplicant
+  # networking.interfaceMonitor.enable = false;
+  # networking.useDHCP = false;
+  # networking.wicd.enable = true;
+
+  # programs
+  programs.ssh.agentTimeout = "12h";
+  programs.zsh.enable = true;
+  programs.light.enable = true;
+
+  # services
+  services.nixosManual.showManual = true;
+  services.openssh.enable = true;
+  services.upower.enable = true;
+  services.printing.enable = true;
+
+  virtualisation.docker.enable = true;
 
   environment.systemPackages = with pkgs; [
     chromium
+    wpa_supplicant_gui
+    acpi
+    powertop
     dmenu
     emacs
     compton
     redshift
-    hsetroot
+    #hsetroot
     file
     gitFull
-    haskellPackages.cabal2nix
-    haskellPackages.cabalInstall
-    haskellPackages.ghc
-    haskellPackages.hlint
-    haskellPackages.pointfree
-    haskellPackages.pointful
-    haskellPackages.yeganesh
+    (haskellPackages.hoogleLocal.override {
+      packages = hsPackages;
+    })
     htop
     nix-repl
     rxvt_unicode
@@ -52,37 +94,71 @@
     xdg_utils
     xlibs.xev
     xlibs.xset
-  ];
+  ] ++ hsPackages;
+
 
   nixpkgs.config = {
     allowUnfree = true;
     chromium.enablePepperFlash = true;
     chromium.enablePepperPDF = true;
+
+    packageOverrides = pkgs: {
+      #jre = pkgs.oraclejre8;
+      #jdk = pkgs.oraclejdk8;
+      linux_3_17 = pkgs.linux_3_17.override {
+        extraConfig =
+        ''
+          THUNDERBOLT m
+        '';
+      };
+    };
   };
 
   services.xserver = {
     enable = true;
-    layout = "us";
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
+
+    vaapiDrivers = [ pkgs.vaapiIntel ];
 
     desktopManager.default = "none";
-    desktopManager.xterm.enable = true;
+    desktopManager.xterm.enable = false;
 
     displayManager = {
-      sessionCommands = ''
-#       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
-        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-      '';
+      desktopManagerHandlesLidAndPower = false;
       lightdm.enable = true;
+      sessionCommands = ''
+        ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+      '';
     };
+
+    # TODO: Use the mtrack driver but do better than this.
+    # multitouch.enable = true;
+    # multitouch.invertScroll = true;
+
+    synaptics.additionalOptions = ''
+      Option "VertScrollDelta" "-111"
+      Option "HorizScrollDelta" "-111"
+    '';
+    synaptics.buttonsMap = [ 1 3 2 ];
+    synaptics.enable = true;
+    synaptics.tapButtons = false;
+    synaptics.fingersMap = [ 0 0 0 ];
+    synaptics.twoFingerScroll = true;
+    synaptics.vertEdgeScroll = false;
 
     videoDrivers = [ "nvidia" ];
 
-    windowManager.default = "i3";
-    windowManager.i3.enable = true;
-  };
+    screenSection = ''
+      Option "DPI" "96 x 96"
+      Option "NoLogo" "TRUE"
+      Option "nvidiaXineramaInfoOrder" "DFP-2"
+      Option "metamodes" "DP-0: nvidia-auto-select +2880+1152 {rotation=right}, HDMI-0: nvidia-auto-select +416+0, DP-2: nvidia-auto-select +0+1152"
+    '';
 
-  hardware.opengl.driSupport32Bit = true;
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
+
+    windowManager.default = "xmonad";
+    windowManager.xmonad.enable = true;
+  };
 
   users.extraUsers.jb55 = {
     name = "jb55";
@@ -96,20 +172,8 @@
 
   users.mutableUsers = true;
 
-  # List services that you want to enable:
+  users.extraGroups.docker.members = [ "jb55" ];
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  virtualisation.docker.enable = true;
-
-  programs.zsh.enable = true;
   programs.zsh.interactiveShellInit =
     ''
       # Taken from <nixos/modules/programs/bash/command-not-found.nix>
@@ -134,5 +198,6 @@
         fi
       }
     '';
+
 }
 
