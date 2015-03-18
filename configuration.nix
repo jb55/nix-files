@@ -34,13 +34,12 @@
     hsetroot
     file
     gitFull
-    haskellPackages.cabal2nix
-    haskellPackages.cabalInstall
-    haskellPackages.ghc
-    haskellPackages.hlint
-    haskellPackages.pointfree
-    haskellPackages.pointful
-    haskellPackages.yeganesh
+    haskellngPackages.cabal2nix
+    haskellngPackages.cabal-install
+    haskellngPackages.ghc
+    haskellngPackages.hlint
+    haskellngPackages.pointfree
+    haskellngPackages.pointful
     htop
     nix-repl
     rxvt_unicode
@@ -72,14 +71,22 @@
       sessionCommands = ''
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
+        hsetroot -solid '#1a2028'
       '';
       lightdm.enable = true;
     };
 
     videoDrivers = [ "nvidia" ];
 
-    windowManager.default = "i3";
-    windowManager.i3.enable = true;
+    windowManager.default = "xmonad";
+    windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
+      extraPackages = haskellngPackages: [
+        haskellngPackages.taffybar
+      ];
+    };
   };
 
   hardware.opengl.driSupport32Bit = true;
