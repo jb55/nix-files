@@ -79,6 +79,10 @@
 
     videoDrivers = [ "nvidia" ];
 
+    screenSection = ''
+      Option "metamodes" "1920x1080_144 +0+0"
+    ''
+
     windowManager.default = "xmonad";
     windowManager.xmonad = {
       enable = true;
