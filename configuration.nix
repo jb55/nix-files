@@ -71,6 +71,7 @@
       sessionCommands = ''
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.redshift}/bin/redshift &
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
