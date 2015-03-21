@@ -4,26 +4,6 @@
 
 { config, pkgs, ... }:
 
-let
-  hsPackages = with pkgs.haskellPackages; [
-    cabal2nix
-    cabalInstall
-    djinn
-    doctest
-    ghc
-    ghcCore
-    ghcid
-    hlint
-    idris
-    pandoc
-    pointfree
-    pointful
-    purescript
-    stylishHaskell
-    taffybar
-    xmobar
-  ];
-in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -80,9 +60,6 @@ in
     #hsetroot
     file
     gitFull
-    (haskellPackages.hoogleLocal.override {
-      packages = hsPackages;
-    })
     htop
     nix-repl
     rxvt_unicode
@@ -127,6 +104,7 @@ in
       lightdm.enable = true;
       sessionCommands = ''
         ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
       '';
     };
 
@@ -140,7 +118,7 @@ in
     '';
     synaptics.buttonsMap = [ 1 3 2 ];
     synaptics.enable = true;
-    synaptics.tapButtons = false;
+    synaptics.tapButtons = true;
     synaptics.fingersMap = [ 0 0 0 ];
     synaptics.twoFingerScroll = true;
     synaptics.vertEdgeScroll = false;
@@ -156,12 +134,13 @@ in
 
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-    windowManager.default = "xmonad";
-    windowManager.xmonad.enable = true;
-    windowManager.xmonad.enableContribAndExtras = true;
-    windowManager.xmonad.extraPackages = haskellPackages: [
-      haskellPackages.taffybar
-    ];
+    windowManager.default = "spectrwm";
+    windowManager.spectrwm.enable = true;
+#   windowManager.xmonad.enable = true;
+#   windowManager.xmonad.enableContribAndExtras = true;
+#   windowManager.xmonad.extraPackages = haskellPackages: [
+#     haskellPackages.taffybar
+#   ];
   };
 
   users.extraUsers.jb55 = {
