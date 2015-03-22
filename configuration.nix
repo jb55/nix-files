@@ -83,16 +83,16 @@
 
     screenSection = ''
       Option "metamodes" "1920x1080_144 +0+0"
-    ''
+    '';
 
-    windowManager.default = "xmonad";
-    windowManager.xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-      extraPackages = haskellngPackages: [
-        haskellngPackages.taffybar
-      ];
-    };
+    windowManager.default = "spectrwm";
+    windowManager.spectrwm.enable = true;
+#     enable = true;
+#     enableContribAndExtras = true;
+#     extraPackages = haskellngPackages: [
+#       haskellngPackages.taffybar
+#     ];
+#   };
   };
 
   hardware.opengl.driSupport32Bit = true;
