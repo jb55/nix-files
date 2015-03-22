@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_17;
+  #boot.kernelPackages = pkgs.linuxPackages_3_17;
   boot.loader.gummiboot.enable = true;
   boot.loader.gummiboot.timeout = 5;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -46,11 +46,11 @@
   services.upower.enable = true;
   services.printing.enable = true;
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
 
   environment.systemPackages = with pkgs; [
-    chromium
-    wpa_supplicant_gui
+    #chromium
+    firefox
     acpi
     powertop
     dmenu
@@ -71,13 +71,18 @@
     xdg_utils
     xlibs.xev
     xlibs.xset
-  ] ++ hsPackages;
+  ];
 
 
   nixpkgs.config = {
     allowUnfree = true;
     chromium.enablePepperFlash = true;
     chromium.enablePepperPDF = true;
+
+    firefox = {
+      enableGoogleTalkPlugin = true;
+      enableAdobeFlash = true;
+    };
 
     packageOverrides = pkgs: {
       #jre = pkgs.oraclejre8;
@@ -155,7 +160,7 @@
 
   users.mutableUsers = true;
 
-  users.extraGroups.docker.members = [ "jb55" ];
+  #users.extraGroups.docker.members = [ "jb55" ];
 
   programs.zsh.interactiveShellInit =
     ''
