@@ -33,6 +33,8 @@
     dmenu
     emacs
     compton
+    notmuch
+    offlineimap
     redshift
     hsetroot
     file
