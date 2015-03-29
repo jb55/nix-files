@@ -16,6 +16,9 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
+  services.xserver.startGnuPgAgent = true;
+  programs.ssh.startAgent = false; # gpg agent takes over this role
+
   time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
