@@ -43,8 +43,6 @@
     haskellngPackages.cabal-install
     haskellngPackages.ghc
     haskellngPackages.hlint
-    haskellngPackages.pointfree
-    haskellngPackages.pointful
     htop
     nix-repl
     rxvt_unicode
