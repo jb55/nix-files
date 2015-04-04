@@ -31,10 +31,11 @@
   environment.systemPackages = with pkgs; [
     chromium
     dmenu
+    ipafont                            # japanese fonts
     emacs
     compton
     notmuch
-    offlineimap
+    mbsync
     redshift
     hsetroot
     file
