@@ -22,11 +22,20 @@
 
   fonts.enableCoreFonts = true;
 
-  networking.hostName = "monad"; # Define your hostname.
-  networking.hostId = "900eef22";
-  # networking.wireless.enable = true;  # Enables wireless.
-  hardware.bluetooth.enable = true;
-  hardware.pulseaudio.enable = true;
+  networking = {
+    hostName = "monad";
+    hostId = "900eef22";
+    extraHosts = ''
+      174.143.211.135 freenode.znc.jb55.com
+      174.143.211.135 globalgamers.znc.jb55.com
+    '';
+  };
+
+  hardware = {
+    bluetooth.enable = true;
+    pulseaudio.enable = true;
+    opengl.driSupport32Bit = true;
+  };
 
   environment.systemPackages = with pkgs; [
     apvlv
@@ -36,7 +45,7 @@
     dmenu
     emacs
     file
-    git-extras
+    gitAndTools.git-extras
     gitFull
     haskellPackages.ShellCheck
     haskellPackages.cabal-install
@@ -95,8 +104,10 @@
     layout = "us";
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-    desktopManager.default = "none";
-    desktopManager.xterm.enable = true;
+    desktopManager = {
+      default = "none";
+      xterm.enable = true;
+    };
 
     displayManager = {
       sessionCommands = ''
@@ -106,7 +117,9 @@
         ${pkgs.redshift}/bin/redshift &
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
+        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
       '';
+
       lightdm.enable = true;
     };
 
@@ -125,8 +138,6 @@
 #     ];
 #   };
   };
-
-  hardware.opengl.driSupport32Bit = true;
 
   users.extraUsers.jb55 = {
     name = "jb55";
