@@ -11,6 +11,7 @@
     ];
 
   #boot.kernelPackages = pkgs.linuxPackages_3_17;
+  #boot.kernelModules = [ "applesmc" ];
   boot.loader.gummiboot.enable = true;
   boot.loader.gummiboot.timeout = 5;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -50,7 +51,7 @@
 
   environment.systemPackages = with pkgs; [
     #chromium
-    firefox
+    #firefox
     acpi
     powertop
     dmenu
@@ -73,11 +74,18 @@
     xlibs.xset
   ];
 
+  nix = {
+    trustedBinaryCaches = ["http://localhost:8080/"];
+  };
 
   nixpkgs.config = {
     allowUnfree = true;
-    chromium.enablePepperFlash = true;
-    chromium.enablePepperPDF = true;
+
+    chromium = {
+      enablePepperFlash = true;
+      enablePepperPDF = true;
+      hiDPISupport = true;
+    };
 
     firefox = {
       enableGoogleTalkPlugin = true;
@@ -110,6 +118,8 @@
       sessionCommands = ''
         ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        #${pkgs.redshift}/bin/redshift &
+        ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
       '';
     };
 
