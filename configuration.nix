@@ -75,7 +75,7 @@
     gitAndTools.git-extras
     htop
     ipafont                            # japanese fonts
-    mbsync
+    isync
     nix-repl
     notmuch
     powertop
@@ -124,7 +124,6 @@
     enable = true;
 
     vaapiDrivers = [ pkgs.vaapiIntel ];
-    startGnuPgAgent = false;
 
     desktopManager = {
       default = "none";
