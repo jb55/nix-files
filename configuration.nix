@@ -184,7 +184,5 @@
   };
 
   users.mutableUsers = true;
-
-  programs.zsh.enable = true;
 }
 
