@@ -17,11 +17,24 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.cleanTmpDir = true;
 
+  programs.ssh.startAgent = true;
+
   time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
 
-  hardware.bluetooth.enable = true;
+  networking = {
+    extraHosts = ''
+      174.143.211.135 freenode.znc.jb55.com
+      174.143.211.135 globalgamers.znc.jb55.com
+    '';
+  };
+
+  hardware = {
+    bluetooth.enable = true;
+    pulseaudio.enable = true;
+    opengl.driSupport32Bit = true;
+  };
 
   # networking
   networking.hostName = "arrow-nixos";
@@ -52,25 +65,28 @@
   environment.systemPackages = with pkgs; [
     #chromium
     #firefox
+    #hsetroot
     acpi
-    powertop
+    compton
     dmenu
     emacs
-    compton
-    redshift
-    #hsetroot
     file
     gitFull
+    gitAndTools.git-extras
     htop
+    ipafont                            # japanese fonts
+    mbsync
     nix-repl
+    notmuch
+    powertop
+    redshift
     rxvt_unicode
     scrot
     silver-searcher
+    unzip
     vim
     wget
-    unzip
-    xdg_utils
-    xlibs.xev
+    xlibs.xev xdg_utils
     xlibs.xset
   ];
 
@@ -108,18 +124,22 @@
     enable = true;
 
     vaapiDrivers = [ pkgs.vaapiIntel ];
+    startGnuPgAgent = false;
 
-    desktopManager.default = "none";
-    desktopManager.xterm.enable = false;
+    desktopManager = {
+      default = "none";
+      xterm.enable = false;
+    };
 
     displayManager = {
       desktopManagerHandlesLidAndPower = false;
       lightdm.enable = true;
       sessionCommands = ''
+        #${pkgs.redshift}/bin/redshift &
+        #${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-        #${pkgs.redshift}/bin/redshift &
-        ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
+        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
       '';
     };
 
@@ -151,11 +171,6 @@
 
     windowManager.default = "spectrwm";
     windowManager.spectrwm.enable = true;
-#   windowManager.xmonad.enable = true;
-#   windowManager.xmonad.enableContribAndExtras = true;
-#   windowManager.xmonad.extraPackages = haskellPackages: [
-#     haskellPackages.taffybar
-#   ];
   };
 
   users.extraUsers.jb55 = {
@@ -170,32 +185,6 @@
 
   users.mutableUsers = true;
 
-  #users.extraGroups.docker.members = [ "jb55" ];
-
-  programs.zsh.interactiveShellInit =
-    ''
-      # Taken from <nixos/modules/programs/bash/command-not-found.nix>
-      # and adapted to zsh (i.e. changed name from 'handle' to
-      # 'handler').
-
-      # This function is called whenever a command is not found.
-      command_not_found_handler() {
-        local p=/run/current-system/sw/bin/command-not-found
-        if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
-          # Run the helper program.
-          $p "$1"
-          # Retry the command if we just installed it.
-          if [ $? = 126 ]; then
-            "$@"
-          else
-            return 127
-          fi
-        else
-          echo "$1: command not found" >&2
-          return 127
-        fi
-      }
-    '';
-
+  programs.zsh.enable = true;
 }
 
