@@ -23,7 +23,7 @@
   fonts.enableCoreFonts = true;
 
   networking = {
-    hostName = "monad";
+    hostName = "archer";
     hostId = "900eef22";
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
@@ -49,7 +49,7 @@
     gitFull
     haskellPackages.ShellCheck
     haskellPackages.cabal-install
-    haskellPackages.cabal2nix
+#   haskellPackages.cabal2nix
     haskellPackages.ghc
     haskellPackages.hlint
     hsetroot
@@ -82,23 +82,6 @@
     chromium.enablePepperPDF = true;
   };
 
- #services.btsync = {
- #  # disable for now until I fix this
- #  enable = false;
- #  deviceName = "monad";
- #  httpListenPort = 9902;
- #  storagePath = "/home/jb55/btsync";
- #  sharedFolders = [{
- #    secret         = "AFNEZRTN4VI2MKMSWKINZDHSGLOMVQJQU";
- #    directory      = "/home/jb55/src";
- #    useRelayServer = true;
- #    useTracker     = true;
- #    useDHT         = false;
- #    searchLAN      = true;
- #    useSyncTrash   = true;
- #  }];
- #};
-
   services.xserver = {
     enable = true;
     layout = "us";
@@ -126,11 +109,11 @@
     videoDrivers = [ "nvidia" ];
 
     screenSection = ''
-      Option "metamodes" "1920x1080_144 +0+0"
+      Option "metamodes" "2048x1152_60 +0+0"
     '';
 
-    windowManager.default = "spectrwm";
     windowManager.spectrwm.enable = true;
+    windowManager.default = "spectrwm";
 #     enable = true;
 #     enableContribAndExtras = true;
 #     extraPackages = haskellngPackages: [
@@ -159,48 +142,11 @@
     passwordAuthentication = false;
   };
 
-  # bittorrent web ui
- #services.transmission = {
- #  enable = false;
- #  settings = {
- #    download-dir = "/home/jb55/torrents";
- #    incomplete-dir-enabled = false;
- #    rpc-whitelist = "127.0.0.1,192.168.*.*";
- #  };
- #};
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.xkbOptions = "eurosign:e";
 
   virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
- #programs.zsh.interactiveShellInit =
- #  ''
- #    # Taken from <nixos/modules/programs/bash/command-not-found.nix>
- #    # and adapted to zsh (i.e. changed name from 'handle' to
- #    # 'handler').
-
- #    # This function is called whenever a command is not found.
- #    command_not_found_handler() {
- #      local p=/run/current-system/sw/bin/command-not-found
- #      if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
- #        # Run the helper program.
- #        $p "$1"
- #        # Retry the command if we just installed it.
- #        if [ $? = 126 ]; then
- #          "$@"
- #        else
- #          return 127
- #        fi
- #      else
- #        echo "$1: command not found" >&2
- #        return 127
- #      fi
- #    }
- #  '';
 }
 
