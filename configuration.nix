@@ -4,43 +4,37 @@
 
 { config, pkgs, ... }:
 
-let
-  hsPackages = with pkgs.haskellPackages; [
-    cabal2nix
-    cabalInstall
-    djinn
-    doctest
-    ghc
-    ghcCore
-    ghcid
-    hlint
-    idris
-    pandoc
-    pointfree
-    pointful
-    purescript
-    stylishHaskell
-    taffybar
-    xmobar
-  ];
-in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_17;
+  #boot.kernelPackages = pkgs.linuxPackages_3_17;
+  #boot.kernelModules = [ "applesmc" ];
   boot.loader.gummiboot.enable = true;
   boot.loader.gummiboot.timeout = 5;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.cleanTmpDir = true;
 
+  programs.ssh.startAgent = true;
+
   time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
 
-  hardware.bluetooth.enable = true;
+  networking = {
+    extraHosts = ''
+      174.143.211.135 freenode.znc.jb55.com
+      174.143.211.135 globalgamers.znc.jb55.com
+    '';
+  };
+
+  hardware = {
+    bluetooth.enable = true;
+    pulseaudio.enable = true;
+    opengl.driSupport32Bit = true;
+  };
 
   # networking
   networking.hostName = "arrow-nixos";
@@ -66,41 +60,53 @@ in
   services.upower.enable = true;
   services.printing.enable = true;
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
 
   environment.systemPackages = with pkgs; [
-    chromium
-    wpa_supplicant_gui
+    #chromium
+    #firefox
+    #hsetroot
     acpi
-    powertop
+    compton
     dmenu
     emacs
-    compton
-    redshift
-    #hsetroot
     file
     gitFull
-    (haskellPackages.hoogleLocal.override {
-      packages = hsPackages;
-    })
+    gitAndTools.git-extras
     htop
+    ipafont                            # japanese fonts
+    isync
     nix-repl
+    notmuch
+    powertop
+    redshift
     rxvt_unicode
     scrot
     silver-searcher
+    unzip
     vim
     wget
-    unzip
-    xdg_utils
-    xlibs.xev
+    xlibs.xev xdg_utils
     xlibs.xset
-  ] ++ hsPackages;
+  ];
 
+  nix = {
+    trustedBinaryCaches = ["http://localhost:8080/"];
+  };
 
   nixpkgs.config = {
     allowUnfree = true;
-    chromium.enablePepperFlash = true;
-    chromium.enablePepperPDF = true;
+
+    chromium = {
+      enablePepperFlash = true;
+      enablePepperPDF = true;
+      hiDPISupport = true;
+    };
+
+    firefox = {
+      enableGoogleTalkPlugin = true;
+      enableAdobeFlash = true;
+    };
 
     packageOverrides = pkgs: {
       #jre = pkgs.oraclejre8;
@@ -119,14 +125,20 @@ in
 
     vaapiDrivers = [ pkgs.vaapiIntel ];
 
-    desktopManager.default = "none";
-    desktopManager.xterm.enable = false;
+    desktopManager = {
+      default = "none";
+      xterm.enable = false;
+    };
 
     displayManager = {
       desktopManagerHandlesLidAndPower = false;
       lightdm.enable = true;
       sessionCommands = ''
+        #${pkgs.redshift}/bin/redshift &
+        #${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
       '';
     };
 
@@ -140,7 +152,7 @@ in
     '';
     synaptics.buttonsMap = [ 1 3 2 ];
     synaptics.enable = true;
-    synaptics.tapButtons = false;
+    synaptics.tapButtons = true;
     synaptics.fingersMap = [ 0 0 0 ];
     synaptics.twoFingerScroll = true;
     synaptics.vertEdgeScroll = false;
@@ -156,12 +168,8 @@ in
 
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-    windowManager.default = "xmonad";
-    windowManager.xmonad.enable = true;
-    windowManager.xmonad.enableContribAndExtras = true;
-    windowManager.xmonad.extraPackages = haskellPackages: [
-      haskellPackages.taffybar
-    ];
+    windowManager.default = "spectrwm";
+    windowManager.spectrwm.enable = true;
   };
 
   users.extraUsers.jb55 = {
@@ -175,33 +183,5 @@ in
   };
 
   users.mutableUsers = true;
-
-  users.extraGroups.docker.members = [ "jb55" ];
-
-  programs.zsh.interactiveShellInit =
-    ''
-      # Taken from <nixos/modules/programs/bash/command-not-found.nix>
-      # and adapted to zsh (i.e. changed name from 'handle' to
-      # 'handler').
-
-      # This function is called whenever a command is not found.
-      command_not_found_handler() {
-        local p=/run/current-system/sw/bin/command-not-found
-        if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
-          # Run the helper program.
-          $p "$1"
-          # Retry the command if we just installed it.
-          if [ $? = 126 ]; then
-            "$@"
-          else
-            return 127
-          fi
-        else
-          echo "$1: command not found" >&2
-          return 127
-        fi
-      }
-    '';
-
 }
 
