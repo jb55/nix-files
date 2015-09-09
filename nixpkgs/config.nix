@@ -4,10 +4,12 @@
 
   packageOverrides = super: let self = super.pkgs; in
   {
-    haskellDevToolsEnv = self.myEnvFun {
+    haskellDevToolsEnv = self.buildEnv {
       name = "haskellDevTools";
-      buildInputs = with self.haskell.packages.ghc784; [
+      paths = with self.haskell.packages.ghc784; [
+        cabal2nix
         hindent
+        hlint
         ghc-mod
         ghc-core
         structured-haskell-mode
