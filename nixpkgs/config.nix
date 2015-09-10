@@ -39,7 +39,7 @@
       paths = with self; [
         caffe
       ];
-    }
+    };
 
     xlsx2csv = super.pythonPackages.buildPythonPackage rec {
       name = "xlsx2csv-0.7.2";
