@@ -78,12 +78,6 @@ in {
     file
     gitAndTools.git-extras
     gitFull
-    haskellPkgs.ShellCheck
-    haskellPkgs.skeletons
-    haskellPkgs.cabal-install
-    haskellPkgs.ghc-mod
-    haskellPkgs.cabal2nix
-    haskellPkgs.hlint
     hsetroot
     htop
     ipafont
