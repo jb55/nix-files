@@ -121,7 +121,7 @@ in {
 
     latitude="49.270186";
     longitude="-123.109353";
-  }
+  };
 
   services.mongodb = {
     enable = true;
@@ -178,8 +178,6 @@ in {
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
 }
