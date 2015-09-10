@@ -4,23 +4,54 @@
 
 { config, pkgs, ... }:
 
-{
+let caches = [ "https://cache.nixos.org/"
+               "http://hydra.cryp.to"
+             ];
+    haskellPkgs = pkgs.haskell.packages.ghc784;
+    user = {
+        name = "jb55";
+        group = "users";
+        uid = 1000;
+        extraGroups = [ "wheel" ];
+        createHome = true;
+        home = "/home/jb55";
+        shell = "/run/current-system/sw/bin/zsh";
+      };
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/sda";
+  };
 
-  programs.ssh.startAgent = false; # gpg agent takes over this role
+  fileSystems = [
+    { mountPoint = "/sand";
+      device = "/dev/disk/by-label/sand";
+      fsType = "ext4";
+    }
+    { mountPoint = "/home/jb55/.local/share/Steam/steamapps";
+      device = "/sand/data/SteamAppsLinux";
+      fsType = "none";
+      options = "bind";
+    }
+  ];
+
+  programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
 
   fonts.enableCoreFonts = true;
+
+  nix = {
+    binaryCaches = caches;
+    trustedBinaryCaches = caches;
+  };
 
   networking = {
     hostName = "monad";
@@ -33,12 +64,12 @@
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = true;
+    #pulseaudio.enable = true;
     opengl.driSupport32Bit = true;
   };
 
   environment.systemPackages = with pkgs; [
-    apvlv
+    mupdf
     bc
     chromium
     compton
@@ -47,18 +78,17 @@
     file
     gitAndTools.git-extras
     gitFull
-    haskellPackages.ShellCheck
-    haskellPackages.cabal-install
-    haskellPackages.cabal2nix
-    haskellPackages.ghc
-    haskellPackages.hlint
+    haskellPkgs.ShellCheck
+    haskellPkgs.skeletons
+    haskellPkgs.cabal-install
+    haskellPkgs.ghc-mod
+    haskellPkgs.cabal2nix
+    haskellPkgs.hlint
     hsetroot
     htop
     ipafont
     lsof
     nix-repl
-    notmuch
-    popcorntime
     redshift
     rsync
     rxvt_unicode
@@ -70,6 +100,7 @@
     vim
     vlc
     wget
+    xbindkeys
     xclip
     xdg_utils
     xlibs.xev
@@ -82,22 +113,6 @@
     chromium.enablePepperPDF = true;
   };
 
- #services.btsync = {
- #  # disable for now until I fix this
- #  enable = false;
- #  deviceName = "monad";
- #  httpListenPort = 9902;
- #  storagePath = "/home/jb55/btsync";
- #  sharedFolders = [{
- #    secret         = "AFNEZRTN4VI2MKMSWKINZDHSGLOMVQJQU";
- #    directory      = "/home/jb55/src";
- #    useRelayServer = true;
- #    useTracker     = true;
- #    useDHT         = false;
- #    searchLAN      = true;
- #    useSyncTrash   = true;
- #  }];
- #};
   services.redshift = {
     enable = true;
     temperature.day = 5700;
@@ -108,6 +123,10 @@
     longitude="-123.109353";
   }
 
+  services.mongodb = {
+    enable = true;
+  };
+
   services.xserver = {
     enable = true;
     layout = "us";
@@ -115,7 +134,7 @@
 
     desktopManager = {
       default = "none";
-      xterm.enable = true;
+      xterm.enable = false;
     };
 
     displayManager = {
@@ -147,19 +166,9 @@
 #   };
   };
 
-  users.extraUsers.jb55 = {
-    name = "jb55";
-    group = "users";
-    uid = 1000;
-    extraGroups = [ "wheel" ];
-    createHome = true;
-    home = "/home/jb55";
-    shell = "/run/current-system/sw/bin/zsh";
-  };
+  users.extraUsers.jb55 = user;
 
   users.mutableUsers = true;
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -167,48 +176,11 @@
     passwordAuthentication = false;
   };
 
-  # bittorrent web ui
- #services.transmission = {
- #  enable = false;
- #  settings = {
- #    download-dir = "/home/jb55/torrents";
- #    incomplete-dir-enabled = false;
- #    rpc-whitelist = "127.0.0.1,192.168.*.*";
- #  };
- #};
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.xkbOptions = "eurosign:e";
 
   virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
- #programs.zsh.interactiveShellInit =
- #  ''
- #    # Taken from <nixos/modules/programs/bash/command-not-found.nix>
- #    # and adapted to zsh (i.e. changed name from 'handle' to
- #    # 'handler').
-
- #    # This function is called whenever a command is not found.
- #    command_not_found_handler() {
- #      local p=/run/current-system/sw/bin/command-not-found
- #      if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
- #        # Run the helper program.
- #        $p "$1"
- #        # Retry the command if we just installed it.
- #        if [ $? = 126 ]; then
- #          "$@"
- #        else
- #          return 127
- #        fi
- #      else
- #        echo "$1: command not found" >&2
- #        return 127
- #      fi
- #    }
- #  '';
 }
 
