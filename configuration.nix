@@ -98,6 +98,15 @@
  #    useSyncTrash   = true;
  #  }];
  #};
+  services.redshift = {
+    enable = true;
+    temperature.day = 5700;
+    temperature.night = 3200;
+    # gamma=0.8
+
+    latitude="49.270186";
+    longitude="-123.109353";
+  }
 
   services.xserver = {
     enable = true;
@@ -114,7 +123,6 @@
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
         ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
-        ${pkgs.redshift}/bin/redshift &
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
