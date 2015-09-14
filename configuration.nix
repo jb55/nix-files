@@ -46,7 +46,20 @@ in {
 
   time.timeZone = "America/Vancouver";
 
-  fonts.enableCoreFonts = true;
+  fonts = {
+    enableFontDir = true;
+    enableGhostscriptFonts = true;
+    enableCoreFonts = true;
+    fonts = with pkgs; [
+      corefonts
+      inconsolata
+      ubuntu_font_family
+      fira-code
+      fira-mono
+      source-code-pro
+      ipafont
+    ];
+  };
 
   nix = {
     binaryCaches = caches;
