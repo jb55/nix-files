@@ -82,7 +82,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    mupdf
+    zathura
     bc
     chromium
     compton
@@ -90,10 +90,10 @@ in {
     emacs
     file
     gitAndTools.git-extras
+    haskellPackages.xmobar
     gitFull
     hsetroot
     htop
-    ipafont
     lsof
     nix-repl
     redshift
@@ -123,7 +123,7 @@ in {
   services.redshift = {
     enable = true;
     temperature.day = 5700;
-    temperature.night = 3200;
+    temperature.night = 3000;
     # gamma=0.8
 
     latitude="49.270186";
@@ -148,6 +148,7 @@ in {
       sessionCommands = ''
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
         ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
