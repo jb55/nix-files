@@ -88,7 +88,7 @@
       exceptions
       fingertree
       foldl
-      #folds
+      folds
       free
       hamlet
       hashable
@@ -140,7 +140,7 @@
       pipes-binary
       pipes-bytestring
       pipes-concurrency
-      # pipes-csv
+      pipes-csv
       pipes-mongodb
       pipes-extras
       pipes-group
