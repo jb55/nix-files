@@ -14,6 +14,7 @@
   packageOverrides = super: let pkgs = super.pkgs; in
   rec {
     haskellEnv = pkgs.buildEnv {
+      name = "haskellEnv";
       paths = with pkgs.haskellPackages; [
         (ghcWithHoogle myHaskellPackages)
         cabal2nix
@@ -30,16 +31,16 @@
       ];
     };
 
-    syntaxCheckersEnv = self.buildEnv {
+    syntaxCheckersEnv = pkgs.buildEnv {
       name = "syntaxCheckers";
-      paths = with self; [
-        haskellPackages.ShellCheck
+      paths = with pkgs; [
+        pkgs.haskellPackages.ShellCheck
       ];
     };
 
-    machineLearningToolsEnv = self.buildEnv {
+    machineLearningToolsEnv = pkgs.buildEnv {
       name = "machineLearningTools";
-      paths = with self; [
+      paths = with pkgs; [
         caffe
       ];
     };
@@ -214,14 +215,14 @@
 
     xlsx2csv = super.pythonPackages.buildPythonPackage rec {
       name = "xlsx2csv-0.7.2";
-      src = self.pkgs.fetchurl {
+      src = pkgs.fetchurl {
         url = "https://pypi.python.org/packages/source/x/xlsx2csv/${name}.tar.gz";
         md5 = "eea39d8ab08ff4503bb145171d0a46f6";
       };
       meta = {
         homepage = https://github.com/bitprophet/alabaster;
         description = "xlsx2csv converter";
-        license = self.stdenv.lib.licenses.bsd3;
+        license = pkgs.stdenv.lib.licenses.bsd3;
       };
     };
   };
