@@ -13,23 +13,19 @@
 
   packageOverrides = super: let pkgs = super.pkgs; in
   rec {
-    haskellEnv = pkgs.buildEnv {
-      name = "haskellEnv";
-      paths = with pkgs.haskellPackages; [
-        (ghcWithHoogle myHaskellPackages)
-        cabal2nix
-        hindent
-        hlint
-        #ghc-mod
-        #hdevtools
-        ghc-core
-        structured-haskell-mode
-        hasktags
-        pointfree
-        cabal-install
-        alex happy
-      ];
-    };
+
+    haskellEnvHoogle = haskellEnvFun true;
+    haskellEnv = haskellEnvFun false;
+
+    haskellEnvFun = withHoogle: 
+      let hp = pkgs.haskellPackages;
+          ghcWith = if withHoogle then hp.ghcWithHoogle else hp.ghcWithPackages;
+      in pkgs.buildEnv {
+        name = "haskellEnv" + (if withHoogle then "Hoogle" else "");
+        paths = with hp;  [
+          (ghcWith myHaskellPackages)
+        ] ++ haskellTools hp;
+      };
 
     syntaxCheckersEnv = pkgs.buildEnv {
       name = "syntaxCheckers";
@@ -44,6 +40,20 @@
         caffe
       ];
     };
+
+    haskellTools = hp: with hp; [
+      cabal2nix
+      hindent
+      hlint
+      ghc-mod
+      #hdevtools
+      ghc-core
+      structured-haskell-mode
+      hasktags
+      pointfree
+      cabal-install
+      alex happy
+    ];
 
     myHaskellPackages = hp: with hp; [
       # fixplate
@@ -65,6 +75,7 @@
       blaze-html
       blaze-markup
       blaze-textual
+      cassava
       cased
       cereal
       comonad
@@ -77,7 +88,7 @@
       exceptions
       fingertree
       foldl
-      folds
+      #folds
       free
       hamlet
       hashable
@@ -124,11 +135,12 @@
       parsec
       parsers
       pipes
+      pipes-async
       pipes-attoparsec
       pipes-binary
       pipes-bytestring
       pipes-concurrency
-      pipes-csv
+      # pipes-csv
       pipes-mongodb
       pipes-extras
       pipes-group
@@ -182,6 +194,9 @@
       tagged
       tar
       tardis
+      tinytemplate
+      test-framework
+      test-framework-hunit
       tasty
       tasty-hspec
       tasty-hunit
