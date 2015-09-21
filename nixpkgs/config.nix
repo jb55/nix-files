@@ -1,28 +1,51 @@
-{
-  allowBroken = true;
+{ 
   allowUnfree = true;
+  allowBroken = false;
   zathura.useMupdf = true;
 
   packageOverrides = super: let pkgs = super.pkgs; in
   rec {
-    haskellEnv = pkgs.buildEnv {
-      name = "haskellEnv";
-      paths = with pkgs.haskellPackages; [
-        (ghcWithHoogle myHaskellPackages)
 
-        cabal2nix
-        hindent
-        hlint
-        #ghc-mod
-        #hdevtools
-        ghc-core
-        structured-haskell-mode
-        hasktags
-        pointfree
-        cabal-install
-        alex happy
+    haskellEnvHoogle = haskellEnvFun true;
+    haskellEnv = haskellEnvFun false;
+
+    haskellEnvFun = withHoogle: 
+      let hp = pkgs.haskellPackages;
+          ghcWith = if withHoogle then hp.ghcWithHoogle else hp.ghcWithPackages;
+      in pkgs.buildEnv {
+        name = "haskellEnv" + (if withHoogle then "Hoogle" else "");
+        paths = with hp;  [
+          (ghcWith myHaskellPackages)
+        ] ++ haskellTools hp;
+      };
+
+    syntaxCheckersEnv = pkgs.buildEnv {
+      name = "syntaxCheckers";
+      paths = with pkgs; [
+        pkgs.haskellPackages.ShellCheck
       ];
     };
+
+    machineLearningToolsEnv = pkgs.buildEnv {
+      name = "machineLearningTools";
+      paths = with pkgs; [
+        caffe
+      ];
+    };
+
+    haskellTools = hp: with hp; [
+      cabal2nix
+      hindent
+      hlint
+      ghc-mod
+      #hdevtools
+      ghc-core
+      structured-haskell-mode
+      hasktags
+      pointfree
+      cabal-install
+      alex happy
+    ];
 
     myHaskellPackages = hp: with hp; [
       # fixplate
@@ -44,6 +67,7 @@
       blaze-html
       blaze-markup
       blaze-textual
+      cassava
       cased
       cereal
       comonad
@@ -56,7 +80,7 @@
       exceptions
       fingertree
       foldl
-      folds
+      #folds
       free
       hamlet
       hashable
@@ -103,6 +127,7 @@
       parsec
       parsers
       pipes
+      pipes-async
       pipes-attoparsec
       pipes-binary
       pipes-bytestring
@@ -161,6 +186,9 @@
       tagged
       tar
       tardis
+      tinytemplate
+      test-framework
+      test-framework-hunit
       tasty
       tasty-hspec
       tasty-hunit
@@ -191,38 +219,5 @@
       zippers
       zlib
     ];
-
-    # haskellPackages = super.haskellPackages.override {
-    #   overrides = self: super: {
-    #     "ghc-mod" = super."ghc-mod".overrideDerivation (attrs: {
-    #       src = pkgs.fetchFromGitHub {
-    #         owner = "kazu-yamamoto";
-    #         repo = "ghc-mod";
-    #         rev = "2c90e7a700d4c0ee4905647f0644b842813dac2b";
-    #         sha256 = "1223xq80k49862s8m1908iiz9k0kph2vqzk3vf0980hkbz096rjy";
-    #       };
-    #       libraryHaskellDepends = [ super.pipes super."cabal-helper" super.cereal ];
-    #       jailbreak = true;
-    #       #nativeBuildInputs = [ super."cabal-helper" super.cereal ] ++ attrs.nativeBuildInputs;
-    #       postInstall = "";
-    #     });
-    #   };
-    # };
-
-#   haskellPackages = super.haskellPackages.override {
-#     overrides = self: super: {
-#       hierarchy = self.callPackage ~/dev/haskell/hierarchy {};
-#     };
-#   };
-
-#   haskell = super.haskell // {
-#     packages = super.haskell.packages // {
-#       ghc784 = super.haskell.packages.ghc784.override {
-#         overrides = self: super: {
-#           hierarchy = self.callPackage ~/dev/haskell/hierarchy {};
-#         };
-#       };
-#     };
-#   };
   };
 }
