@@ -33,23 +33,28 @@
       name = "haskellTools784";
       compiler = "ghc784";
       withPackages = false;
+      tools = haskell784Tools;
     };
 
-    haskellEnvFun = attrs:
-      let hp = if attrs.compiler != null
-                 then pkgs.haskell.packages.${attrs.compiler}
+    haskellEnvFun = { tools ? null, withHoogle ? false, withPackages ? true, compiler ? null, name }:
+      let hp = if compiler != null
+                 then pkgs.haskell.packages.${compiler}
                  else pkgs.haskellPackages;
 
-          ghcWith = if attrs.withHoogle or false
+          ghcWith = if withHoogle
                       then hp.ghcWithHoogle
                       else hp.ghcWithPackages;
 
-          basePackages = if attrs.withPackages or true
+          theTools = if tools != null
+                       then tools hp
+                       else haskellTools hp;
+
+          basePackages = if withPackages ? true
                            then ghcWith myHaskellPackages
                            else [];
       in pkgs.buildEnv {
-        name = attrs.name;
-        paths = with hp; basePackages ++ haskellTools hp;
+        name = name;
+        paths = with hp; basePackages ++ theTools;
       };
 
     syntaxCheckersEnv = pkgs.buildEnv {
@@ -66,11 +71,14 @@
       ];
     };
 
-    haskellTools = hp: with hp; [
-      cabal2nix
+    haskell784Tools = hp: baseHaskellTools hp;
+
+    haskellTools = hp: (baseHaskellTools hp) ++ (with hp; [cabal2nix ghc-mod]);
+
+    baseHaskellTools = hp: with hp; [
       hindent
       hlint
-      ghc-mod
+      #ghc-mod
       #hdevtools
       ghc-core
       structured-haskell-mode
