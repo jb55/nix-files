@@ -1,4 +1,4 @@
-{ 
+{
   allowUnfree = true;
   allowUnfreeRedistributable = true;
   obs-studio.pulseaudio = true;
@@ -14,17 +14,42 @@
   packageOverrides = super: let pkgs = super.pkgs; in
   rec {
 
-    haskellEnvHoogle = haskellEnvFun true;
-    haskellEnv = haskellEnvFun false;
+    haskellEnvHoogle = haskellEnvFun {
+      name = "haskellEnvHoogle";
+      withHoogle = true;
+    };
 
-    haskellEnvFun = withHoogle: 
-      let hp = pkgs.haskellPackages;
-          ghcWith = if withHoogle then hp.ghcWithHoogle else hp.ghcWithPackages;
+    haskellEnv = haskellEnvFun {
+      name = "haskellEnv";
+      withHoogle = false;
+    };
+
+    haskellToolsEnv = haskellEnvFun {
+      name = "haskellTools";
+      withPackages = false;
+    };
+
+    haskellTools784Env = haskellEnvFun {
+      name = "haskellTools784";
+      compiler = "ghc784";
+      withPackages = false;
+    };
+
+    haskellEnvFun = attrs:
+      let hp = if attrs.compiler != null
+                 then pkgs.haskell.packages.${attrs.compiler}
+                 else pkgs.haskellPackages;
+
+          ghcWith = if attrs.withHoogle or false
+                      then hp.ghcWithHoogle
+                      else hp.ghcWithPackages;
+
+          basePackages = if attrs.withPackages or true
+                           then ghcWith myHaskellPackages
+                           else [];
       in pkgs.buildEnv {
-        name = "haskellEnv" + (if withHoogle then "Hoogle" else "");
-        paths = with hp;  [
-          (ghcWith myHaskellPackages)
-        ] ++ haskellTools hp;
+        name = attrs.name;
+        paths = with hp; basePackages ++ haskellTools hp;
       };
 
     syntaxCheckersEnv = pkgs.buildEnv {
