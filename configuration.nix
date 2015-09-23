@@ -52,6 +52,9 @@ in {
   nix = {
     binaryCaches = caches;
     trustedBinaryCaches = caches;
+    binaryCachePublicKeys = [
+      "hydra.cryp.to-1:8g6Hxvnp/O//5Q1bjjMTd5RO8ztTsG8DKPOAg9ANr2g="
+    ];
   };
 
   networking = {
