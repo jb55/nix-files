@@ -7,7 +7,7 @@
 let caches = [ "https://cache.nixos.org/"
                "http://hydra.cryp.to"
              ];
-    haskellPkgs = pkgs.haskell.packages.ghc784;
+    zsh = "/run/current-system/sw/bin/zsh";
     user = {
         name = "jb55";
         group = "users";
@@ -15,7 +15,7 @@ let caches = [ "https://cache.nixos.org/"
         extraGroups = [ "wheel" ];
         createHome = true;
         home = "/home/jb55";
-        shell = "/run/current-system/sw/bin/zsh";
+        shell = zsh;
       };
 in {
   imports =
@@ -176,6 +176,7 @@ in {
 
   users.extraUsers.jb55 = user;
 
+  users.defaultUserShell = zsh;
   users.mutableUsers = true;
 
   # Enable the OpenSSH daemon.
