@@ -2,7 +2,7 @@
 {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
-  obs-studio.pulseaudio = true;
+  pulseaudio = true;
   steam.java = true;
   allowBroken = false;
   zathura.useMupdf = true;
@@ -13,48 +13,6 @@
   };
 
   packageOverrides = super: rec {
-    haskell = super.haskell // {
-      packages = super.haskell.packages // {
-        ghc784 = super.haskell.packages.ghc784.override {
-          overrides = self: super: {
-            mongoDB = super.mongoDB.overrideDerivation (attrs: {
-              src = pkgs.fetchFromGitHub {
-                owner = "mongodb-haskell";
-                repo = "mongodb";
-                rev = "cb912cb952542a6d60cfc31ee2ef2f41d41eefff";
-                sha256 = "1nv1mffbkq90g6657gp2sb2sf6q5l44yxjn20haaym9nh1xkzfrz";
-              };
-            });
-          };
-        };
-      };
-    };
-
-    haskellPackages = super.haskellPackages.override {
-      overrides = self: super: {
-        "ghc-mod" = super."ghc-mod".overrideDerivation (attrs: {
-          src = pkgs.fetchFromGitHub {
-            owner = "kazu-yamamoto";
-            repo = "ghc-mod";
-            rev = "edfce196107dbd43958d72c174ad66e4a7d30643";
-            sha256 = "1wiwkp4qcgdwnr4h1bn27hh1kyl2wjlrz2bbfv638y9gzc06rgch";
-          };
-          nativeBuildInputs = [ super."cabal-helper" super.cereal super.pipes ] ++ attrs.nativeBuildInputs;
-          postInstall = "";
-        });
-
-        "cabal-helper" = super."cabal-helper".overrideDerivation (attrs: {
-          src = pkgs.fetchFromGitHub {
-            owner = "DanielG";
-            repo = "cabal-helper";
-            rev = "3484965e347f39e976e0e850a5620354dbffabfc";
-            sha256 = "0qi230hsyp5pamak2gk5kviiar7g35wd7wdkg8zz1hsjbjy5iwbn";
-          };
-        });
-
-      };
-    };
-
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
       withHoogle = true;
@@ -90,7 +48,7 @@
     syntaxCheckersEnv = super.buildEnv {
       name = "syntaxCheckers";
       paths = [
-        haskellPackages.ShellCheck
+        super.haskellPackages.ShellCheck
       ];
     };
 
@@ -148,7 +106,7 @@
       exceptions
       fingertree
       foldl
-      folds
+      #folds
       free
       hamlet
       hashable

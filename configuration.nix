@@ -80,7 +80,7 @@ in {
 
   hardware = {
     bluetooth.enable = true;
-    #pulseaudio.enable = true;
+    pulseaudio.enable = true;
     opengl.driSupport32Bit = true;
   };
 
@@ -104,8 +104,8 @@ in {
     rxvt_unicode
     scrot
     silver-searcher
-    steam
     subversion
+    steam
     unzip
     vim
     vlc
