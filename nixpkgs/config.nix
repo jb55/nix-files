@@ -57,9 +57,9 @@
       withHoogle = false;
     };
 
-    haskellToolsEnv = haskellEnvFun {
+    haskellToolsEnv = super.buildEnv {
       name = "haskellTools";
-      withPackages = false;
+      paths = haskellTools super.haskellPackages;
     };
 
     haskellEnvFun = { tools ? haskellTools, withHoogle ? false, withPackages ? true, compiler ? null, name }:
