@@ -24,7 +24,6 @@
 
   networking = {
     hostName = "archer";
-    hostId = "900eef22";
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
       174.143.211.135 globalgamers.znc.jb55.com
