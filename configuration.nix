@@ -4,23 +4,55 @@
 
 { config, pkgs, ... }:
 
-{
+let caches = [ "https://cache.nixos.org/"
+               "http://hydra.cryp.to"
+             ];
+    haskellPkgs = pkgs.haskell.packages.ghc784;
+    user = {
+        name = "jb55";
+        group = "users";
+        uid = 1000;
+        extraGroups = [ "wheel" ];
+        createHome = true;
+        home = "/home/jb55";
+        shell = "/run/current-system/sw/bin/zsh";
+      };
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/sda";
+  };
 
-  programs.ssh.startAgent = false; # gpg agent takes over this role
+  programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
 
-  fonts.enableCoreFonts = true;
+  fonts = {
+    enableFontDir = true;
+    enableGhostscriptFonts = true;
+    enableCoreFonts = true;
+    fonts = with pkgs; [
+      corefonts
+      inconsolata
+      ubuntu_font_family
+      fira-code
+      fira-mono
+      source-code-pro
+      ipafont
+    ];
+  };
+
+  nix = {
+    binaryCaches = caches;
+    trustedBinaryCaches = caches;
+  };
 
   networking = {
     hostName = "archer";
@@ -32,12 +64,12 @@
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = true;
+    #pulseaudio.enable = true;
     opengl.driSupport32Bit = true;
   };
 
   environment.systemPackages = with pkgs; [
-    apvlv
+    zathura
     bc
     chromium
     compton
@@ -45,19 +77,12 @@
     emacs
     file
     gitAndTools.git-extras
+    haskellPackages.xmobar
     gitFull
-    haskellPackages.ShellCheck
-    haskellPackages.cabal-install
-#   haskellPackages.cabal2nix
-    haskellPackages.ghc
-    haskellPackages.hlint
     hsetroot
     htop
-    ipafont
     lsof
     nix-repl
-    notmuch
-    popcorntime
     redshift
     rsync
     rxvt_unicode
@@ -69,6 +94,7 @@
     vim
     vlc
     wget
+    xbindkeys
     xclip
     xdg_utils
     xlibs.xev
@@ -81,6 +107,20 @@
     chromium.enablePepperPDF = true;
   };
 
+  services.redshift = {
+    enable = true;
+    temperature.day = 5700;
+    temperature.night = 3000;
+    # gamma=0.8
+
+    latitude="49.270186";
+    longitude="-123.109353";
+  };
+
+  services.mongodb = {
+    enable = true;
+  };
+
   services.xserver = {
     enable = true;
     layout = "us";
@@ -88,15 +128,15 @@
 
     desktopManager = {
       default = "none";
-      xterm.enable = true;
+      xterm.enable = false;
     };
 
     displayManager = {
       sessionCommands = ''
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
         ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
-        ${pkgs.redshift}/bin/redshift &
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
@@ -121,19 +161,9 @@
 #   };
   };
 
-  users.extraUsers.jb55 = {
-    name = "jb55";
-    group = "users";
-    uid = 1000;
-    extraGroups = [ "wheel" ];
-    createHome = true;
-    home = "/home/jb55";
-    shell = "/run/current-system/sw/bin/zsh";
-  };
+  users.extraUsers.jb55 = user;
 
   users.mutableUsers = true;
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -144,7 +174,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
 }
