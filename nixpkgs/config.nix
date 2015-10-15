@@ -1,42 +1,53 @@
-{ 
+{ pkgs }:
+{
   allowUnfree = true;
-  allowUnfreeRedistributable = true;
-  obs-studio.pulseaudio = true;
-  steam.java = true;
   allowBroken = false;
   zathura.useMupdf = true;
 
-  chromium = {
-    enablePepperFlash = true;
-    enablePepperPDF = true;
-  };
+  packageOverrides = super: rec {
 
-  packageOverrides = super: let pkgs = super.pkgs; in
-  rec {
+    haskellEnvHoogle = haskellEnvFun {
+      name = "haskellEnvHoogle";
+      withHoogle = true;
+    };
 
-    haskellEnvHoogle = haskellEnvFun true;
-    haskellEnv = haskellEnvFun false;
+    haskellEnv = haskellEnvFun {
+      name = "haskellEnv";
+      withHoogle = false;
+    };
 
-    haskellEnvFun = withHoogle: 
-      let hp = pkgs.haskellPackages;
-          ghcWith = if withHoogle then hp.ghcWithHoogle else hp.ghcWithPackages;
-      in pkgs.buildEnv {
-        name = "haskellEnv" + (if withHoogle then "Hoogle" else "");
-        paths = with hp;  [
-          (ghcWith myHaskellPackages)
-        ] ++ haskellTools hp;
+    haskellToolsEnv = super.buildEnv {
+      name = "haskellTools";
+      paths = haskellTools super.haskellPackages;
+    };
+
+    haskellEnvFun = { withHoogle ? false, withPackages ? true, compiler ? null, name }:
+      let hp = if compiler != null
+                 then super.haskell.packages.${compiler}
+                 else super.haskellPackages;
+
+          ghcWith = if withHoogle
+                      then hp.ghcWithHoogle
+                      else hp.ghcWithPackages;
+
+          basePackages = if withPackages
+                           then ghcWith myHaskellPackages
+                           else [];
+      in super.buildEnv {
+        name = name;
+        paths = basePackages;
       };
 
-    syntaxCheckersEnv = pkgs.buildEnv {
+    syntaxCheckersEnv = super.buildEnv {
       name = "syntaxCheckers";
-      paths = with pkgs; [
-        pkgs.haskellPackages.ShellCheck
+      paths = [
+        haskellPackages.ShellCheck
       ];
     };
 
-    machineLearningToolsEnv = pkgs.buildEnv {
+    machineLearningToolsEnv = super.buildEnv {
       name = "machineLearningTools";
-      paths = with pkgs; [
+      paths = with super; [
         caffe
       ];
     };
@@ -140,7 +151,7 @@
       pipes-binary
       pipes-bytestring
       pipes-concurrency
-      # pipes-csv
+      pipes-csv
       pipes-mongodb
       pipes-extras
       pipes-group
@@ -197,6 +208,8 @@
       tinytemplate
       test-framework
       test-framework-hunit
+      taggy
+      taggy-lens
       tasty
       tasty-hspec
       tasty-hunit
@@ -222,23 +235,11 @@
       void
       wai
       warp
+      wreq
       xhtml
       yaml
       zippers
       zlib
     ];
-
-    xlsx2csv = super.pythonPackages.buildPythonPackage rec {
-      name = "xlsx2csv-0.7.2";
-      src = pkgs.fetchurl {
-        url = "https://pypi.python.org/packages/source/x/xlsx2csv/${name}.tar.gz";
-        md5 = "eea39d8ab08ff4503bb145171d0a46f6";
-      };
-      meta = {
-        homepage = https://github.com/bitprophet/alabaster;
-        description = "xlsx2csv converter";
-        license = pkgs.stdenv.lib.licenses.bsd3;
-      };
-    };
   };
 }
