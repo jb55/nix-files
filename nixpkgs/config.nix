@@ -41,7 +41,7 @@
     syntaxCheckersEnv = super.buildEnv {
       name = "syntaxCheckers";
       paths = [
-        haskellPackages.ShellCheck
+        pkgs.haskellPackages.ShellCheck
       ];
     };
 
@@ -56,7 +56,7 @@
       cabal2nix
       hindent
       hlint
-      ghc-mod
+      #ghc-mod
       #hdevtools
       ghc-core
       structured-haskell-mode
