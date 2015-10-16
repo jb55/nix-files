@@ -139,6 +139,7 @@ in {
         ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
+        ${pkgs.xbindkeys}/bin/xbindkeys
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
       '';
 
