@@ -99,6 +99,7 @@ in {
     xdg_utils
     xlibs.xev
     xlibs.xset
+    slock
   ];
 
   nixpkgs.config = {
@@ -161,6 +162,8 @@ in {
 #     ];
 #   };
   };
+
+  security.setuidPrograms = [ "slock" ];
 
   users.extraUsers.jb55 = user;
 
