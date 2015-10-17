@@ -85,7 +85,6 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    zathura
     bc
     chromium
     compton
@@ -93,8 +92,8 @@ in {
     emacs
     file
     gitAndTools.git-extras
-    haskellPackages.xmobar
     gitFull
+    haskellPackages.xmobar
     hsetroot
     htop
     lsof
@@ -104,8 +103,8 @@ in {
     rxvt_unicode
     scrot
     silver-searcher
-    subversion
     steam
+    subversion
     unzip
     vim
     vlc
@@ -116,6 +115,7 @@ in {
     xlibs.xev
     xlibs.xset
     slock
+    zathura
   ];
 
   nixpkgs.config = {
