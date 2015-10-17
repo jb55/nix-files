@@ -42,15 +42,8 @@
                            else [];
       in super.buildEnv {
         name = name;
-        paths = [basePackages (tools hp)];
+        paths = basePackages;
       };
-
-    syntaxCheckersEnv = super.buildEnv {
-      name = "syntaxCheckers";
-      paths = [
-        super.haskellPackages.ShellCheck
-      ];
-    };
 
     machineLearningToolsEnv = super.buildEnv {
       name = "machineLearningTools";
