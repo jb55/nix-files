@@ -88,6 +88,7 @@ in {
     rxvt_unicode
     scrot
     silver-searcher
+    zip
     steam
     subversion
     unzip
