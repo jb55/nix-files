@@ -148,7 +148,7 @@ in {
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
         ${pkgs.xbindkeys}/bin/xbindkeys
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
-        ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
+        ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
       '';
 
       lightdm.enable = true;
