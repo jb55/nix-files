@@ -123,6 +123,13 @@ in {
     longitude="-123.109353";
   };
 
+  services.mpd = {
+    enable = true;
+    dataDir = "/home/jb55/mpd";
+    user = "jb55";
+    group = "users";
+  };
+
   services.mongodb = {
     enable = true;
   };
