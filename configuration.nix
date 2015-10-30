@@ -123,6 +123,11 @@ in {
     longitude="-123.109353";
   };
 
+  services.syncthing = {
+    enable = true;
+    user = "jb55";
+  };
+
   services.mpd = {
     enable = true;
     dataDir = "/home/jb55/mpd";
