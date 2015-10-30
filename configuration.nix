@@ -155,7 +155,7 @@ in {
     videoDrivers = [ "nvidia" ];
 
     screenSection = ''
-      Option "metamodes" "2048x1152_60 +0+0"
+      Option "metamodes" "1920x1080 +0+0"
     '';
 
     windowManager.spectrwm.enable = true;
