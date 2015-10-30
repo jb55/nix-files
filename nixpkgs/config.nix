@@ -130,6 +130,7 @@
       mime-mail
       mime-types
       mmorph
+      mongoDB
       monad-control
       monad-coroutine
       monad-loops
@@ -145,6 +146,9 @@
       # pandoc
       parsec
       parsers
+      persistent
+      persistent-template
+      persistent-mongoDB
       pipes
       pipes-async
       pipes-attoparsec
