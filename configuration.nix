@@ -4,9 +4,7 @@
 
 { config, pkgs, ... }:
 
-let caches = [ "https://cache.nixos.org/"
-               "http://hydra.cryp.to"
-             ];
+let caches = [ "https://cache.nixos.org/"];
     zsh = "/run/current-system/sw/bin/zsh";
     user = {
         name = "jb55";
