@@ -150,8 +150,8 @@ in {
       sessionCommands = ''
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        ${pkgs.xlibs.xset}/bin/xset m 0 0
         ${pkgs.haskellPackages.xmobar}/bin/xmobar &
-        ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
         ${pkgs.xbindkeys}/bin/xbindkeys
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
