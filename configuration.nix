@@ -89,7 +89,6 @@ in {
     scrot
     silver-searcher
     zip
-    steam
     subversion
     unzip
     vim
