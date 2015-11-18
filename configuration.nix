@@ -115,7 +115,7 @@ in {
     xdg_utils
     xlibs.xev
     xlibs.xset
-    slock
+    xlibs.xmodmap
     zathura
   ];
 
@@ -153,6 +153,7 @@ in {
       sessionCommands = ''
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
         ${pkgs.haskellPackages.xmobar}/bin/xmobar &
         ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.compton}/bin/compton -r 4 -o 0.75 -l -6 -t -6 -c -G -b
