@@ -154,7 +154,7 @@ in {
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
         ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
         ${pkgs.haskellPackages.xmobar}/bin/xmobar &
-        ${pkgs.xlibs.xinput}/bin/xinput set-prop 9 "Device Accel Constant Deceleration" 3
+        ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
         ${pkgs.xbindkeys}/bin/xbindkeys
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
