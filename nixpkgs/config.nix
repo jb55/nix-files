@@ -38,7 +38,7 @@
                       else hp.ghcWithPackages;
 
           basePackages = if withPackages
-                           then ghcWith myHaskellPackages
+                           then [(ghcWith myHaskellPackages)]
                            else [];
       in super.buildEnv {
         name = name;
@@ -181,6 +181,7 @@
       safe
       sbv
       scotty
+      Spock
       semigroupoids
       semigroups
       shake
