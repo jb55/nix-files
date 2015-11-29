@@ -84,24 +84,39 @@ in {
     opengl.driSupport32Bit = true;
   };
 
+  environment.x11Packages = with pkgs; [
+    gnome.gnomeicontheme
+    gtk
+    hicolor_icon_theme
+    shared_mime_info
+    xfce.thunar
+    xfce.xfce4icontheme  # for thunar
+  ];
+
   environment.systemPackages = with pkgs; [
+    #unity3d
+    autocutsel
     bc
+    binutils
     chromium
     dmenu
     emacs
     file
     gitAndTools.git-extras
     gitFull
-    haskellPackages.xmobar
+    haskellPackages.taffybar
     hsetroot
     htop
     lsof
     nix-repl
+    parcellite
+    patchelf
     redshift
     rsync
     rxvt_unicode
     scrot
     silver-searcher
+    slock
     steam
     subversion
     unzip
@@ -113,8 +128,8 @@ in {
     xclip
     xdg_utils
     xlibs.xev
-    xlibs.xset
     xlibs.xmodmap
+    xlibs.xset
     zathura
   ];
 
@@ -132,6 +147,10 @@ in {
 
     latitude="49.270186";
     longitude="-123.109353";
+  };
+
+  services.mpd = {
+    enable = true;
   };
 
   services.mongodb = {
@@ -153,7 +172,8 @@ in {
 #       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
         ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
-        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
+        ${pkgs.haskellPackages.taffybar}/bin/taffybar &
+        ${pkgs.parcellite}/bin/parcellite &
         ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
         ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
         ${pkgs.xbindkeys}/bin/xbindkeys
@@ -170,14 +190,17 @@ in {
       Option "metamodes" "1920x1080_144 +0+0"
     '';
 
-    windowManager.default = "spectrwm";
-    windowManager.spectrwm.enable = true;
-#     enable = true;
-#     enableContribAndExtras = true;
-#     extraPackages = haskellngPackages: [
-#       haskellngPackages.taffybar
-#     ];
-#   };
+    # windowManager.spectrwm.enable = true;
+    windowManager = {
+      xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        extraPackages = hp: [
+          hp.taffybar
+        ];
+      };
+      default = "xmonad";
+    };
   };
 
   security.setuidPrograms = [ "slock" ];
