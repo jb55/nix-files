@@ -81,6 +81,10 @@ in {
   hardware = {
     bluetooth.enable = true;
     pulseaudio.enable = true;
+    sane = {
+      enable = true;
+      configDir = "/home/jb55/.sane";
+    };
     opengl.driSupport32Bit = true;
   };
 
@@ -221,7 +225,10 @@ in {
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.gutenprint ] ;
+  };
 
   programs.zsh.enable = true;
 }
