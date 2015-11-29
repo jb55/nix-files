@@ -203,9 +203,13 @@ in {
     };
   };
 
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.docker.enable = true;
+
   security.setuidPrograms = [ "slock" ];
 
   users.extraUsers.jb55 = user;
+  users.extraGroups.vboxusers.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
