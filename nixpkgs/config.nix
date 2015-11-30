@@ -5,6 +5,9 @@
   zathura.useMupdf = true;
 
   packageOverrides = super: rec {
+    pidgin-with-plugins = super.pidgin-with-plugins.override {
+      plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
+    };
 
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
