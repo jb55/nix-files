@@ -106,11 +106,7 @@ in {
     zathura
   ];
 
-  nixpkgs.config = {
-    allowUnfree = true;
-    chromium.enablePepperFlash = true;
-    chromium.enablePepperPDF = true;
-  };
+  nixpkgs.config = import ~/.nixpkgs/config.nix;
 
   services.redshift = {
     enable = true;
