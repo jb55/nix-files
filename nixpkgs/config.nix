@@ -28,13 +28,13 @@ in {
 
     haskellToolsEnv = super.buildEnv {
       name = "haskellTools";
-      paths = haskellTools super.haskellPackages;
+      paths = haskellTools haskellPackages;
     };
 
     haskellEnvFun = { withHoogle ? false, withPackages ? true, compiler ? null, name }:
       let hp = if compiler != null
                  then super.haskell.packages.${compiler}
-                 else super.haskellPackages;
+                 else haskellPackages;
 
           ghcWith = if withHoogle
                       then hp.ghcWithHoogle
@@ -47,20 +47,6 @@ in {
         name = name;
         paths = basePackages;
       };
-
-    syntaxCheckersEnv = super.buildEnv {
-      name = "syntaxCheckers";
-      paths = [
-        pkgs.haskellPackages.ShellCheck
-      ];
-    };
-
-    machineLearningToolsEnv = super.buildEnv {
-      name = "machineLearningTools";
-      paths = with super; [
-        caffe
-      ];
-    };
 
     haskellTools = hp: with hp; [
       cabal2nix
@@ -77,16 +63,31 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      # fixplate
-      # orgmode-parse
-      Boolean
       # CC-delcont
+      # arithmoi
+      # compdata
+      # errors
+      # fixplate
+      # linearscan
+      # linearscan-hoopl
+      # machines
+      # orgmode-parse
+      # pandoc
+      # recursion-schemes
+      # singletons
+      # these
+      # thyme
+      # time-recurrence
+      # timeparsers
+      # units
+      # folds
+      Boolean
       HTTP
       HUnit
       MissingH
       QuickCheck
+      SafeSemaphore
       aeson
-      # arithmoi
       async
       attoparsec
       bifunctors
@@ -96,20 +97,17 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
-      cassava
       cased
+      cassava
       cereal
       comonad
       comonad-transformers
-      # compdata
       dlist
       dlist-instances
       doctest
-      # errors
       exceptions
       fingertree
       foldl
-      #folds
       free
       hamlet
       hashable
@@ -120,6 +118,7 @@ in {
       http-date
       http-types
       io-memoize
+      keys
       language-c
       language-javascript
       lens
@@ -131,16 +130,12 @@ in {
       lifted-async
       lifted-base
       linear
-      # linearscan
-      # linearscan-hoopl
       list-extras
       list-t
       logict
-      # machines
       mime-mail
       mime-types
       mmorph
-      mongoDB
       monad-control
       monad-coroutine
       monad-loops
@@ -148,17 +143,17 @@ in {
       monad-par-extras
       monad-stm
       monadloc
+      mongoDB
       monoid-extras
       network
       newtype
       numbers
       optparse-applicative
-      # pandoc
       parsec
       parsers
       persistent
-      persistent-template
       persistent-mongoDB
+      persistent-template
       pipes
       pipes-async
       pipes-attoparsec
@@ -166,21 +161,20 @@ in {
       pipes-bytestring
       pipes-concurrency
       pipes-csv
-      pipes-mongodb
       pipes-extras
       pipes-group
       pipes-http
+      pipes-mongodb
       pipes-network
       pipes-parse
       pipes-safe
       pipes-shell
       pipes-text
       posix-paths
-      #postgresql-simple
+      postgresql-simple
       pretty-show
       profunctors
       random
-      # recursion-schemes
       reducers
       reflection
       regex-applicative
@@ -188,10 +182,10 @@ in {
       regex-compat
       regex-posix
       regular
+      relational-record
       resourcet
       retry
       rex
-      SafeSemaphore
       safe
       sbv
       scotty
@@ -201,7 +195,6 @@ in {
       shakespeare
       shelly
       simple-reflect
-      # singletons
       speculation
       split
       spoon
@@ -217,31 +210,26 @@ in {
       system-fileio
       system-filepath
       tagged
-      tar
-      tardis
-      tinytemplate
-      test-framework
-      test-framework-hunit
       taggy
       taggy-lens
+      tar
+      tardis
       tasty
       tasty-hspec
       tasty-hunit
       tasty-quickcheck
       tasty-smallcheck
       temporary
+      test-framework
+      test-framework-hunit
       text
       text-format
-      # these
-      # thyme
       time
-      # time-recurrence
-      # timeparsers
+      tinytemplate
       transformers
       transformers-base
       turtle
       uniplate
-      # units
       unix-compat
       unordered-containers
       uuid
