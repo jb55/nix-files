@@ -76,6 +76,7 @@ in {
     chromium
     dmenu
     emacs
+    dropbox-cli
     file
     gitAndTools.git-extras
     gitFull
