@@ -1,5 +1,6 @@
 { pkgs }:
-{
+let overrideCabal = pkgs.haskell.lib.overrideCabal;
+in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
   pulseaudio = true;
@@ -25,13 +26,23 @@
 
     haskellToolsEnv = super.buildEnv {
       name = "haskellTools";
-      paths = haskellTools super.haskellPackages;
+      paths = haskellTools haskellPackages;
+    };
+
+    haskellPackages = super.haskellPackages.override {
+      overrides = self: super: {
+        streaming-wai = self.callPackage ~/src/haskell/streaming-wai {};
+        pipes = overrideCabal super.pipes (drv: {
+          version = "4.1.7";
+          sha256 = "104620e6868cc2c4f84c85416ecfce32d53fbbbecaacc7466a0566f574f9d616";
+        });
+      };
     };
 
     haskellEnvFun = { tools ? haskellTools, withHoogle ? false, withPackages ? true, compiler ? null, name }:
       let hp = if compiler != null
                  then super.haskell.packages.${compiler}
-                 else super.haskellPackages;
+                 else haskellPackages;
 
           ghcWith = if withHoogle
                       then hp.ghcWithHoogle
@@ -53,17 +64,19 @@
     };
 
     haskellTools = hp: with hp; [
+      #hdevtools
+      alex happy
+      cabal-install
       cabal2nix
+      ghc-core
+      ghc-mod
+      hasktags
+      super.multi-ghc-travis
       hindent
       hlint
-      ghc-mod
-      #hdevtools
-      ghc-core
-      structured-haskell-mode
-      hasktags
       pointfree
-      cabal-install
-      alex happy
+      stack
+      structured-haskell-mode
     ];
 
     myHaskellPackages = hp: with hp; [
@@ -145,6 +158,7 @@
       # pandoc
       parsec
       parsers
+      pcg-random
       pipes
       pipes-async
       pipes-attoparsec
@@ -197,6 +211,7 @@
       stm-stats
       streaming
       streaming-bytestring
+      streaming-wai
       strict
       stringsearch
       strptime
@@ -235,6 +250,7 @@
       vector
       void
       wai
+      wai-conduit
       warp
       wreq
       xhtml
