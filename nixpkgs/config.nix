@@ -2,15 +2,14 @@
 let haskellOverrides = import ./haskell-overrides.nix;
 in {
   allowUnfree = true;
+  allowUnfreeRedistributable = true;
   allowBroken = false;
   zathura.useMupdf = true;
 
-  packageOverrides = super:
-  let haskellPackages = super.haskellPackages.override {
-    overrides = haskellOverrides pkgs;
-  };
-  in rec {
-    inherit haskellPackages;
+  packageOverrides = super: rec {
+    haskellPackages = super.haskellPackages.override {
+      overrides = haskellOverrides pkgs;
+    };
 
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
@@ -48,18 +47,23 @@ in {
         paths = basePackages;
       };
 
+
     haskellTools = hp: with hp; [
-      cabal2nix
-      hindent
-      hlint
       #ghc-mod
       #hdevtools
-      ghc-core
-      structured-haskell-mode
-      hasktags
-      pointfree
+      alex 
       cabal-install
-      alex happy
+      cabal2nix
+      ghc-core
+      ghc-mod
+      happy
+      hasktags
+      hindent
+      hlint
+      pointfree
+      stack
+      structured-haskell-mode
+      super.multi-ghc-travis
     ];
 
     myHaskellPackages = hp: with hp; [
@@ -68,6 +72,7 @@ in {
       # compdata
       # errors
       # fixplate
+      # folds
       # linearscan
       # linearscan-hoopl
       # machines
@@ -80,13 +85,13 @@ in {
       # time-recurrence
       # timeparsers
       # units
-      # folds
       Boolean
       HTTP
       HUnit
       MissingH
       QuickCheck
       SafeSemaphore
+      Spock
       aeson
       async
       attoparsec
@@ -151,6 +156,7 @@ in {
       optparse-applicative
       parsec
       parsers
+      pcg-random
       persistent
       persistent-mongoDB
       persistent-template
@@ -203,6 +209,7 @@ in {
       stm-stats
       streaming
       streaming-bytestring
+      streaming-wai
       strict
       stringsearch
       strptime
@@ -236,6 +243,7 @@ in {
       vector
       void
       wai
+      wai-conduit
       warp
       wreq
       xhtml

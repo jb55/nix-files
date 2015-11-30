@@ -61,36 +61,51 @@ in {
     hostName = "archer";
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
-      174.143.211.135 globalgamers.znc.jb55.com
     '';
   };
 
   hardware = {
     bluetooth.enable = true;
-    #pulseaudio.enable = true;
+    pulseaudio.enable = true;
+    sane = {
+      enable = true;
+      configDir = "/home/jb55/.sane";
+    };
     opengl.driSupport32Bit = true;
   };
 
+  environment.x11Packages = with pkgs; [
+    gnome.gnomeicontheme
+    gtk
+    hicolor_icon_theme
+    shared_mime_info
+    xfce.thunar
+    xfce.xfce4icontheme  # for thunar
+  ];
+
   environment.systemPackages = with pkgs; [
     bc
+    binutils
     chromium
     dmenu
-    emacs
     dropbox-cli
+    emacs
     file
     gitAndTools.git-extras
     gitFull
-    haskellPackages.xmobar
+    haskellPackages.taffybar
     hsetroot
     htop
     lsof
     nix-repl
+    parcellite
+    patchelf
     redshift
     rsync
     rxvt_unicode
     scrot
     silver-searcher
-    zip
+    slock
     subversion
     unzip
     vim
@@ -101,12 +116,13 @@ in {
     xclip
     xdg_utils
     xlibs.xev
+    xlibs.xmodmap
     xlibs.xset
-    slock
     zathura
+    zip
   ];
 
-  nixpkgs.config = import ~/.nixpkgs/config.nix;
+  nixpkgs.config = import /home/jb55/.nixpkgs/config.nix;
 
   services.redshift = {
     enable = true;
@@ -153,14 +169,15 @@ in {
 
     displayManager = {
       sessionCommands = ''
-#       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
+        ${pkgs.haskellPackages.taffybar}/bin/taffybar &
+        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
+        ${pkgs.parcellite}/bin/parcellite &
+        ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
+        ${pkgs.xbindkeys}/bin/xbindkeys
+        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
         ${pkgs.xlibs.xset}/bin/xset m 0 0
-        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
-        ${pkgs.hsetroot}/bin/hsetroot -solid '#1a2028'
-        ${pkgs.xbindkeys}/bin/xbindkeys
-        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
-        ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
       '';
 
       lightdm.enable = true;
@@ -172,21 +189,26 @@ in {
       Option "metamodes" "1920x1080 +0+0"
     '';
 
-    windowManager.spectrwm.enable = true;
-    windowManager.default = "spectrwm";
-#     enable = true;
-#     enableContribAndExtras = true;
-#     extraPackages = haskellngPackages: [
-#       haskellngPackages.taffybar
-#     ];
-#   };
+    windowManager = {
+      xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        extraPackages = hp: [
+          hp.taffybar
+        ];
+      };
+      default = "xmonad";
+    };
   };
 
-  security.setuidPrograms = [ "slock" ];
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.docker.enable = true;
 
+  security.setuidPrograms = [ "slock" ];
   security.pki.certificates = [ flynnCert ];
 
   users.extraUsers.jb55 = user;
+  users.extraGroups.vboxusers.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
@@ -198,10 +220,12 @@ in {
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.gutenprint ] ;
+  };
 
   #virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
 }
-
