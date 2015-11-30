@@ -134,6 +134,11 @@ in {
     enable = true;
   };
 
+  services.postgresql = {
+    enable = true;
+    authentication = "local all all ident";
+  };
+
   services.xserver = {
     enable = true;
     layout = "us";
