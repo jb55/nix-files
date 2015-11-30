@@ -1,10 +1,17 @@
 { pkgs }:
-{
+let haskellOverrides = import ./haskell-overrides.nix;
+in {
   allowUnfree = true;
   allowBroken = false;
   zathura.useMupdf = true;
 
-  packageOverrides = super: rec {
+  packageOverrides = super:
+  let haskellPackages = super.haskellPackages.override {
+    overrides = haskellOverrides pkgs;
+  };
+  in rec {
+    inherit haskellPackages;
+
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
