@@ -29,7 +29,7 @@ in {
     device = "/dev/sda";
   };
 
-  programs.ssh.startAgent = true;
+  programs.ssh.startAgent = false;
 
   time.timeZone = "America/Vancouver";
 
@@ -141,6 +141,8 @@ in {
     enable = true;
     layout = "us";
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
+
+    startGnuPGAgent = true;
 
     desktopManager = {
       default = "none";
