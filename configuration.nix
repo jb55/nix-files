@@ -6,18 +6,21 @@
 
 let caches = [ "https://cache.nixos.org/"];
     zsh = "/run/current-system/sw/bin/zsh";
+    machine = "monad";
+    home = "/home/jb55";
+    machineConfig = import "${home}/etc/nix-files/machines/${machine}.nix";
     user = {
         name = "jb55";
         group = "users";
         uid = 1000;
         extraGroups = [ "wheel" ];
         createHome = true;
-        home = "/home/jb55";
+        home = home;
         shell = zsh;
       };
     flynnCert = "-----BEGIN CERTIFICATE-----\nMIIDBDCCAe6gAwIBAgIRAPEpcMuL9MBoJy4I2TJBwSkwCwYJKoZIhvcNAQELMC0x\nDjAMBgNVBAoTBUZseW5uMRswGQYDVQQLExJGbHlubiBFcGhlbWVyYWwgQ0EwHhcN\nMTUxMTE3MjEzMjM5WhcNMjAxMTE1MjEzMjM5WjAtMQ4wDAYDVQQKEwVGbHlubjEb\nMBkGA1UECxMSRmx5bm4gRXBoZW1lcmFsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOC\nAQ8AMIIBCgKCAQEA4KzIAMp0Itlzilc4qpZJyPI9V1h+D91HJGmGZ4dlbMnU/cr5\nFV32eymw4vT6DxYo4+5LkXQ6FbRQ5fVKvNGwUYC71V0ir7yQc6w8mPYSo2LOCWIB\nk9uC66ERMgiQ0Jaii30ptq9dYJRvwoT7ApgUwOYvvYmD+Xc9x2WQQiThecGEJl4l\nZIO0YuBaqohsBuVByxUuhkpu7A0Kv4qRO3I9rWmRgAzpeTvMaiN+TjaukPjzrxIu\ncRopysKS19yVL1mBnfrPAZIKdiW4KfYH7GnV0dSwUsFH36iO30Tb+WWo3302XDZi\nKDBy8YweYkkj8kQZ6L6R5zgej5bVsE3Pf+BzywIDAQABoyMwITAOBgNVHQ8BAf8E\nBAMCAAYwDwYDVR0TAQH/BAUwAwEB/zALBgkqhkiG9w0BAQsDggEBACdxeKbSpyYG\nIO8SoknVG+l4rDgnLh9p12frRicBfNey7NEn9tJGAZ9tMt9xq/VEksK8GS3reehi\nCzo5Q4vFusgxfBCTglmAmJinZI7PbMTuc2qKcCkHKnBMrKeFENOVPBO90XOAQ5To\nwyy+1NKtxpgEV9FfFxxR5VNCxaOgF7Y8u1YhG0biWKRKcjGcJq9HiASsWeD5m6+S\n+QSk0J/SaIobX/d90IGR54bnubObbspDCGi76FiKxWDOSU0Wi1yNcIbFbdqeSXHV\n5ky3QEopqf4S9D4OLkdauxO6M8cKoSpeDAYLLiViBpLb8WZAafse26Vm34w521pU\nuw2W4U8T+IU=\n-----END CERTIFICATE-----";
 in {
-  imports =
+imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
@@ -58,7 +61,7 @@ in {
   };
 
   networking = {
-    hostName = "archer";
+    hostName = machine;
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
     '';
@@ -69,7 +72,7 @@ in {
     pulseaudio.enable = true;
     sane = {
       enable = true;
-      configDir = "/home/jb55/.sane";
+      configDir = "${home}/.sane";
     };
     opengl.driSupport32Bit = true;
   };
@@ -122,7 +125,7 @@ in {
     zip
   ];
 
-  nixpkgs.config = import /home/jb55/.nixpkgs/config.nix;
+  nixpkgs.config = import "${home}/.nixpkgs/config.nix";
 
   services.redshift = {
     enable = true;
@@ -132,11 +135,6 @@ in {
 
     latitude="49.270186";
     longitude="-123.109353";
-  };
-
-  services.syncthing = {
-    enable = true;
-    user = "jb55";
   };
 
   services.mpd = {
@@ -175,10 +173,9 @@ in {
         ${pkgs.parcellite}/bin/parcellite &
         ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
         ${pkgs.xbindkeys}/bin/xbindkeys
-        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
+        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmaor
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-        ${pkgs.xlibs.xset}/bin/xset m 0 0
-      '';
+      '' + "\n" + (machineConfig pkgs).sessionCommands or "";
 
       lightdm.enable = true;
     };
