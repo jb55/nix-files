@@ -169,7 +169,6 @@ imports =
       sessionCommands = ''
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
         ${pkgs.haskellPackages.taffybar}/bin/taffybar &
-        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
         ${pkgs.parcellite}/bin/parcellite &
         ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
         ${pkgs.xbindkeys}/bin/xbindkeys
