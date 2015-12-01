@@ -51,7 +51,7 @@ in {
     haskellTools = hp: with hp; [
       #ghc-mod
       #hdevtools
-      alex 
+      alex
       cabal-install
       cabal2nix
       ghc-core
