@@ -196,7 +196,7 @@ imports =
         ${pkgs.parcellite}/bin/parcellite &
         ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
         ${pkgs.xbindkeys}/bin/xbindkeys
-        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmaor
+        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
       '' + "\n" + (machineConfig pkgs).sessionCommands or "";
 
