@@ -57,6 +57,18 @@ imports =
     supportedFilesystems = ["ntfs"];
   };
 
+  fileSystems = [
+    { mountPoint = "/sand";
+      device = "/dev/disk/by-label/sand";
+      fsType = "ext4";
+    }
+    { mountPoint = "/home/jb55/.local/share/Steam/steamapps";
+      device = "/sand/data/SteamAppsLinux";
+      fsType = "none";
+      options = "bind";
+    }
+  ];
+
   programs.ssh.startAgent = false;
 
   time.timeZone = "America/Vancouver";
