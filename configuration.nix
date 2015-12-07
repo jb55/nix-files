@@ -26,11 +26,27 @@ imports =
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub = {
-    enable = true;
-    version = 2;
-    device = "/dev/sda";
+  boot = {
+    loader.grub = {
+      enable = true;
+      version = 2;
+      device = "/dev/sda";
+    };
+
+    supportedFilesystems = ["ntfs"];
   };
+
+  fileSystems = [
+    { mountPoint = "/sand";
+      device = "/dev/disk/by-label/sand";
+      fsType = "ext4";
+    }
+    { mountPoint = "/home/jb55/.local/share/Steam/steamapps";
+      device = "/sand/data/SteamAppsLinux";
+      fsType = "none";
+      options = "bind";
+    }
+  ];
 
   programs.ssh.startAgent = false;
 
@@ -65,11 +81,19 @@ imports =
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
     '';
+
+    firewall = {
+      allowPing = true;
+      allowedTCPPorts = [ 22 ];
+    };
   };
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = true;
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+    };
     sane = {
       enable = true;
       configDir = "${home}/.sane";
@@ -169,9 +193,8 @@ imports =
       sessionCommands = ''
         ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
         ${pkgs.haskellPackages.taffybar}/bin/taffybar &
-        ${pkgs.haskellPackages.xmobar}/bin/xmobar &
         ${pkgs.parcellite}/bin/parcellite &
-        ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
+        ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
         ${pkgs.xbindkeys}/bin/xbindkeys
         ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmaor
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
@@ -206,6 +229,7 @@ imports =
 
   users.extraUsers.jb55 = user;
   users.extraGroups.vboxusers.members = [ "jb55" ];
+  users.extraGroups.docker.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
@@ -221,8 +245,6 @@ imports =
     enable = true;
     drivers = [ pkgs.gutenprint ] ;
   };
-
-  #virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
 }

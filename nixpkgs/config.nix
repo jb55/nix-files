@@ -7,6 +7,8 @@ in {
   zathura.useMupdf = true;
 
   packageOverrides = super: rec {
+    bluez = pkgs.bluez5;
+
     haskellPackages = super.haskellPackages.override {
       overrides = haskellOverrides pkgs;
     };
