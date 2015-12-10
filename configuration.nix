@@ -84,7 +84,7 @@ imports =
 
     firewall = {
       allowPing = true;
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = [ 22 5000 143 ];
     };
   };
 
@@ -175,6 +175,16 @@ imports =
   services.postgresql = {
     enable = true;
     authentication = "local all all ident";
+  };
+
+  services.tor = {
+    enable = true;
+    relay = {
+      enable = true;
+      accountingMax = "50 GBytes";
+      accountingStart = "month 1 1:00";
+      portSpec = "143";
+    };
   };
 
   services.xserver = {
