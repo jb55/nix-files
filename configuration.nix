@@ -158,6 +158,7 @@ imports =
     longitude="-123.109353";
   };
 
+  services.zerotierone.enable = true;
   services.mpd = {
     enable = true;
     dataDir = "/home/jb55/mpd";
