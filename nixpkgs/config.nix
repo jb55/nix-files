@@ -1,5 +1,6 @@
 { pkgs }:
 let haskellOverrides = import ./haskell-overrides.nix;
+    myPackages = import ./my-packages.nix;
 in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
@@ -253,5 +254,5 @@ in {
       zippers
       zlib
     ];
-  };
+  } // myPackages (with pkgs.stdenv; { inherit pkgs mkDerivation; });
 }
