@@ -6,7 +6,7 @@
 
 let caches = [ "https://cache.nixos.org/"];
     zsh = "/run/current-system/sw/bin/zsh";
-    machine = "monad";
+    machine = "archer";
     home = "/home/jb55";
     machineConfig = import "${home}/etc/nix-files/machines/${machine}.nix";
     user = {
