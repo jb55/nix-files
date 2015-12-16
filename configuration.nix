@@ -73,7 +73,7 @@ imports =
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = false;
+    pulseaudio.enable = true;
     sane = {
       enable = true;
       configDir = "${home}/.sane";
