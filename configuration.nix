@@ -65,6 +65,10 @@ imports =
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
     '';
+    firewall = {
+      allowPing = true;
+      allowedTCPPorts = [ 8999 5000 ];
+    };
   };
 
   hardware = {
