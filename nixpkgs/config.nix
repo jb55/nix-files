@@ -7,7 +7,13 @@ in {
   allowBroken = false;
   zathura.useMupdf = true;
 
+  chromium = {
+    enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+    enablePepperPDF = true;
+  };
+
   packageOverrides = super: rec {
+
     haskellPackages = super.haskellPackages.override {
       overrides = haskellOverrides pkgs;
     };
