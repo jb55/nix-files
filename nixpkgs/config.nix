@@ -103,6 +103,11 @@ in {
       async
       attoparsec
       bifunctors
+      bitcoin-api
+      bitcoin-api-extra
+      bitcoin-block
+      bitcoin-script
+      bitcoin-tx
       blaze-builder
       blaze-builder-conduit
       blaze-builder-enumerator
@@ -114,11 +119,15 @@ in {
       cereal
       comonad
       comonad-transformers
+      compact-string-fix
       dlist
       dlist-instances
       doctest
       exceptions
+      failure
       fingertree
+      flexible
+      flexible-instances
       foldl
       free
       hamlet
@@ -155,6 +164,7 @@ in {
       monad-par-extras
       monad-stm
       monadloc
+      money
       mongoDB
       monoid-extras
       network
@@ -183,6 +193,7 @@ in {
       pipes-safe
       pipes-shell
       pipes-text
+      pipes-wai
       posix-paths
       postgresql-simple
       pretty-show
@@ -250,7 +261,7 @@ in {
       vector
       void
       wai
-      wai-conduit
+
       warp
       wreq
       xhtml
