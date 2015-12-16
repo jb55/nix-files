@@ -90,10 +90,7 @@ imports =
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-    };
+    pulseaudio.enable = true;
     sane = {
       enable = true;
       configDir = "${home}/.sane";
