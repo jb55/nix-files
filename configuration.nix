@@ -121,6 +121,7 @@ imports =
     hsetroot
     htop
     lsof
+    mpc_cli
     nix-repl
     parcellite
     patchelf
@@ -148,6 +149,8 @@ imports =
 
   nixpkgs.config = import "${home}/.nixpkgs/config.nix";
 
+  services.zerotierone.enable = true;
+
   services.redshift = {
     enable = true;
     temperature.day = 5700;
@@ -161,9 +164,16 @@ imports =
   services.zerotierone.enable = true;
   services.mpd = {
     enable = true;
-    dataDir = "/home/jb55/mpd";
+    dataDir = "/sand/mpd";
     user = "jb55";
     group = "users";
+    extraConfig = ''
+      audio_output {
+        type     "pulse"
+        name     "Local MPD"
+        server   "127.0.0.1"
+      }
+    '';
   };
 
   services.mongodb = {

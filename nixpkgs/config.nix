@@ -7,9 +7,14 @@ in {
   allowBroken = false;
   zathura.useMupdf = true;
 
+  firefox = {
+    enableGoogleTalkPlugin = true;
+    enableAdobeFlash = true;
+  };
+
   chromium = {
     enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
-    enablePepperPDF = true;
+    enablePepperPDF = false;
   };
 
   packageOverrides = super: rec {
@@ -37,7 +42,7 @@ in {
       paths = haskellTools haskellPackages;
     };
 
-    haskellEnvFun = { withHoogle ? false, withPackages ? true, compiler ? null, name }:
+    haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
       let hp = if compiler != null
                  then super.haskell.packages.${compiler}
                  else haskellPackages;
@@ -46,14 +51,10 @@ in {
                       then hp.ghcWithHoogle
                       else hp.ghcWithPackages;
 
-          basePackages = if withPackages
-                           then [(ghcWith myHaskellPackages)]
-                           else [];
       in super.buildEnv {
         name = name;
-        paths = basePackages;
+        paths = [(ghcWith myHaskellPackages)];
       };
-
 
     haskellTools = hp: with hp; [
       #ghc-mod
@@ -74,31 +75,6 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      # CC-delcont
-      # arithmoi
-      # compdata
-      # errors
-      # fixplate
-      # folds
-      # linearscan
-      # linearscan-hoopl
-      # machines
-      # orgmode-parse
-      # pandoc
-      # recursion-schemes
-      # singletons
-      # these
-      # thyme
-      # time-recurrence
-      # timeparsers
-      # units
-      Boolean
-      HTTP
-      HUnit
-      MissingH
-      QuickCheck
-      SafeSemaphore
-      Spock
       aeson
       async
       attoparsec
@@ -114,12 +90,14 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
+      Boolean
       cased
       cassava
       cereal
       comonad
       comonad-transformers
       compact-string-fix
+      directory_1_2_4_0
       dlist
       dlist-instances
       doctest
@@ -135,11 +113,14 @@ in {
       hspec
       hspec-expectations
       html
+      HTTP
       http-client
       http-date
       http-types
+      HUnit
       io-memoize
       keys
+      language-bash
       language-c
       language-javascript
       lens
@@ -156,14 +137,15 @@ in {
       logict
       mime-mail
       mime-types
+      MissingH
       mmorph
       monad-control
       monad-coroutine
+      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
-      monadloc
       money
       mongoDB
       monoid-extras
@@ -198,6 +180,7 @@ in {
       postgresql-simple
       pretty-show
       profunctors
+      QuickCheck
       random
       reducers
       reflection
@@ -211,6 +194,7 @@ in {
       retry
       rex
       safe
+      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -221,6 +205,7 @@ in {
       simple-reflect
       speculation
       split
+      Spock
       spoon
       stm
       stm-chans
@@ -261,7 +246,6 @@ in {
       vector
       void
       wai
-
       warp
       wreq
       xhtml
