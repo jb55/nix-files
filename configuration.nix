@@ -80,6 +80,7 @@ imports =
     hostName = machine;
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
+      6.6.6.187 archer
     '';
 
     firewall = {
