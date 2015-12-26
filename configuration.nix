@@ -149,8 +149,6 @@ imports =
 
   nixpkgs.config = import "${home}/.nixpkgs/config.nix";
 
-  services.zerotierone.enable = true;
-
   services.redshift = {
     enable = true;
     temperature.day = 5700;
