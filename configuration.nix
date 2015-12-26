@@ -5,10 +5,13 @@
 { config, pkgs, ... }:
 
 let caches = [ "https://cache.nixos.org/"];
+    nixfiles = "${home}/etc/nix-files";
+    machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
     zsh = "/run/current-system/sw/bin/zsh";
     machine = "monad";
+    nixpkgsConfig = import "${home}/.nixpkgs/config.nix";
+    userConfig = (nixpkgsConfig {inherit pkgs;}).userConfig;
     home = "/home/jb55";
-    machineConfig = import "${home}/etc/nix-files/machines/${machine}.nix";
     user = {
         name = "jb55";
         group = "users";
@@ -148,7 +151,7 @@ imports =
     zip
   ];
 
-  nixpkgs.config = import "${home}/.nixpkgs/config.nix";
+  nixpkgs.config = nixpkgsConfig;
 
   services.redshift = {
     enable = true;
@@ -207,16 +210,7 @@ imports =
     };
 
     displayManager = {
-      sessionCommands = ''
-        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
-        ${pkgs.haskellPackages.taffybar}/bin/taffybar &
-        ${pkgs.parcellite}/bin/parcellite &
-        ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
-        ${pkgs.xbindkeys}/bin/xbindkeys
-        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
-        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-      '' + "\n" + (machineConfig pkgs).sessionCommands or "";
-
+      sessionCommands = "${userConfig}/bin/xinitrc";
       lightdm.enable = true;
     };
 

@@ -1,7 +1,13 @@
 { pkgs }:
 let haskellOverrides = import ./haskell-overrides.nix;
     myPackages = import ./my-packages.nix;
+    callPackage = pkgs.callPackage;
+    userConfig = callPackage ./dotfiles.nix {
+      # machineSessionCommands = machineConfig.sessionCommands or "";
+    };
 in {
+  inherit userConfig;
+
   allowUnfree = true;
   allowUnfreeRedistributable = true;
   allowBroken = false;
@@ -18,6 +24,8 @@ in {
   };
 
   packageOverrides = super: rec {
+
+    inherit userConfig;
 
     haskellPackages = super.haskellPackages.override {
       overrides = haskellOverrides pkgs;
