@@ -17,13 +17,14 @@ let
     md5 = "04d86f9b50e42d46d566bded9a91ee2c";
   };
   sessionCommands = ''
-    #!${pkgs.bash}
+    #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
     ${pkgs.haskellPackages.taffybar}/bin/taffybar &
     ${pkgs.parcellite}/bin/parcellite &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
-    ${pkgs.xbindkeys}/bin/xbindkeys
-    ${pkgs.xlibs.xmodmap}/bin/xmodmap $dotfiles/.Xmodmap
+    ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
+    ${pkgs.xlibs.xmodmap}/bin/xmodmap ${dotfiles}/.Xmodmap
+    ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
     ${pkgs.xlibs.xset}/bin/xset r rate 200 50
    '' + "\n" + machineSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;

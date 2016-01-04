@@ -27,6 +27,8 @@ in {
 
     inherit userConfig;
 
+    bluez = pkgs.bluez5;
+
     haskellPackages = super.haskellPackages.override {
       overrides = haskellOverrides pkgs;
     };
