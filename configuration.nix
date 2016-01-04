@@ -5,10 +5,13 @@
 { config, pkgs, ... }:
 
 let caches = [ "https://cache.nixos.org/"];
+    nixfiles = "${home}/etc/nix-files";
+    machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
     zsh = "/run/current-system/sw/bin/zsh";
     machine = "archer";
+    nixpkgsConfig = import "${home}/.nixpkgs/config.nix";
+    userConfig = (nixpkgsConfig {inherit pkgs;}).userConfig;
     home = "/home/jb55";
-    machineConfig = (import "${home}/etc/nix-files/machines/${machine}.nix") pkgs;
     user = {
         name = "jb55";
         group = "users";
@@ -64,16 +67,22 @@ imports =
     hostName = machine;
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
+      6.6.6.187 archer
     '';
+
     firewall = {
       allowPing = true;
-      allowedTCPPorts = [ 8999 5000 ];
+      allowedTCPPorts = [ 22 5000 143 ];
     };
   };
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = true;
+    pulseaudio = {
+      package = pkgs.pulseaudioFull;
+      enable = true;
+      support32Bit = true;
+    };
     sane = {
       enable = true;
       configDir = "${home}/.sane";
@@ -104,6 +113,7 @@ imports =
     hsetroot
     htop
     lsof
+    mpc_cli
     nix-repl
     parcellite
     patchelf
@@ -129,7 +139,7 @@ imports =
     zip
   ];
 
-  nixpkgs.config = import "${home}/.nixpkgs/config.nix";
+  nixpkgs.config = nixpkgsConfig;
 
   services.redshift = {
     enable = true;
@@ -147,6 +157,13 @@ imports =
     dataDir = "/home/jb55/mpd";
     user = "jb55";
     group = "users";
+    extraConfig = ''
+      audio_output {
+        type     "pulse"
+        name     "Local MPD"
+        server   "127.0.0.1"
+      }
+    '';
   };
 
   services.mongodb = {
@@ -171,16 +188,7 @@ imports =
     };
 
     displayManager = {
-      sessionCommands = ''
-        ${pkgs.feh}/bin/feh --bg-fill $HOME/etc/img/polygon1.png
-        ${pkgs.haskellPackages.taffybar}/bin/taffybar &
-        ${pkgs.parcellite}/bin/parcellite &
-        ${pkgs.xautolock}/bin/xautolock -time 5 -locker slock &
-        ${pkgs.xbindkeys}/bin/xbindkeys
-        ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
-        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-      '' + "\n" + machineConfig.sessionCommands or "";
-
+      sessionCommands = "${userConfig}/bin/xinitrc";
       lightdm.enable = true;
     };
 
@@ -210,6 +218,7 @@ imports =
 
   users.extraUsers.jb55 = user;
   users.extraGroups.vboxusers.members = [ "jb55" ];
+  users.extraGroups.docker.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
@@ -225,8 +234,6 @@ imports =
     enable = true;
     drivers = [ pkgs.gutenprint ] ;
   };
-
-  #virtualisation.docker.enable = true;
 
   programs.zsh.enable = true;
 }
