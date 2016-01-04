@@ -8,7 +8,7 @@ let caches = [ "https://cache.nixos.org/"];
     zsh = "/run/current-system/sw/bin/zsh";
     machine = "archer";
     home = "/home/jb55";
-    machineConfig = import "${home}/etc/nix-files/machines/${machine}.nix";
+    machineConfig = (import "${home}/etc/nix-files/machines/${machine}.nix") pkgs;
     user = {
         name = "jb55";
         group = "users";
@@ -179,7 +179,7 @@ imports =
         ${pkgs.xbindkeys}/bin/xbindkeys
         ${pkgs.xlibs.xmodmap}/bin/xmodmap $HOME/.Xmodmap
         ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-      '' + "\n" + (machineConfig pkgs).sessionCommands or "";
+      '' + "\n" + machineConfig.sessionCommands or "";
 
       lightdm.enable = true;
     };
