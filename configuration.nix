@@ -166,9 +166,8 @@ imports =
     '';
   };
 
-  services.mongodb = {
-    enable = true;
-  };
+  services.mongodb.enable = true;
+  services.redis.enable = true;
 
   services.postgresql = {
     enable = true;
