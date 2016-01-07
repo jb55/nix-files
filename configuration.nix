@@ -182,9 +182,8 @@ imports =
     '';
   };
 
-  services.mongodb = {
-    enable = true;
-  };
+  services.mongodb.enable = true;
+  services.redis.enable = true;
 
   services.postgresql = {
     enable = true;
@@ -197,6 +196,7 @@ imports =
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
     startGnuPGAgent = true;
+    wacom.enable = true;
 
     desktopManager = {
       default = "none";

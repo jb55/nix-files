@@ -9,8 +9,8 @@ let
   dotfiles = fetchFromGitHub {
     owner = "jb55";
     repo = "dotfiles";
-    rev = "11d2e02cf733dae9a4218c28cb099f864f9b3bad";
-    sha256 = "1hkrpy4kgz1n256dk365yvjxay8w1nr99924fqzlxqjrxdpgm60q";
+    rev = "5e6282c2be7dbf58d95741fb8b6349c588051249";
+    sha256 = "0gfszgmny1qss1k9cl5v1jvq3cqqvw1f19vbdh415sc38frvk1sl";
   };
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";

@@ -78,8 +78,7 @@ in {
       hasktags
       hindent
       hlint
-      pointfree
-      stack
+      # pointfree
       structured-haskell-mode
       super.multi-ghc-travis
     ];
@@ -107,10 +106,10 @@ in {
       comonad
       comonad-transformers
       compact-string-fix
-      directory_1_2_4_0
       dlist
       dlist-instances
       doctest
+      either
       exceptions
       failure
       fingertree
@@ -209,6 +208,13 @@ in {
       scotty
       semigroupoids
       semigroups
+      servant
+      servant-cassava
+      servant-client
+      servant-docs
+      servant-lucid
+      servant-server
+      servant-swagger
       shake
       shakespeare
       shelly
