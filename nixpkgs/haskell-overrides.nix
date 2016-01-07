@@ -38,4 +38,4 @@ in {
       sha256 = "1r1dv7yaalxja06jxqi7rjcdkb72mb2prnk8crzqap0gkmbahqcd";
     };
   });
-} // monstercatPkgs.haskellPackages
+} # // monstercatPkgs.haskellPackages
