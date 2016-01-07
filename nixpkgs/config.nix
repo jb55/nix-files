@@ -78,13 +78,20 @@ in {
       hasktags
       hindent
       hlint
-      pointfree
-      stack
+      # pointfree
       structured-haskell-mode
       super.multi-ghc-travis
     ];
 
     myHaskellPackages = hp: with hp; [
+      # directory_1_2_4_0
+      Boolean
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      SafeSemaphore
+      Spock
       aeson
       async
       attoparsec
@@ -100,17 +107,16 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
-      Boolean
       cased
       cassava
       cereal
       comonad
       comonad-transformers
       compact-string-fix
-      directory_1_2_4_0
       dlist
       dlist-instances
       doctest
+      either
       exceptions
       failure
       fingertree
@@ -123,11 +129,9 @@ in {
       hspec
       hspec-expectations
       html
-      HTTP
       http-client
       http-date
       http-types
-      HUnit
       io-memoize
       keys
       language-bash
@@ -147,15 +151,14 @@ in {
       logict
       mime-mail
       mime-types
-      MissingH
       mmorph
       monad-control
       monad-coroutine
-      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
+      monadloc
       money
       mongoDB
       monoid-extras
@@ -190,7 +193,6 @@ in {
       postgresql-simple
       pretty-show
       profunctors
-      QuickCheck
       random
       reducers
       reflection
@@ -204,18 +206,23 @@ in {
       retry
       rex
       safe
-      SafeSemaphore
       sbv
       scotty
       semigroupoids
       semigroups
+      servant
+      servant-cassava
+      servant-client
+      servant-docs
+      servant-lucid
+      servant-server
+      servant-swagger
       shake
       shakespeare
       shelly
       simple-reflect
       speculation
       split
-      Spock
       spoon
       stm
       stm-chans
