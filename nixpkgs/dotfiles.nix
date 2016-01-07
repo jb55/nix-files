@@ -9,8 +9,8 @@ let
   dotfiles = fetchFromGitHub {
     owner = "jb55";
     repo = "dotfiles";
-    rev = "11d2e02cf733dae9a4218c28cb099f864f9b3bad";
-    sha256 = "1hkrpy4kgz1n256dk365yvjxay8w1nr99924fqzlxqjrxdpgm60q";
+    rev = "8dfc255e8c29a517f47ca1b0aa32f123a4e5511e";
+    sha256 = "0sg7cfymgnlrp5jrgfpf0qz0pn2n1ngvdncgfdzb3c4dq5fz6322";
   };
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
@@ -24,8 +24,8 @@ let
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
     ${pkgs.xlibs.xmodmap}/bin/xmodmap ${dotfiles}/.Xmodmap
-    ${pkgs.xlibs.xinput}/bin/xinput set-prop 8 "Device Accel Constant Deceleration" 3
     ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+    ${pkgs.xlibs.xset}/bin/xset m 0 0
    '' + "\n" + machineSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;
 in stdenv.mkDerivation rec {
