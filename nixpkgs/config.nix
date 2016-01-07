@@ -1,7 +1,12 @@
 { pkgs }:
 let haskellOverrides = import ./haskell-overrides.nix;
-    myPackages = import ./my-packages.nix;
     callPackage = pkgs.callPackage;
+    jb55pkgs = import (pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "jb55pkgs";
+      rev = "b746f519c2a237c9996dff42b1d3f3658329dddd";
+      sha256 = "0vhip23alsi3zjag2wz16rnj0gdv254ml95ivwcw8df2k5957sjb";
+    }) { nixpkgs = pkgs; };
     userConfig = callPackage ./dotfiles.nix {
       # machineSessionCommands = machineConfig.sessionCommands or "";
     };
@@ -26,6 +31,11 @@ in {
   packageOverrides = super: rec {
 
     inherit userConfig;
+
+    myPackages = super.buildEnv {
+      name = "myPackages";
+      paths = builtins.attrValues jb55pkgs;
+    };
 
     bluez = pkgs.bluez5;
 
@@ -273,5 +283,5 @@ in {
       zippers
       zlib
     ];
-  } // myPackages (with pkgs.stdenv; { inherit pkgs mkDerivation; });
+  };
 }
