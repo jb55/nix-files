@@ -84,7 +84,6 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      # directory_1_2_4_0
       Boolean
       HTTP
       HUnit
@@ -124,8 +123,10 @@ in {
       flexible-instances
       foldl
       free
+      generics-sop
       hamlet
       hashable
+      heroku
       hspec
       hspec-expectations
       html
@@ -171,6 +172,7 @@ in {
       pcg-random
       persistent
       persistent-mongoDB
+      persistent-postgresql
       persistent-template
       pipes
       pipes-async
@@ -191,6 +193,7 @@ in {
       pipes-wai
       posix-paths
       postgresql-simple
+      postgresql-simple-sop
       pretty-show
       profunctors
       random
