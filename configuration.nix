@@ -116,6 +116,7 @@ imports =
     xfce.xfce4icontheme  # for thunar
 
     bc
+    pidgin
     binutils
     chromium
     dmenu
@@ -138,6 +139,7 @@ imports =
     scrot
     silver-searcher
     slock
+    spotify
     subversion
     unzip
     vim
