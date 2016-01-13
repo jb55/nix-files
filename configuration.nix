@@ -96,15 +96,25 @@ imports =
   };
 
   environment.x11Packages = with pkgs; [
-    gnome.gnomeicontheme
     gtk
+  ];
+
+  environment.variables = {
+    # GTK2_RC_FILES = "${pkgs.numix-gtk-theme}/share/themes/Numix/gtk-2.0/gtkrc";
+    GTK_DATA_PREFIX = "${config.system.path}";
+  };
+
+  environment.systemPackages = with pkgs; [
+    gnome.gnome_icon_theme
+    gtk-engine-murrine
     hicolor_icon_theme
+    numix-gtk-theme
+    numix-icon-theme-circle
+    paper-gtk-theme
     shared_mime_info
     xfce.thunar
     xfce.xfce4icontheme  # for thunar
-  ];
 
-  environment.systemPackages = with pkgs; [
     bc
     binutils
     chromium
