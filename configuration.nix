@@ -30,10 +30,14 @@ imports =
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub = {
-    enable = true;
-    version = 2;
-    device = "/dev/sda";
+  boot = {
+    loader.grub = {
+      enable = true;
+      version = 2;
+      device = "/dev/sda";
+    };
+
+    supportedFilesystems = ["ntfs"];
   };
 
   programs.ssh.startAgent = false;
