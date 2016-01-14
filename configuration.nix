@@ -5,12 +5,26 @@
 { config, pkgs, ... }:
 
 let caches = [ "https://cache.nixos.org/"];
-    nixfiles = "${home}/etc/nix-files";
-    machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
-    zsh = "/run/current-system/sw/bin/zsh";
+    nixfiles = pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "nix-files";
+      rev = "c5df1ca439dc20d98fdb11e5b7362adac2b39003";
+      sha256 = "07a1afx86qdls7r7cjyflg6a060wl3zk0rd9n1s7kqg36zqy9ymc";
+    };
+    jb55pkgs = import (pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "jb55pkgs";
+      rev = "b746f519c2a237c9996dff42b1d3f3658329dddd";
+      sha256 = "0vhip23alsi3zjag2wz16rnj0gdv254ml95ivwcw8df2k5957sjb";
+    }) { nixpkgs = pkgs; };
     machine = "monad";
+    machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
+    userConfig = pkgs.callPackage "${nixfiles}/nixpkgs/dotfiles.nix" {
+      machineSessionCommands = machineConfig.sessionCommands or "";
+    };
+    zsh = "/run/current-system/sw/bin/zsh";
     nixpkgsConfig = import "${home}/.nixpkgs/config.nix";
-    userConfig = (nixpkgsConfig {inherit pkgs;}).userConfig;
+    myPackages = builtins.attrValues jb55pkgs;
     home = "/home/jb55";
     user = {
         name = "jb55";
@@ -21,7 +35,8 @@ let caches = [ "https://cache.nixos.org/"];
         home = home;
         shell = zsh;
       };
-    flynnCert = "-----BEGIN CERTIFICATE-----\nMIIDBDCCAe6gAwIBAgIRAPEpcMuL9MBoJy4I2TJBwSkwCwYJKoZIhvcNAQELMC0x\nDjAMBgNVBAoTBUZseW5uMRswGQYDVQQLExJGbHlubiBFcGhlbWVyYWwgQ0EwHhcN\nMTUxMTE3MjEzMjM5WhcNMjAxMTE1MjEzMjM5WjAtMQ4wDAYDVQQKEwVGbHlubjEb\nMBkGA1UECxMSRmx5bm4gRXBoZW1lcmFsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOC\nAQ8AMIIBCgKCAQEA4KzIAMp0Itlzilc4qpZJyPI9V1h+D91HJGmGZ4dlbMnU/cr5\nFV32eymw4vT6DxYo4+5LkXQ6FbRQ5fVKvNGwUYC71V0ir7yQc6w8mPYSo2LOCWIB\nk9uC66ERMgiQ0Jaii30ptq9dYJRvwoT7ApgUwOYvvYmD+Xc9x2WQQiThecGEJl4l\nZIO0YuBaqohsBuVByxUuhkpu7A0Kv4qRO3I9rWmRgAzpeTvMaiN+TjaukPjzrxIu\ncRopysKS19yVL1mBnfrPAZIKdiW4KfYH7GnV0dSwUsFH36iO30Tb+WWo3302XDZi\nKDBy8YweYkkj8kQZ6L6R5zgej5bVsE3Pf+BzywIDAQABoyMwITAOBgNVHQ8BAf8E\nBAMCAAYwDwYDVR0TAQH/BAUwAwEB/zALBgkqhkiG9w0BAQsDggEBACdxeKbSpyYG\nIO8SoknVG+l4rDgnLh9p12frRicBfNey7NEn9tJGAZ9tMt9xq/VEksK8GS3reehi\nCzo5Q4vFusgxfBCTglmAmJinZI7PbMTuc2qKcCkHKnBMrKeFENOVPBO90XOAQ5To\nwyy+1NKtxpgEV9FfFxxR5VNCxaOgF7Y8u1YhG0biWKRKcjGcJq9HiASsWeD5m6+S\n+QSk0J/SaIobX/d90IGR54bnubObbspDCGi76FiKxWDOSU0Wi1yNcIbFbdqeSXHV\n5ky3QEopqf4S9D4OLkdauxO6M8cKoSpeDAYLLiViBpLb8WZAafse26Vm34w521pU\nuw2W4U8T+IU=\n-----END CERTIFICATE-----";
+    flynnProd = "-----BEGIN CERTIFICATE-----\nMIIDAzCCAe2gAwIBAgIQWmzx7lHQxRCWh1Nm8gse2zALBgkqhkiG9w0BAQswLTEO\nMAwGA1UEChMFRmx5bm4xGzAZBgNVBAsTEkZseW5uIEVwaGVtZXJhbCBDQTAeFw0x\nNjAxMTIwMDI0MjdaFw0yMTAxMTAwMDI0MjdaMC0xDjAMBgNVBAoTBUZseW5uMRsw\nGQYDVQQLExJGbHlubiBFcGhlbWVyYWwgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQCn5f5K0iqK5ZtE2wjFnxD5hoMa3k9oyvkSflOO7tDyMi+zLyt3\nchvbccKcJLiYEWB5+RTu/JzmTNMejxh1toAglrrKTxqQ76t8oHDh0pD661rUELDQ\nI4a83Lh3A4JBY2IjFMSWHqSJjEK50HIUoPbkkIkRlBVpZP6n/c4Tgl43VTLiShFz\nRndX3PF3+Zxdilo4sIbFGKzw2Gq15qKuSV5P8FRpQMBC5uMAFaC2coxgdHZ0SclV\nm/te3f5L3Dg71dLXePqotlCBW89peoOBu3+n8v0IzMB0R4tMm5kT7kGVYWNN//Gf\nd4syJ7Q5mg2fWOdfOGiTOgZWw3OI/odn1TnPAgMBAAGjIzAhMA4GA1UdDwEB/wQE\nAwIABjAPBgNVHRMBAf8EBTADAQH/MAsGCSqGSIb3DQEBCwOCAQEAAfEDAS/VW7q0\nxaWqjtr341h+VKAjLPjgMrrOIli52oco1q5UvYWa5EVSoVtU2NZwzstDOIrnD/2T\n+RG1gOdMA+FyRIeC6qmQ7An4Tim2O08TG18jGRHDMzoIi2s4ZSek989OT4ZvLMmX\nyIh4M1mNt3v2aSOVEYiUrZ0yibo1i6QgRJSgIJ/QSCCyR1suyKIcQIlYGSgIeA0s\ncPUbGhjj2T28oAZDVDPx7QdXRwLz07FAvrblL4mm4LnI/tjZ9Zy5xYqRdEl/Q0uu\nPLmE19PrMCXE3r2kS3z+EY2KKbaZyaoP5nkSdx5YI1re6jPp6snZsjyCW7uOpY2Z\nVjkJuS7sCQ==\n-----END CERTIFICATE-----";
+    flynnDev = "-----BEGIN CERTIFICATE-----\nMIIDAzCCAe2gAwIBAgIQRt44w0Dtmo6Kc0rZK/yGtzALBgkqhkiG9w0BAQswLTEO\nMAwGA1UEChMFRmx5bm4xGzAZBgNVBAsTEkZseW5uIEVwaGVtZXJhbCBDQTAeFw0x\nNjAxMTEyMzU4MTRaFw0yMTAxMDkyMzU4MTRaMC0xDjAMBgNVBAoTBUZseW5uMRsw\nGQYDVQQLExJGbHlubiBFcGhlbWVyYWwgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQC1vDwqPoUmwRepdUV1rs67c/vnDn8GaFoKyLY4OBrmsxMA/E9J\nyeTK5cfTmFK7YnMjBOg93PxYkQIL3viJhL04gKqZdVF3VTMdP0RNYLIT28qyoWbt\nbDfc/OMLDh8pNXtOovCuIIWkKkVJWPk+SA5a1Cj6755WU8faRJ58unUFK3AeurFs\n5g7F+FZahzrGqYAZt6uN/er3OQlYWOueklMBkQBo26EPN9GX6wSJJyh+tlXXnIU7\naGs+Y3za8Sf9aitEdZJ1++S7nunzfv6DHmT+qGLgKkeykWJp3pt01l2KfM99n4cu\ndTMY1sdI8xjc5bKb1N80xf39GZfCw5btzZctAgMBAAGjIzAhMA4GA1UdDwEB/wQE\nAwIABjAPBgNVHRMBAf8EBTADAQH/MAsGCSqGSIb3DQEBCwOCAQEAOy5O7cME57bR\nBemhUY9tQrcxJOIu/Wzo6ccHxDzWMJ2aCPuFZGcCvflGKdYorVFDGq4qWAAISrRT\n3j5gtfPgDxGlck17RdptM1PB6IM//1WwoZoKO6h6tRyXGjCQr7PvhBB9rWepZfyZ\n8CxH6XZY3To0IdVfikXnSgWpFncpmlfl465fBERKkDRN0+5q51wlxPNsykQOzgjo\ngiJySbYUD345vGDsVwAffwMnnE9xwGB9Xdoyd7AvAaXFmsYONGCb0+kaN4CZQYtR\nP1zau8J1jy5KAahfvMIWvih2aWqeqQpNQ9PfSsz5F2C76XvkxnkOicga9tuoJYgo\nluF0apj1Qg==\n-----END CERTIFICATE-----";
 in {
 imports =
     [ # Include the results of the hardware scan.
@@ -107,16 +122,28 @@ imports =
   };
 
   environment.x11Packages = with pkgs; [
-    gnome.gnomeicontheme
     gtk
+  ];
+
+  environment.variables = {
+    # GTK2_RC_FILES = "${pkgs.numix-gtk-theme}/share/themes/Numix/gtk-2.0/gtkrc";
+    GTK_DATA_PREFIX = "${config.system.path}";
+  };
+
+  environment.systemPackages = with pkgs; myPackages ++ [
+    gnome.gnome_icon_theme
+    gtk-engine-murrine
     hicolor_icon_theme
+    numix-gtk-theme
+    numix-icon-theme-circle
+    paper-gtk-theme
     shared_mime_info
     xfce.thunar
     xfce.xfce4icontheme  # for thunar
-  ];
 
-  environment.systemPackages = with pkgs; [
+    userConfig
     bc
+    pidgin
     binutils
     chromium
     dmenu
@@ -139,6 +166,7 @@ imports =
     scrot
     silver-searcher
     slock
+    spotify
     subversion
     unzip
     vim
@@ -154,6 +182,26 @@ imports =
     zathura
     zip
   ];
+
+  # systemd.services.emacs = {
+  #   description = "Emacs Daemon";
+  #   environment = {
+  #     GTK_DATA_PREFIX = config.system.path;
+  #     SSH_AUTH_SOCK = "%t/ssh-agent";
+  #     GTK_PATH = "${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0";
+  #     NIX_PROFILES = "${pkgs.lib.concatStringsSep " " config.environment.profiles}";
+  #     TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
+  #     ASPELL_CONF = "dict-dir /run/current-system/sw/lib/aspell";
+  #   };
+  #   serviceConfig = {
+  #     Type = "forking";
+  #     ExecStart = "${pkgs.emacs}/bin/emacs --daemon";
+  #     ExecStop = "${pkgs.emacs}/bin/emacsclient --eval (kill-emacs)";
+  #     Restart = "always";
+  #   };
+  #   wantedBy = [ "default.target" ];
+  # };
+  # systemd.services.emacs.enable = true;
 
   nixpkgs.config = nixpkgsConfig;
 
@@ -230,7 +278,7 @@ imports =
   virtualisation.docker.enable = true;
 
   security.setuidPrograms = [ "slock" ];
-  security.pki.certificates = [ flynnCert ];
+  security.pki.certificates = [ flynnDev flynnProd ];
 
   users.extraUsers.jb55 = user;
   users.extraGroups.vboxusers.members = [ "jb55" ];

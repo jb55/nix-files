@@ -1,18 +1,7 @@
 { pkgs }:
 let haskellOverrides = import ./haskell-overrides.nix;
     callPackage = pkgs.callPackage;
-    jb55pkgs = import (pkgs.fetchFromGitHub {
-      owner = "jb55";
-      repo = "jb55pkgs";
-      rev = "b746f519c2a237c9996dff42b1d3f3658329dddd";
-      sha256 = "0vhip23alsi3zjag2wz16rnj0gdv254ml95ivwcw8df2k5957sjb";
-    }) { nixpkgs = pkgs; };
-    userConfig = callPackage ./dotfiles.nix {
-      # machineSessionCommands = machineConfig.sessionCommands or "";
-    };
 in {
-  inherit userConfig;
-
   allowUnfree = true;
   allowUnfreeRedistributable = true;
   allowBroken = false;
@@ -29,14 +18,6 @@ in {
   };
 
   packageOverrides = super: rec {
-
-    inherit userConfig;
-
-    myPackages = super.buildEnv {
-      name = "myPackages";
-      paths = builtins.attrValues jb55pkgs;
-    };
-
     bluez = pkgs.bluez5;
 
     haskellPackages = super.haskellPackages.override {
@@ -94,6 +75,13 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
+      Boolean
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      SafeSemaphore
+      Spock
       aeson
       async
       attoparsec
@@ -127,8 +115,10 @@ in {
       flexible-instances
       foldl
       free
+      generics-sop
       hamlet
       hashable
+      heroku
       hspec
       hspec-expectations
       html
@@ -177,6 +167,7 @@ in {
       pcg-random
       persistent
       persistent-mongoDB
+      persistent-postgresql
       persistent-template
       pipes
       pipes-async
@@ -197,6 +188,7 @@ in {
       pipes-wai
       posix-paths
       postgresql-simple
+      postgresql-simple-sop
       pretty-show
       profunctors
       QuickCheck
