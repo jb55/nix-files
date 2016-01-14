@@ -10,7 +10,7 @@ let
     owner = "jb55";
     repo = "dotfiles";
     rev = "853052d386f6c0ee44048fd87fa7db1cd8d73dd7";
-    sha256 = "0gfszgmny1qss1k9cl5v1jvq3cqqvw1f19vbdh415sc38frvk1sd";
+    sha256 = "100j8jqpc85dr5ajx5scqmv8qn4rhh2xv3nmpf3kf7bma1kc4zph";
   };
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
