@@ -5,12 +5,26 @@
 { config, pkgs, ... }:
 
 let caches = [ "https://cache.nixos.org/"];
-    nixfiles = "${home}/etc/nix-files";
-    machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
-    zsh = "/run/current-system/sw/bin/zsh";
+    nixfiles = pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "nix-files";
+      rev = "c5df1ca439dc20d98fdb11e5b7362adac2b39003";
+      sha256 = "07a1afx86qdls7r7cjyflg6a060wl3zk0rd9n1s7kqg36zqy9ymc";
+    };
+    jb55pkgs = import (pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "jb55pkgs";
+      rev = "b746f519c2a237c9996dff42b1d3f3658329dddd";
+      sha256 = "0vhip23alsi3zjag2wz16rnj0gdv254ml95ivwcw8df2k5957sjb";
+    }) { nixpkgs = pkgs; };
     machine = "archer";
+    machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
+    userConfig = pkgs.callPackage "${nixfiles}/nixpkgs/dotfiles.nix" {
+      machineSessionCommands = machineConfig.sessionCommands or "";
+    };
+    zsh = "/run/current-system/sw/bin/zsh";
     nixpkgsConfig = import "${home}/.nixpkgs/config.nix";
-    userConfig = (nixpkgsConfig {inherit pkgs;}).userConfig;
+    myPackages = builtins.attrValues jb55pkgs;
     home = "/home/jb55";
     user = {
         name = "jb55";
@@ -104,7 +118,7 @@ imports =
     GTK_DATA_PREFIX = "${config.system.path}";
   };
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; myPackages ++ [
     gnome.gnome_icon_theme
     gtk-engine-murrine
     hicolor_icon_theme
@@ -115,6 +129,7 @@ imports =
     xfce.thunar
     xfce.xfce4icontheme  # for thunar
 
+    userConfig
     bc
     pidgin
     binutils
