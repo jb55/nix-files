@@ -26,6 +26,9 @@ let caches = [ "https://cache.nixos.org/"];
     nixpkgsConfig = import "${home}/.nixpkgs/config.nix";
     myPackages = builtins.attrValues jb55pkgs;
     home = "/home/jb55";
+    myHaskellPackages = with pkgs.haskellPackages; [
+      skeletons
+    ];
     user = {
         name = "jb55";
         group = "users";
@@ -118,7 +121,7 @@ imports =
     GTK_DATA_PREFIX = "${config.system.path}";
   };
 
-  environment.systemPackages = with pkgs; myPackages ++ [
+  environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
     gnome.gnome_icon_theme
     gtk-engine-murrine
     hicolor_icon_theme

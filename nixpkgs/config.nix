@@ -83,6 +83,7 @@ in {
       SafeSemaphore
       Spock
       aeson
+      aeson-qq
       async
       attoparsec
       bifunctors
@@ -103,6 +104,7 @@ in {
       comonad
       comonad-transformers
       compact-string-fix
+      directory
       dlist
       dlist-instances
       doctest
