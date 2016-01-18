@@ -98,7 +98,8 @@ imports =
     hostName = machine;
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
-      6.6.6.187 archer
+      172.24.14.20 archer
+      172.24.160.85 phone
     '';
 
     firewall = {
@@ -128,21 +129,21 @@ imports =
   environment.variables = {
     # GTK2_RC_FILES = "${pkgs.numix-gtk-theme}/share/themes/Numix/gtk-2.0/gtkrc";
     GTK_DATA_PREFIX = "${config.system.path}";
+    GTK_THEME = "Vertex-Dark";
+    QT_STYLE_OVERRIDE = "GTK+";
   };
 
   environment.systemPackages = with pkgs; myPackages ++ [
     gnome.gnome_icon_theme
     gtk-engine-murrine
     hicolor_icon_theme
-    numix-gtk-theme
-    numix-icon-theme-circle
-    paper-gtk-theme
     shared_mime_info
-    xfce.thunar
-    xfce.xfce4icontheme  # for thunar
+    arc-gtk-theme
+    theme-vertex
 
     userConfig
     bc
+    gnome3.eog
     pidgin
     binutils
     chromium
