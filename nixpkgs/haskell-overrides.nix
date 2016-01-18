@@ -7,10 +7,6 @@ in {
     version = "4.1.7";
     sha256 = "104620e6868cc2c4f84c85416ecfce32d53fbbbecaacc7466a0566f574f9d616";
   });
-  # warp = overrideCabal super.warp (attrs: {
-  #   version = "3.1.8";
-  #   sha256 = "1xilx37hmk8cabwi6s92g2vxpq0yaa8yx17pdmb0dh6ls2w3j6p8";
-  # });
   pipes-csv = overrideCabal super.pipes-csv (attrs: {
     version = "1.4.2";
     src = pkgs.fetchFromGitHub {

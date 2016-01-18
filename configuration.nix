@@ -8,8 +8,8 @@ let caches = [ "https://cache.nixos.org/"];
     nixfiles = pkgs.fetchFromGitHub {
       owner = "jb55";
       repo = "nix-files";
-      rev = "c5df1ca439dc20d98fdb11e5b7362adac2b39003";
-      sha256 = "07a1afx86qdls7r7cjyflg6a060wl3zk0rd9n1s7kqg36zqy9ymc";
+      rev = "be8a844d3daeba7716f128de31dea41362082872";
+      sha256 = "11lv9yvps0z77xjm9j03y32gvpzz693pfg2rlp8hb6k6kcl19qmr";
     };
     jb55pkgs = import (pkgs.fetchFromGitHub {
       owner = "jb55";
@@ -90,7 +90,7 @@ imports =
     extraHosts = ''
       174.143.211.135 freenode.znc.jb55.com
       172.24.160.85 phone
-      6.6.6.187 archer
+      172.24.14.20 archer
     '';
 
     firewall = {
@@ -120,18 +120,17 @@ imports =
   environment.variables = {
     # GTK2_RC_FILES = "${pkgs.numix-gtk-theme}/share/themes/Numix/gtk-2.0/gtkrc";
     GTK_DATA_PREFIX = "${config.system.path}";
+    GTK_THEME = "Vertex-Dark";
+    QT_STYLE_OVERRIDE = "GTK+";
   };
 
   environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
     gnome.gnome_icon_theme
     gtk-engine-murrine
     hicolor_icon_theme
-    numix-gtk-theme
-    numix-icon-theme-circle
-    paper-gtk-theme
     shared_mime_info
-    xfce.thunar
-    xfce.xfce4icontheme  # for thunar
+    arc-gtk-theme
+    theme-vertex
 
     bc
     binutils
@@ -143,6 +142,7 @@ imports =
     fzf
     gitAndTools.git-extras
     gitFull
+    gnome3.eog
     gnupg
     haskellPackages.taffybar
     hsetroot

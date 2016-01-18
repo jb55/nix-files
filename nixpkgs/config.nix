@@ -98,6 +98,7 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
+      Boolean
       cased
       cassava
       cereal
@@ -123,9 +124,11 @@ in {
       hspec
       hspec-expectations
       html
+      HTTP
       http-client
       http-date
       http-types
+      HUnit
       io-memoize
       keys
       language-bash
@@ -145,14 +148,15 @@ in {
       logict
       mime-mail
       mime-types
+      MissingH
       mmorph
       monad-control
       monad-coroutine
+      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
-      monadloc
       money
       mongoDB
       monoid-extras
@@ -189,6 +193,7 @@ in {
       postgresql-simple-sop
       pretty-show
       profunctors
+      QuickCheck
       random
       reducers
       reflection
@@ -202,6 +207,7 @@ in {
       retry
       rex
       safe
+      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -219,6 +225,7 @@ in {
       simple-reflect
       speculation
       split
+      Spock
       spoon
       stm
       stm-chans

@@ -9,8 +9,8 @@ let
   dotfiles = fetchFromGitHub {
     owner = "jb55";
     repo = "dotfiles";
-    rev = "c503640abe1a33662669216b63f80ec41e8d03bc";
-    sha256 = "02cnxlb86i192wgz8d23nj03dpb81gmqca0a7iqzcqs5ln4vmbgn";
+    rev = "853052d386f6c0ee44048fd87fa7db1cd8d73dd7";
+    sha256 = "100j8jqpc85dr5ajx5scqmv8qn4rhh2xv3nmpf3kf7bma1kc4zph";
   };
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
@@ -34,7 +34,7 @@ let
   xinitrc-refresh = writeScript "xinitrc-refresh" impureSessionCommands;
 in stdenv.mkDerivation rec {
   name = "jb55-config-${version}";
-  version = "git-2015-12-26";
+  version = "git-2015-01-13";
 
   phases = "installPhase";
 
