@@ -133,17 +133,17 @@ imports =
     xfce.thunar
     xfce.xfce4icontheme  # for thunar
 
-    userConfig
     bc
-    pidgin
     binutils
     chromium
     dmenu
     dropbox-cli
     emacs
     file
+    fzf
     gitAndTools.git-extras
     gitFull
+    gnupg
     haskellPackages.taffybar
     hsetroot
     htop
@@ -152,6 +152,8 @@ imports =
     nix-repl
     parcellite
     patchelf
+    pidgin
+    pv
     redshift
     rsync
     rxvt_unicode
@@ -161,6 +163,7 @@ imports =
     spotify
     subversion
     unzip
+    userConfig
     vim
     vlc
     wget
