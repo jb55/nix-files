@@ -1,6 +1,6 @@
+{ monstercatPkgs }:
 pkgs: self: super:
 let overrideCabal = pkgs.haskell.lib.overrideCabal;
-    monstercatPkgs = import /home/jb55/etc/monstercatpkgs { inherit pkgs; };
 in {
   streaming-wai = self.callPackage ~/src/haskell/streaming-wai {};
   pipes = overrideCabal super.pipes (drv: {
@@ -34,4 +34,6 @@ in {
       sha256 = "1r1dv7yaalxja06jxqi7rjcdkb72mb2prnk8crzqap0gkmbahqcd";
     };
   });
+  monstercat-backend = self.callPackage ./monstercat-backend.nix { };
+  payment = self.callPackage ./payment.nix { inherit overrideCabal; };
 } // monstercatPkgs.haskellPackages

@@ -1,5 +1,6 @@
 { pkgs }:
-let haskellOverrides = import ./haskell-overrides.nix;
+let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
+    haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     callPackage = pkgs.callPackage;
 in {
   allowUnfree = true;
@@ -113,8 +114,6 @@ in {
       exceptions
       failure
       fingertree
-      flexible
-      flexible-instances
       foldl
       free
       generics-sop
@@ -157,7 +156,6 @@ in {
       monad-par
       monad-par-extras
       monad-stm
-      money
       mongoDB
       monoid-extras
       network
@@ -272,6 +270,6 @@ in {
       yaml
       zippers
       zlib
-    ];
+    ] ++ builtins.attrValues monstercatPkgs.haskellPackages;
   };
 }
