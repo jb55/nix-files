@@ -26,7 +26,7 @@ let
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
     ${pkgs.haskellPackages.taffybar}/bin/taffybar &
-    ${pkgs.parcellite}/bin/parcellite &
+    ${pkgs.clipit}/bin/clipit &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
    '' + "\n" + impureSessionCommands + "\n" + machineSessionCommands;

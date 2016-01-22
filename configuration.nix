@@ -144,13 +144,14 @@ imports =
     gitFull
     gnome3.eog
     gnupg
+    dragon-drop
     haskellPackages.taffybar
     hsetroot
     htop
     lsof
     mpc_cli
     nix-repl
-    parcellite
+    clipit
     patchelf
     pidgin
     pv
