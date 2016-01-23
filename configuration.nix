@@ -136,7 +136,9 @@ imports =
     bc
     binutils
     chromium
+    clipit
     dmenu
+    dragon-drop
     dropbox-cli
     emacs
     file
@@ -145,14 +147,12 @@ imports =
     gitFull
     gnome3.eog
     gnupg
-    dragon-drop
     haskellPackages.taffybar
     hsetroot
     htop
     lsof
     mpc_cli
     nix-repl
-    clipit
     patchelf
     pidgin
     pv
@@ -164,6 +164,7 @@ imports =
     slock
     spotify
     subversion
+    twmn
     unzip
     userConfig
     vim
