@@ -96,6 +96,7 @@ imports =
     firewall = {
       allowPing = true;
       allowedTCPPorts = [ 22 5000 143 ];
+      allowedUDPPorts = [ 11155 ];
     };
   };
 
