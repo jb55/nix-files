@@ -113,8 +113,8 @@ in {
       exceptions
       failure
       fingertree
-      flexible
-      flexible-instances
+      # flexible
+      # flexible-instances
       foldl
       free
       generics-sop
@@ -157,7 +157,7 @@ in {
       monad-par
       monad-par-extras
       monad-stm
-      money
+      # money
       mongoDB
       monoid-extras
       network
