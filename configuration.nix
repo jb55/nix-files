@@ -8,8 +8,8 @@ let caches = [ "https://cache.nixos.org/"];
     nixfiles = pkgs.fetchFromGitHub {
       owner = "jb55";
       repo = "nix-files";
-      rev = "be8a844d3daeba7716f128de31dea41362082872";
-      sha256 = "11lv9yvps0z77xjm9j03y32gvpzz693pfg2rlp8hb6k6kcl19qmr";
+      rev = "1c6f055e5e44d8c3ddb18c578c4b765c3a058595";
+      sha256 = "030jd63fnq2wmbhh2r0sdkhslqw66n5prmbvmj1bwzyd0n5gk20k";
     };
     jb55pkgs = import (pkgs.fetchFromGitHub {
       owner = "jb55";
