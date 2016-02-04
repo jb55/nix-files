@@ -54,7 +54,7 @@ imports =
       device = "/dev/sda";
     };
 
-    supportedFilesystems = ["ntfs"];
+    supportedFilesystems = ["ntfs" "exfat"];
   };
 
   fileSystems = [
@@ -270,6 +270,7 @@ imports =
 
     screenSection = ''
       Option "metamodes" "1920x1080 +0+0"
+      Option "dpi" "96 x 96"
     '';
 
     windowManager = {

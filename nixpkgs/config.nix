@@ -75,13 +75,6 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      Boolean
-      HTTP
-      HUnit
-      MissingH
-      QuickCheck
-      SafeSemaphore
-      Spock
       aeson
       aeson-qq
       async
@@ -99,6 +92,7 @@ in {
       blaze-markup
       blaze-textual
       Boolean
+      bson-lens
       cased
       cassava
       cereal
@@ -110,6 +104,7 @@ in {
       dlist-instances
       doctest
       either
+      envy
       exceptions
       failure
       fingertree
@@ -269,6 +264,7 @@ in {
       warp
       wreq
       xhtml
+      xml-lens
       yaml
       zippers
       zlib
