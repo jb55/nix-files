@@ -54,7 +54,7 @@ imports =
       device = "/dev/sda";
     };
 
-    supportedFilesystems = ["ntfs"];
+    supportedFilesystems = ["ntfs" "exfat"];
   };
 
   programs.ssh.startAgent = false;
