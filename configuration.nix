@@ -14,8 +14,8 @@ let caches = [ "https://cache.nixos.org/"];
     jb55pkgs = import (pkgs.fetchFromGitHub {
       owner = "jb55";
       repo = "jb55pkgs";
-      rev = "791a58b9557ccbece53617e8be361cb5c47daa69";
-      sha256 = "06aw0p7ma5a4qgycaavnckafii72v8m45xjmygv8220xs785ph8g";
+      rev = "20b1b0233597a1fdda601da0b2e9478239bdf204";
+      sha256 = "150g971c9nah5m9qd9sjkssn0g2cpj9l4n1gnfmngsfdxwlzgcvk";
     }) { nixpkgs = pkgs; };
     machine = "monad";
     machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
@@ -155,9 +155,12 @@ imports =
     emacs
     file
     fzf
+    gist
     gitAndTools.git-extras
     gitFull
     gnome3.eog
+    gnome3.nautilus
+    gnome3.gnome-calculator
     gnupg
     haskellPackages.taffybar
     hsetroot
@@ -166,6 +169,7 @@ imports =
     mpc_cli
     nix-repl
     patchelf
+    pavucontrol
     pidgin
     pv
     redshift
@@ -191,6 +195,7 @@ imports =
     xlibs.xset
     zathura
     zip
+
   ];
 
   # systemd.services.emacs = {
