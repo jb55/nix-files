@@ -11,10 +11,8 @@ let caches = [ "https://cache.nixos.org/"];
       rev = "1c6f055e5e44d8c3ddb18c578c4b765c3a058595";
       sha256 = "030jd63fnq2wmbhh2r0sdkhslqw66n5prmbvmj1bwzyd0n5gk20k";
     };
-    jb55pkgs = import (pkgs.fetchFromGitHub {
-      owner = "jb55";
-      repo = "jb55pkgs";
-      rev = "20b1b0233597a1fdda601da0b2e9478239bdf204";
+    jb55pkgs = import (pkgs.fetchzip {
+      url = "https://jb55.com/pkgs.tar.gz";
       sha256 = "150g971c9nah5m9qd9sjkssn0g2cpj9l4n1gnfmngsfdxwlzgcvk";
     }) { nixpkgs = pkgs; };
     machine = "monad";
