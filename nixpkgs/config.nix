@@ -28,6 +28,8 @@ in {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
 
+    ical2org = super.callPackage ./scripts/ical2org { };
+
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
       withHoogle = true;
