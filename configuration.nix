@@ -13,7 +13,7 @@ let caches = [ "https://cache.nixos.org/"];
     };
     jb55pkgs = import (pkgs.fetchzip {
       url = "https://jb55.com/pkgs.tar.gz";
-      sha256 = "150g971c9nah5m9qd9sjkssn0g2cpj9l4n1gnfmngsfdxwlzgcvk";
+      sha256 = "12sii14xzy4vix4bmm1amg9bc54fl563pri2fqn99bss5ga1s6jn";
     }) { nixpkgs = pkgs; };
     machine = "monad";
     machineConfig = import "${nixfiles}/machines/${machine}.nix" pkgs;
