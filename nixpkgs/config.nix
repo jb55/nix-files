@@ -29,6 +29,8 @@ in {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
 
+    ical2org = super.callPackage ./scripts/ical2org { };
+
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
       withHoogle = true;
@@ -77,6 +79,8 @@ in {
 
     myHaskellPackages = hp: with hp; [
       aeson
+      amazonka
+      amazonka-s3
       aeson-qq
       async
       attoparsec

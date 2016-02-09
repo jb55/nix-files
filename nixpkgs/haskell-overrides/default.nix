@@ -2,7 +2,7 @@
 pkgs: self: super:
 let overrideCabal = pkgs.haskell.lib.overrideCabal;
 in {
-  streaming-wai = self.callPackage ~/src/haskell/streaming-wai {};
+  # streaming-wai = self.callPackage ~/src/haskell/streaming-wai {};
   pipes = overrideCabal super.pipes (drv: {
     version = "4.1.7";
     sha256 = "104620e6868cc2c4f84c85416ecfce32d53fbbbecaacc7466a0566f574f9d616";

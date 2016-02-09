@@ -6,12 +6,10 @@
 , machineSessionCommands ? ""
 }:
 let
-  dotfiles = fetchFromGitHub {
-    owner = "jb55";
-    repo = "dotfiles";
-    rev = "853052d386f6c0ee44048fd87fa7db1cd8d73dd7";
-    sha256 = "100j8jqpc85dr5ajx5scqmv8qn4rhh2xv3nmpf3kf7bma1kc4zph";
-  };
+  regularFiles = builtins.filterSource (f: type: type == "symlink"
+                                              || type == "directory"
+                                              || type == "regular");
+  dotfiles = regularFiles <dotfiles>;
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
     md5 = "04d86f9b50e42d46d566bded9a91ee2c";
@@ -20,8 +18,7 @@ let
     #!${pkgs.bash}/bin/bash
     ${pkgs.xlibs.xmodmap}/bin/xmodmap ${dotfiles}/.Xmodmap
     ${pkgs.xlibs.xset}/bin/xset r rate 200 50
-    ${pkgs.xlibs.xset}/bin/xset m 0 0
-  '';
+  '' + "\n" + machineSessionCommands;
   sessionCommands = ''
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
@@ -29,7 +26,7 @@ let
     ${pkgs.clipit}/bin/clipit &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
-   '' + "\n" + impureSessionCommands + "\n" + machineSessionCommands;
+  '' + "\n" + impureSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;
   xinitrc-refresh = writeScript "xinitrc-refresh" impureSessionCommands;
 in stdenv.mkDerivation rec {

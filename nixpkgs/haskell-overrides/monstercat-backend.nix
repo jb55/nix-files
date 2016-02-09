@@ -41,7 +41,7 @@ mkDerivation rec {
   version = "1.1.0";
 
   # todo: get fetchgitPrivate working
-  src = ~/Dropbox/projects/monstercat/haskell/monstercat-backend;
+  src = /dropbox/projects/monstercat/haskell/monstercat-backend;
 
   buildDepends = [
     Decimal
