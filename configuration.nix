@@ -31,6 +31,8 @@ in {
       ./hardware-configuration.nix
       ./certs
       ./fonts
+      ./services/hoogle
+      (machinePath "/networking")
       (import ./timers/sync-ical2org.nix home)
       (import ./environment userConfig)
       (import ./services userConfig)

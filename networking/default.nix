@@ -9,10 +9,6 @@ machine:
       172.24.14.20 archer
     '';
 
-    firewall = {
-      allowPing = true;
-      allowedTCPPorts = [ 22 5000 143 ];
-      allowedUDPPorts = [ 11155 ];
-    };
+    firewall.allowPing = true;
   };
 }

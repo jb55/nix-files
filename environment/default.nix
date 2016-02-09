@@ -70,6 +70,7 @@ in {
     vim
     vlc
     wget
+    weechat
     xautolock
     xbindkeys
     xclip

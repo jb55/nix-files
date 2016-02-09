@@ -78,6 +78,8 @@ in {
 
     myHaskellPackages = hp: with hp; [
       aeson
+      amazonka
+      amazonka-s3
       aeson-qq
       async
       attoparsec
