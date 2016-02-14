@@ -2,7 +2,7 @@
 let sites = [./sites/jb55.com
              ./sites/npmrepo.com
             ];
-    logDir = /var/log/nginx;
+    logDir = "/var/log/nginx";
 in {
   services.logrotate.config = ''
     ${logDir}/access.log ${logDir}/error.log {
