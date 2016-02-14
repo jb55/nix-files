@@ -6,6 +6,7 @@ machine:
     174.143.211.135 freenode.znc.jb55.com
     172.24.160.85 phone
     172.24.14.20 archer
+    172.24.206.82 charon
   '';
 
   networking.firewall.allowPing = true;
