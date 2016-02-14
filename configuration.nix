@@ -4,8 +4,8 @@
 
 { config, pkgs, ... }:
 
-let caches = [ "https://cache.nixos.org/"];
-    machine = "monad";
+let machine = "monad";
+    isDesktop = machine != "charon";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "") pkgs;
@@ -30,65 +30,34 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./certs
-      ./fonts
-      ./services/hoogle
-      (machinePath "/networking")
-      (import ./timers/sync-ical2org.nix home)
-      (import ./environment userConfig)
-      (import ./services userConfig)
+      ./services
+      ./environment
       (import ./networking machine)
-    ];
+      (machinePath "/networking")
+    ] ++ if isDesktop then [
+      ./services/hoogle
+      ./fonts
+      (import ./environment/desktop userConfig)
+      (import ./timers/sync-ical2org.nix home)
+      (import ./services/desktop userConfig)
+    ] else [];
 
   # Use the GRUB 2 boot loader.
-  boot = {
-    loader.grub = {
-      enable = true;
-      version = 2;
-      device = "/dev/sda";
-    };
-
-    supportedFilesystems = ["ntfs" "exfat"];
-  };
-
-  programs.ssh.startAgent = false;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/xvda";
+  programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
 
-  nix = {
-    binaryCaches = caches;
-    trustedBinaryCaches = caches;
-    binaryCachePublicKeys = [
-      "hydra.cryp.to-1:8g6Hxvnp/O//5Q1bjjMTd5RO8ztTsG8DKPOAg9ANr2g="
-    ];
-  };
-
-  hardware = {
-    bluetooth.enable = true;
-    pulseaudio = {
-      package = pkgs.pulseaudioFull;
-      enable = true;
-      support32Bit = true;
-    };
-    sane = {
-      enable = true;
-      configDir = "${home}/.sane";
-    };
-    opengl.driSupport32Bit = true;
-  };
-
   nixpkgs.config = nixpkgsConfig;
 
-  virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
 
-  security.setuidPrograms = [ "slock" ];
-
   users.extraUsers.jb55 = user;
-  users.extraGroups.vboxusers.members = [ "jb55" ];
   users.extraGroups.docker.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
-  users.mutableUsers = true;
+  users.mutableUsers = false;
 
   programs.zsh.enable = true;
 }
