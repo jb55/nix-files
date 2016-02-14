@@ -8,6 +8,8 @@ userConfig:
     packages = pkgs.myHaskellPackages;
   };
 
+  services.atd.enable = true;
+
   services.redshift = {
     enable = true;
     temperature.day = 5700;
