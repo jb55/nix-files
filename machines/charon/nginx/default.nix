@@ -74,5 +74,5 @@ in {
 
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
     '';
-  }
+  };
 }

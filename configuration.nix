@@ -32,7 +32,7 @@ in {
       ./services
       ./environment
       (import ./networking machine)
-      machinePath
+      (machinePath "")
     ] ++ (if isDesktop then [
       ./services/hoogle
       ./hardware/desktop
