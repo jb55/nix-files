@@ -34,18 +34,20 @@ in {
       ./environment
       (import ./networking machine)
       (machinePath "/networking")
-    ] ++ if isDesktop then [
+      (machinePath "/hardware")
+    ] ++ (if isDesktop then [
       ./services/hoogle
+      ./hardware/desktop
       ./fonts
       (import ./environment/desktop userConfig)
       (import ./timers/sync-ical2org.nix home)
       (import ./services/desktop userConfig)
-    ] else [];
+    ] else []);
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/xvda";
-  programs.ssh.startAgent = true;
+
+  programs.ssh.startAgent = !isDesktop;
 
   time.timeZone = "America/Vancouver";
 
@@ -61,4 +63,3 @@ in {
 
   programs.zsh.enable = true;
 }
- 

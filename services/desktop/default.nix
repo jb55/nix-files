@@ -1,3 +1,4 @@
+userConfig:
 { config, lib, pkgs, ... }:
 {
   # sync ical to org
