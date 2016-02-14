@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 
-let machine = "monad";
+let machine = "charon";
     isDesktop = machine != "charon";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
