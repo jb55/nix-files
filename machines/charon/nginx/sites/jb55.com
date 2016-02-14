@@ -1,7 +1,7 @@
 server {
   listen 443 ssl;
   server_name jb55.com;
-  root /home/jb55/www/jb55/public;
+  root /www/jb55/public;
   index index.html index.htm;
 
   ssl_certificate /etc/letsencrypt/live/jb55.com/fullchain.pem;
@@ -11,7 +11,7 @@ server {
   rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
   location / {
-    try_files $uri $uri/ /index.html;
+    try_files $uri $uri/ =404;
   }
 
   location ^~ /files/calls {
