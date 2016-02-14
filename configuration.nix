@@ -8,9 +8,8 @@ let machine = "charon";
     isDesktop = machine != "charon";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
-    machineConfig = import (machinePath "") pkgs;
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
-      machineSessionCommands = machineConfig.sessionCommands or "";
+      machineSessionCommands = "";
     };
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
@@ -33,8 +32,7 @@ in {
       ./services
       ./environment
       (import ./networking machine)
-      (machinePath "/networking")
-      (machinePath "/hardware")
+      machinePath
     ] ++ (if isDesktop then [
       ./services/hoogle
       ./hardware/desktop

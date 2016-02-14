@@ -14,4 +14,13 @@
     enable = true;
     passwordAuthentication = true;
   };
+
+  services.logrotate = {
+    enable = true;
+    config = ''
+      compresscmd ${pkgs.xz}/bin/xz
+      uncompresscmd ${pkgs.xz}/bin/unxz
+      compressext .xz
+    '';
+  };
 }
