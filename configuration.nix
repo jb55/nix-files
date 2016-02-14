@@ -59,7 +59,7 @@ in {
   users.extraGroups.docker.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
-  users.mutableUsers = false;
+  users.mutableUsers = true;
 
   programs.zsh.enable = true;
 }

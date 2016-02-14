@@ -8,7 +8,7 @@ userConfig:
     QT_STYLE_OVERRIDE = "GTK+";
   };
 
-  environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
+  environment.systemPackages = with pkgs; [
     gnome.gnome_icon_theme
     gtk-engine-murrine
     shared_mime_info
