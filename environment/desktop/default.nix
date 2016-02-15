@@ -37,4 +37,6 @@ userConfig:
     xlibs.xset
     zathura
   ];
+
+  security.setuidPrograms = [ "slock" ];
 }
