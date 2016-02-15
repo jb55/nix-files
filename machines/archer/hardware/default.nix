@@ -11,6 +11,7 @@
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "xhci_hcd" "firewire_ohci" "usb_storage" "usbhid" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.loader.grub.device = "/dev/sda";
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/4b076497-f2f8-4e3a-bd27-2874a4a0e361";
@@ -26,6 +27,4 @@
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/d4e4ae51-9179-439d-925b-8df42dd1bfc5"; } ] ;
-
-  nix.maxJobs = 8;
 }
