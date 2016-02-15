@@ -21,6 +21,12 @@ server {
 
 server {
   listen 80;
-  server_name jb55.com;
-  return 301 https://$server_name$request_uri;
+  server_name jb55.com www.jb55.com;
+  return 301 https://jb55.com$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name www.jb55.com;
+  return 301 https://jb55.com$request_uri;
 }
