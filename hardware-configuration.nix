@@ -6,5 +6,6 @@
 {
   imports = [ ];
 
+  boot.loader.grub.version = 2;
   nix.maxJobs = 8;
 }
