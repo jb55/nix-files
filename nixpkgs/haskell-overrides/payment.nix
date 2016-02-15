@@ -14,6 +14,7 @@
 , data-default
 , directory
 , errors
+, envy
 , fetchFromGitHub
 , fetchgitPrivate
 , filepath
@@ -66,6 +67,7 @@ mkDerivation {
     data-default
     directory
     errors
+    envy
     filepath
     flexible
     flexible-instances

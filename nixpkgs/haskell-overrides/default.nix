@@ -35,5 +35,6 @@ in {
     };
   });
   monstercat-backend = self.callPackage ./monstercat-backend.nix { };
-  payment = self.callPackage ./payment.nix { inherit overrideCabal; };
+  massager-service = self.callPackage ./massager-service.nix { };
+  massager = self.callPackage ./payment.nix { };
 } // monstercatPkgs.haskellPackages

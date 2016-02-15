@@ -3,6 +3,7 @@ userConfig:
 {
   # sync ical to org
   systemd.services.sync-ical2org.enable = true;
+
   services.hoogle = {
     enable = true;
     packages = pkgs.myHaskellPackages;
