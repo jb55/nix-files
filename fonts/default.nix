@@ -12,7 +12,6 @@
       fira-mono
       source-code-pro
       ipafont
-      noto-fonts-emoji
     ];
   };
 }
