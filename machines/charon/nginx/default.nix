@@ -5,7 +5,7 @@ let sites = [./sites/jb55.com
     logDir = "/var/log/nginx";
 in {
   services.logrotate.config = ''
-    ${logDir}/access.log ${logDir}/error.log {
+    ${logDir}/*.log {
       daily
       missingok
       rotate 52
@@ -62,12 +62,6 @@ in {
 
       server {
         listen      80;
-        server_name "";
-        return      444;
-      }
-
-      server {
-        listen      443 ssl;
         server_name "";
         return      444;
       }
