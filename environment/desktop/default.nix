@@ -2,7 +2,7 @@ userConfig:
 { config, lib, pkgs, ... }:
 {
   environment.variables = {
-    GTK2_RC_FILES = "${config.system.path}";
+    #GTK2_RC_FILES = "${config.system.path}";
     GTK_DATA_PREFIX = "${config.system.path}";
     GTK_THEME = "Vertex-Dark";
     QT_STYLE_OVERRIDE = "GTK+";
@@ -12,7 +12,7 @@ userConfig:
     gnome.gnome_icon_theme
     gtk-engine-murrine
     numix-icon-theme
-    hicolor_icon_theme
+    numix-icon-theme-circle
     shared_mime_info
     theme-vertex
 
