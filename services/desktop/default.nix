@@ -1,4 +1,4 @@
-userConfig:
+{ userConfig, theme, icon-theme }:
 { config, lib, pkgs, ... }:
 {
   # sync ical to org
@@ -40,23 +40,24 @@ userConfig:
     startGnuPGAgent = true;
     wacom.enable = true;
 
-
     desktopManager = {
       default = "none";
       xterm.enable = false;
     };
 
     displayManager = {
-      slim = {
-        defaultUser = "jb55";
-        theme = pkgs.fetchFromGitHub {
-          owner = "crough";
-          repo = "nixos-slim-theme";
-          rev = "9c37840ba8b42d8f488eb80074ea940af9536360";
-          sha256 = "1mvys3jq4sh7dmdzsnf01cl20bagrvh2jc23fgjiyrgdjwqv7d18";
+      sessionCommands = "${userConfig}/bin/xinitrc";
+      lightdm = {
+        enable = true;
+        background = "${pkgs.fetchurl {
+          url = "https://jb55.com/img/haskell-space.jpg";
+          md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+        }}";
+        greeters.gtk = {
+          theme = theme;
+          # iconTheme = icon-theme;
         };
       };
-      sessionCommands = "${userConfig}/bin/xinitrc";
     };
 
     videoDrivers = [ "nvidia" ];
