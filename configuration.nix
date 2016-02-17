@@ -10,7 +10,7 @@ let machine = "monad";
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
-      machineSessionCommands = "";
+      machineSessionCommands = machineConfig.sessionCommands;
     };
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;

@@ -17,7 +17,6 @@ let
   impureSessionCommands = ''
     #!${pkgs.bash}/bin/bash
     ${pkgs.xlibs.xmodmap}/bin/xmodmap ${dotfiles}/.Xmodmap
-    ${pkgs.xlibs.xset}/bin/xset r rate 200 50
   '' + "\n" + machineSessionCommands;
   sessionCommands = ''
     #!${pkgs.bash}/bin/bash

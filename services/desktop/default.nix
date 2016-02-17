@@ -40,14 +40,23 @@ userConfig:
     startGnuPGAgent = true;
     wacom.enable = true;
 
+
     desktopManager = {
       default = "none";
       xterm.enable = false;
     };
 
     displayManager = {
+      slim = {
+        defaultUser = "jb55";
+        theme = pkgs.fetchFromGitHub {
+          owner = "crough";
+          repo = "nixos-slim-theme";
+          rev = "9c37840ba8b42d8f488eb80074ea940af9536360";
+          sha256 = "1mvys3jq4sh7dmdzsnf01cl20bagrvh2jc23fgjiyrgdjwqv7d18";
+        };
+      };
       sessionCommands = "${userConfig}/bin/xinitrc";
-      lightdm.enable = true;
     };
 
     videoDrivers = [ "nvidia" ];
@@ -75,4 +84,16 @@ userConfig:
     enable = true;
     drivers = [ pkgs.gutenprint ] ;
   };
+
+  systemd.user.services.urxvtd = {
+    enable = true;
+    description = "RXVT-Unicode Daemon";
+    wantedBy = [ "default.target" ];
+    path = [ pkgs.rxvt_unicode-with-plugins ];
+    serviceConfig = {
+      Restart = "always";
+      ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
+    };
+  };
+
 }
