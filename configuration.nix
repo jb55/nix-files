@@ -8,12 +8,21 @@ let machine = "archer";
     isDesktop = machine != "charon";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
+    machineConfig = import (machinePath "/config") pkgs;
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
-      machineSessionCommands = "";
+      machineSessionCommands = machineConfig.sessionCommands;
     };
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
+    theme = {
+      package = pkgs.theme-vertex;
+      name = "Vertex-Dark";
+    };
+    icon-theme = {
+      package = pkgs.numix-icon-theme;
+      name = "Numix";
+    };
     private = import ./private.nix;
     user = {
         name = "jb55";
@@ -37,9 +46,9 @@ in {
       ./services/hoogle
       ./hardware/desktop
       ./fonts
-      (import ./environment/desktop userConfig)
+      (import ./environment/desktop { inherit userConfig theme icon-theme; })
       (import ./timers/sync-ical2org.nix home)
-      (import ./services/desktop userConfig)
+      (import ./services/desktop { inherit userConfig theme icon-theme; })
     ] else []);
 
   # Use the GRUB 2 boot loader.
@@ -61,4 +70,3 @@ in {
 
   programs.zsh.enable = true;
 }
- 
