@@ -8,6 +8,7 @@ let machine = "charon";
     isDesktop = machine != "charon";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
+    machineConfig = import (machinePath "/config") pkgs;
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = "";
     };
