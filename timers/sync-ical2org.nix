@@ -2,7 +2,7 @@ home:
 { config, lib, pkgs, ... }:
 let calendars = (import ../private.nix).calendars;
     calendarArgs = with pkgs.lib;
-      let xs = mapAttrsToList (n: v: "'" + n + "=" + v + "'") calendars;
+      let xs = mapAttrsToList (n: v: "'" + n + "=" + v.category + "=" + v.link + "'") calendars;
       in concatStringsSep " " xs;
 in {
   systemd.services.sync-ical2org = {
@@ -19,7 +19,7 @@ in {
         os.makedirs(caldir, exist_ok=True)
         cat = lambda n: b"#+CATEGORY:    " + bytes(n, "utf-8")
         for arg in sys.argv[1:]:
-          [name, link] = arg.split("=")
+          [name, category, link] = arg.split("=")
           ical = urlopen(link).read()
           fname = os.path.join(caldir, name + ".org")
           org = open(fname, "wb")
@@ -28,7 +28,7 @@ in {
                                   stdin=subprocess.PIPE,
                                   stdout=subprocess.PIPE)
           out, err = proc.communicate(ical)
-          org.write(out.replace(cat("google"), cat(name)))
+          org.write(out.replace(cat("google"), cat(category)))
           org.close()
       ''; in "${script} ${calendarArgs}";
 
