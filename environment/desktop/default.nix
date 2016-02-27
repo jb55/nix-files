@@ -35,6 +35,8 @@ in {
     dragon-drop
     dropbox-cli
     emacs
+    gnome3.eog
+    gnome3.nautilus
     haskellPackages.taffybar
     pavucontrol
     pidgin
