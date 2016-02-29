@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 {
   # sync ical to org
-  systemd.services.sync-ical2org.enable = false;
+  systemd.services.sync-ical2org.enable = true;
   services.hoogle = {
     enable = false;
     packages = pkgs.myHaskellPackages;

@@ -8,11 +8,11 @@ let jb55pkgs = import (pkgs.fetchzip {
       skeletons
     ];
 in {
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; myPackages ++ [
     bc
     file
-    #gist
-    #gitAndTools.git-extras
+    gist
+    gitAndTools.git-extras
     gitFull
     htop
     lsof

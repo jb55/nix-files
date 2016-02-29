@@ -32,6 +32,7 @@ in {
     clipit
     dmenu
     chromium
+    emacs
     #dragon-drop
     #dropbox-cli
     #pavucontrol

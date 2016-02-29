@@ -11,7 +11,7 @@
   boot.initrd.availableKernelModules =  [ "uhci_hcd" "ehci_pci" "ata_piix" "usb_storage" ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.device = "/dev/disk/by-label/nixos";
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/9ecb0aa4-3155-43c0-9464-176f6e5d4a9d";
