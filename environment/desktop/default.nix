@@ -24,26 +24,22 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    gnome.gnome_icon_theme
     gtk-engine-murrine
     shared_mime_info
     theme.package
     icon-theme.package
 
-    chromium
     clipit
-    dragon-drop
-    dropbox-cli
-    emacs
-    haskellPackages.taffybar
-    pavucontrol
-    pidgin
+    dmenu
+    chromium
+    #dragon-drop
+    #dropbox-cli
+    #pavucontrol
+    #pidgin
     rxvt_unicode
     scrot
     slock
-    spotify
     userConfig
-    vlc
     weechat
     xautolock
     xbindkeys
@@ -51,7 +47,7 @@ in {
     xlibs.xev
     xlibs.xmodmap
     xlibs.xset
-    zathura
+    #zathura
   ];
 
   security.setuidPrograms = [ "slock" ];

@@ -4,8 +4,9 @@
 
 { config, pkgs, ... }:
 
-let machine = "monad";
+let machine = "kerby";
     isDesktop = machine != "charon";
+    isMinimal = machine == "kerby";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
@@ -24,6 +25,7 @@ let machine = "monad";
       name = "Numix";
     };
     private = import ./private.nix;
+    optional = pkgs.lib.optional;
     user = {
         name = "jb55";
         group = "users";
@@ -43,9 +45,9 @@ in {
       (import ./networking machine)
       (machinePath "")
     ] ++ (if isDesktop then [
-      ./services/hoogle
       ./hardware/desktop
       ./fonts
+      ./services/hoogle
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
       (import ./timers/sync-ical2org.nix home)
       (import ./services/desktop { inherit userConfig theme icon-theme; })
@@ -60,7 +62,7 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
 
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];

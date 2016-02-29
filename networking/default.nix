@@ -8,5 +8,7 @@ machine:
     172.24.206.82 charon
   '';
 
+  networking.networkmanager.enable = true;
+
   networking.firewall.allowPing = true;
 }

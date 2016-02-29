@@ -11,8 +11,8 @@ let
                                               || type == "regular");
   dotfiles = regularFiles <dotfiles>;
   bgimg = fetchurl {
-    url = "http://jb55.com/img/haskell-space.jpg";
-    md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+    url = "http://jb55.com/img/haskell-space-1024x600.jpg";
+    md5 = "5887080b0582fe3d27000a16b6a739b1";
   };
   impureSessionCommands = ''
     #!${pkgs.bash}/bin/bash
@@ -22,7 +22,6 @@ let
   sessionCommands = ''
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
-    ${pkgs.haskellPackages.taffybar}/bin/taffybar &
     ${pkgs.clipit}/bin/clipit &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc

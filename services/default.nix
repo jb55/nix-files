@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 {
-  services.zerotierone.enable = true;
+  services.zerotierone.enable = false;
 
-  services.mongodb.enable = true;
-  services.redis.enable = true;
+  services.mongodb.enable = false;
+  services.redis.enable = false;
 
   services.postgresql = {
-    enable = true;
+    enable = false;
     authentication = "local all all ident";
   };
 
@@ -16,7 +16,7 @@
   };
 
   services.logrotate = {
-    enable = true;
+    enable = false;
     config = ''
       dateext
       dateformat %Y-%m-%d.

@@ -12,10 +12,10 @@ in {
     enableAdobeFlash = true;
   };
 
-  chromium = {
-    enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
-    enablePepperPDF = false;
-  };
+#  chromium = {
+#    enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+#    enablePepperPDF = false;
+#  };
 
   packageOverrides = super: rec {
     bluez = pkgs.bluez5;

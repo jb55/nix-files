@@ -5,13 +5,8 @@
     enableGhostscriptFonts = true;
     enableCoreFonts = true;
     fonts = with pkgs; [
-      corefonts
-      inconsolata
-      ubuntu_font_family
-      fira-code
-      fira-mono
       source-code-pro
-      ipafont
+      terminus_font
     ];
   };
 }

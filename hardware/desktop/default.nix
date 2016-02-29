@@ -1,14 +1,10 @@
 { config, lib, pkgs, ... }:
 {
-  boot.supportedFilesystems = ["ntfs" "exfat"];
-
   hardware = {
-    bluetooth.enable = true;
+    bluetooth.enable = false;
     pulseaudio = {
       package = pkgs.pulseaudioFull;
-      enable = true;
-      support32Bit = true;
+      enable = false;
     };
-    opengl.driSupport32Bit = true;
   };
 }

@@ -2,9 +2,9 @@
 { config, lib, pkgs, ... }:
 {
   # sync ical to org
-  systemd.services.sync-ical2org.enable = true;
+  systemd.services.sync-ical2org.enable = false;
   services.hoogle = {
-    enable = true;
+    enable = false;
     packages = pkgs.myHaskellPackages;
   };
 
@@ -19,7 +19,7 @@
   };
 
   services.mpd = {
-    enable = true;
+    enable = false;
     dataDir = "/home/jb55/mpd";
     user = "jb55";
     group = "users";
@@ -38,7 +38,7 @@
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
     startGnuPGAgent = true;
-    wacom.enable = true;
+    #wacom.enable = true;
 
     desktopManager = {
       default = "none";
@@ -50,51 +50,45 @@
       lightdm = {
         enable = true;
         background = "${pkgs.fetchurl {
-          url = "https://jb55.com/img/haskell-space.jpg";
-          md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+          url = "https://jb55.com/img/haskell-space-1024x600.jpg";
+          md5 = "5887080b0582fe3d27000a16b6a739b1";
         }}";
-        greeters.gtk = {
-          theme = theme;
-          # iconTheme = icon-theme;
-        };
+        #greeters.gtk = {
+        #  theme = theme;
+        #  # iconTheme = icon-theme;
+        #};
       };
     };
 
-    videoDrivers = [ "nvidia" ];
+    #videoDrivers = [ "ati_unfree" ];
 
     screenSection = ''
-      Option "metamodes" "1920x1080 +0+0"
+      Option "metamodes" "1024x600 +0+0"
       Option "dpi" "96 x 96"
     '';
 
     windowManager = {
-      xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-        extraPackages = hp: [
-          hp.taffybar
-        ];
-      };
-      default = "xmonad";
+      spectrwm.enable = true;
+      default = "spectrwm";
     };
   };
 
   # Enable the OpenSSH daemon.
   # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs.gutenprint ] ;
-  };
-
-  systemd.user.services.urxvtd = {
-    enable = true;
-    description = "RXVT-Unicode Daemon";
-    wantedBy = [ "default.target" ];
-    path = [ pkgs.rxvt_unicode-with-plugins ];
-    serviceConfig = {
-      Restart = "always";
-      ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
-    };
-  };
+  #services.printing = {
+  #  enable = true;
+  #  drivers = [ pkgs.gutenprint ] ;
+  #};
+#
+#  systemd.user.services.urxvtd = {
+#    enable = true;
+#    description = "RXVT-Unicode Daemon";
+#    wantedBy = [ "default.target" ];
+#    path = [ pkgs.rxvt_unicode-with-plugins ];
+#    serviceConfig = {
+#      Restart = "always";
+#      ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
+#    };
+#  };
 
 }

@@ -8,27 +8,18 @@ let jb55pkgs = import (pkgs.fetchzip {
       skeletons
     ];
 in {
-  environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
+  environment.systemPackages = with pkgs; [
     bc
-    binutils
     file
-    fzf
-    gist
-    gitAndTools.git-extras
+    #gist
+    #gitAndTools.git-extras
     gitFull
-    gnupg
     htop
     lsof
-    nix-repl
-    patchelf
-    pv
     rsync
     silver-searcher
-    subversion
-    unzip
     vim
     wget
     xclip
-    zip
   ];
 }
