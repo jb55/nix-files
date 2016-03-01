@@ -19,6 +19,9 @@ in {
   };
 
   packageOverrides = super: rec {
+    qt48Full = super.qt48Full.override { gtkStyle = true; };
+    qt53 = super.qt53.override { gtkStyle = true; };
+
     bluez = pkgs.bluez5;
 
     haskellPackages = super.haskellPackages.override {
@@ -78,10 +81,17 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
+      Boolean
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      SafeSemaphore
+      Spock
       aeson
+      aeson-qq
       amazonka
       amazonka-s3
-      aeson-qq
       async
       attoparsec
       bifunctors
@@ -96,7 +106,6 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
-      Boolean
       bson-lens
       cased
       cassava
@@ -112,6 +121,7 @@ in {
       envy
       exceptions
       failure
+      filepath
       fingertree
       foldl
       free
@@ -122,11 +132,9 @@ in {
       hspec
       hspec-expectations
       html
-      HTTP
       http-client
       http-date
       http-types
-      HUnit
       io-memoize
       keys
       language-bash
@@ -146,20 +154,21 @@ in {
       logict
       mime-mail
       mime-types
-      MissingH
       mmorph
       monad-control
       monad-coroutine
-      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
+      monadloc
       mongoDB
       monoid-extras
+      monstercat-backend
       network
       newtype
       numbers
+      options
       optparse-applicative
       parsec
       parsers
@@ -190,7 +199,6 @@ in {
       postgresql-simple-sop
       pretty-show
       profunctors
-      QuickCheck
       random
       reducers
       reflection
@@ -204,7 +212,6 @@ in {
       retry
       rex
       safe
-      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -222,7 +229,6 @@ in {
       simple-reflect
       speculation
       split
-      Spock
       spoon
       stm
       stm-chans

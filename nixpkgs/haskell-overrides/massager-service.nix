@@ -3,6 +3,7 @@
 , streaming-wai, text, unordered-containers, vector, wai, warp
 , word8
 }:
+with stdenv.lib;
 mkDerivation {
   pname = "massager-service";
   version = "0.1.0";

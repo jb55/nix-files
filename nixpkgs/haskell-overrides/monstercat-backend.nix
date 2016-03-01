@@ -36,6 +36,7 @@
 , word8
 }:
 
+with stdenv.lib;
 mkDerivation rec {
   pname = "monstercat-backend";
   version = "1.1.0";
