@@ -13,7 +13,7 @@
   fileSystems."/home/jb55/.local/share/Steam/steamapps" =
     { device = "/sand/data/SteamAppsLinux";
       fsType = "none";
-      options = "bind";
+      options = ["bind"];
     };
 
   swapDevices =
