@@ -14,6 +14,8 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     '';
 in {
   environment.variables = {
+    # sane date formats
+    LC_TIME="en_DK.UTF-8";
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     GTK_DATA_PREFIX = "${theme.package}";
     GTK_EXEC_PREFIX = "${theme.package}";

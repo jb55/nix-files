@@ -56,7 +56,8 @@ in {
 
   programs.ssh.startAgent = !isDesktop;
 
-  time.timeZone = "America/Vancouver";
+  # utc-8 because DST is dumb
+  time.timeZone = "America/Metlakatla";
 
   nixpkgs.config = nixpkgsConfig;
 
