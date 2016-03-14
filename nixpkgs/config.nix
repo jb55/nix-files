@@ -19,9 +19,6 @@ in {
   };
 
   packageOverrides = super: rec {
-    qt48Full = super.qt48Full.override { gtkStyle = true; };
-    qt53 = super.qt53.override { gtkStyle = true; };
-
     bluez = pkgs.bluez5;
 
     haskellPackages = super.haskellPackages.override {
