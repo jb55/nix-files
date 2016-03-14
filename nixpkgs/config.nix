@@ -254,6 +254,7 @@ in {
       test-framework-hunit
       text
       text-format
+      formatting
       time
       tinytemplate
       transformers
