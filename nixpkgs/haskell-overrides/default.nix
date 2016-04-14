@@ -36,5 +36,5 @@ in {
   });
   monstercat-backend = self.callPackage ./monstercat-backend.nix { };
   massager-service = self.callPackage ./massager-service.nix { };
-  massager = self.callPackage ./payment.nix { };
+  payment = self.callPackage ./payment.nix { };
 } // monstercatPkgs.haskellPackages
