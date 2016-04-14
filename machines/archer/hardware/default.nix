@@ -16,13 +16,13 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/4b076497-f2f8-4e3a-bd27-2874a4a0e361";
     fsType = "ext4";
-    options = "noatime,nodiratime,discard";
+    options = ["noatime" "nodiratime" "discard"];
   };
 
   fileSystems."/dropbox" = {
     device = "/dev/disk/by-label/vertex";
     fsType = "ext4";
-    options = "noatime,nodiratime,discard";
+    options = ["noatime" "nodiratime" "discard"];
   };
 
   swapDevices =
