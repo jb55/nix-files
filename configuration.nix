@@ -43,7 +43,7 @@ in {
       (import ./networking machine)
       (machinePath "")
     ] ++ (if isDesktop then [
-      ./services/hoogle
+      # ./services/hoogle
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
