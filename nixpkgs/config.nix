@@ -87,6 +87,7 @@ in {
       Spock
       aeson
       aeson-qq
+      aeson-applicative
       amazonka
       amazonka-s3
       async
@@ -256,6 +257,7 @@ in {
       text-format
       formatting
       time
+      time-patterns
       tinytemplate
       transformers
       transformers-base
