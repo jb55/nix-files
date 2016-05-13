@@ -20,8 +20,8 @@
     config = ''
       dateext
       dateformat %Y-%m-%d.
-      compresscmd ${pkgs.xz}/bin/xz
-      uncompresscmd ${pkgs.xz}/bin/unxz
+      compresscmd ${pkgs.xz.bin}/bin/xz
+      uncompresscmd ${pkgs.xz.bin}/bin/unxz
       compressext .xz
     '';
   };
