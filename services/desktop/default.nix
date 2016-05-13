@@ -38,7 +38,6 @@
     layout = "us";
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-    startGnuPGAgent = true;
     wacom.enable = true;
 
     desktopManager = {
