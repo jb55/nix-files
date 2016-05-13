@@ -6,6 +6,7 @@
   services.hoogle = {
     enable = true;
     packages = pkgs.myHaskellPackages;
+    haskellPackages = pkgs.haskellPackages;
   };
 
   services.redshift = {
