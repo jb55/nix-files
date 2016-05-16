@@ -34,7 +34,7 @@ in {
     clipit
     dragon-drop
     dropbox-cli
-    emacs
+    emacs25pre
     gnome3.eog
     gnome3.nautilus
     haskellPackages.taffybar
