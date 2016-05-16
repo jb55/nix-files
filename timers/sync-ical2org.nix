@@ -10,7 +10,7 @@ in {
     serviceConfig = {
       Type = "oneshot";
       ExecStart = let script = pkgs.writeScript "ical2org-auto" ''
-        #!${pkgs.python32}/bin/python3
+        #!${pkgs.python35}/bin/python3
         import os
         import sys
         from urllib.request import urlopen

@@ -16,15 +16,15 @@ in {
       sha256 = "0z3mnhy1ims0r60iq3278wrpqsv552cr7b6bmzff2dfy0xd2x48r";
     };
   });
-  language-bash = overrideCabal super.language-bash (attrs: {
-    testHaskellDepends = with super; [ QuickCheck tasty tasty-quickcheck ];
-    src = pkgs.fetchFromGitHub {
-      owner = "jb55";
-      repo = "language-bash";
-      rev = "f80672b3b18983a1ba67ceb7cfcfc7216abafc0b";
-      sha256 = "1dgb5cmc73vj9pvfxl1p1x3j3qr45058wff7gpvvnzf0zm1ycspl";
-    };
-  });
+  # language-bash = overrideCabal super.language-bash (attrs: {
+  #   testHaskellDepends = with super; [ QuickCheck tasty tasty-quickcheck ];
+  #   src = pkgs.fetchFromGitHub {
+  #     owner = "jb55";
+  #     repo = "language-bash";
+  #     rev = "f80672b3b18983a1ba67ceb7cfcfc7216abafc0b";
+  #     sha256 = "1dgb5cmc73vj9pvfxl1p1x3j3qr45058wff7gpvvnzf0zm1ycspl";
+  #   };
+  # });
   cassava = overrideCabal super.cassava (attrs: {
     version = "0.4.3.1";
     src = pkgs.fetchFromGitHub {
