@@ -3,5 +3,6 @@
   imports = [
     ./networking
     ./hardware
+    ./environment
   ];
 }

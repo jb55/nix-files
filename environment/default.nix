@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let jb55pkgs = import (pkgs.fetchzip {
       url = "https://jb55.com/pkgs.tar.gz";
-      sha256 = "12sii14xzy4vix4bmm1amg9bc54fl563pri2fqn99bss5ga1s6jn";
+      sha256 = "1q6m77qnixnp17ai9qacxsrc10bqbdm21cyw1vdggsii7inh0r1d";
     }) { nixpkgs = pkgs; };
     myPackages = builtins.attrValues jb55pkgs;
     myHaskellPackages = with pkgs.haskellPackages; [

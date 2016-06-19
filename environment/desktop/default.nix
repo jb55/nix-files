@@ -1,26 +1,42 @@
-userConfig:
+{ userConfig, theme, icon-theme }:
 { config, lib, pkgs, ... }:
-{
+let gtk2rc = pkgs.writeText "gtk2rc" ''
+      gtk-icon-theme-name = "${icon-theme.name}"
+      gtk-theme-name = "${theme.name}"
+
+      binding "gtk-binding-menu" {
+        bind "j" { "move-current" (next) }
+        bind "k" { "move-current" (prev) }
+        bind "h" { "move-current" (parent) }
+        bind "l" { "move-current" (child) }
+      }
+      class "GtkMenuShell" binding "gtk-binding-menu"
+    '';
+in {
   environment.variables = {
-    GTK2_RC_FILES = "${config.system.path}";
-    GTK_DATA_PREFIX = "${config.system.path}";
-    GTK_THEME = "Vertex-Dark";
+    GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+    GTK_DATA_PREFIX = "${theme.package}";
+    GTK_EXEC_PREFIX = "${theme.package}";
+    GTK_PATH = "${theme.package}:${pkgs.gtk3.out}";
+    GTK_THEME = "${theme.name}";
     QT_STYLE_OVERRIDE = "GTK+";
+    GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
   };
 
   environment.systemPackages = with pkgs; [
     gnome.gnome_icon_theme
     gtk-engine-murrine
-    numix-icon-theme
-    hicolor_icon_theme
     shared_mime_info
-    theme-vertex
+    theme.package
+    icon-theme.package
 
     chromium
     clipit
     dragon-drop
     dropbox-cli
-    emacs
+    emacs25pre
+    gnome3.eog
+    gnome3.nautilus
     haskellPackages.taffybar
     pavucontrol
     pidgin

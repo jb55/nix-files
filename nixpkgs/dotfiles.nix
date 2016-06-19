@@ -26,6 +26,7 @@ let
     ${pkgs.clipit}/bin/clipit &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
+    ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
   '' + "\n" + impureSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;
   xinitrc-refresh = writeScript "xinitrc-refresh" impureSessionCommands;

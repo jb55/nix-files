@@ -1,4 +1,4 @@
-userConfig:
+{ userConfig, theme, icon-theme }:
 { config, lib, pkgs, ... }:
 {
   # sync ical to org
@@ -6,6 +6,7 @@ userConfig:
   services.hoogle = {
     enable = true;
     packages = pkgs.myHaskellPackages;
+    haskellPackages = pkgs.haskellPackages;
   };
 
   services.redshift = {
@@ -37,7 +38,6 @@ userConfig:
     layout = "us";
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-    startGnuPGAgent = true;
     wacom.enable = true;
 
     desktopManager = {
@@ -47,8 +47,35 @@ userConfig:
 
     displayManager = {
       sessionCommands = "${userConfig}/bin/xinitrc";
-      lightdm.enable = true;
+      lightdm = {
+        enable = true;
+        background = "${pkgs.fetchurl {
+          url = "https://jb55.com/img/haskell-space.jpg";
+          md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+        }}";
+        greeters.gtk = {
+          theme = theme;
+          # iconTheme = icon-theme;
+        };
+      };
     };
+
+    libinput = {
+      enable = true;
+      accelProfile = "flat";
+      # accelSpeed = "0.1";
+    };
+
+    config = ''
+      Section "InputClass"
+        Identifier "Razer Razer DeathAdder 2013"
+        MatchIsPointer "yes"
+        Option "AccelerationProfile" "-1"
+        Option "ConstantDeceleration" "5"
+        Option "AccelerationScheme" "none"
+        Option "AccelSpeed" "-1"
+      EndSection
+    '';
 
     videoDrivers = [ "nvidia" ];
 
@@ -75,4 +102,16 @@ userConfig:
     enable = true;
     drivers = [ pkgs.gutenprint ] ;
   };
+
+  systemd.user.services.urxvtd = {
+    enable = true;
+    description = "RXVT-Unicode Daemon";
+    wantedBy = [ "default.target" ];
+    path = [ pkgs.rxvt_unicode-with-plugins ];
+    serviceConfig = {
+      Restart = "always";
+      ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
+    };
+  };
+
 }

@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 let sites = [./sites/jb55.com
              ./sites/npmrepo.com
+             ./sites/wineparty.xyz
             ];
     logDir = "/var/log/nginx";
 in {
