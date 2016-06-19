@@ -1,7 +1,5 @@
 { pkgs }:
-let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
-    haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
-    callPackage = pkgs.callPackage;
+let callPackage = pkgs.callPackage;
 in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
@@ -21,10 +19,6 @@ in {
   packageOverrides = super: rec {
     bluez = pkgs.bluez5;
 
-    haskellPackages = super.haskellPackages.override {
-      overrides = haskellOverrides pkgs;
-    };
-
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
@@ -43,13 +37,13 @@ in {
 
     haskellToolsEnv = super.buildEnv {
       name = "haskellTools";
-      paths = haskellTools haskellPackages;
+      paths = haskellTools super.haskellPackages;
     };
 
     haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
       let hp = if compiler != null
                  then super.haskell.packages.${compiler}
-                 else haskellPackages;
+                 else super.haskellPackages;
 
           ghcWith = if withHoogle
                       then hp.ghcWithHoogle
@@ -270,6 +264,6 @@ in {
       yaml
       zippers
       zlib
-    ] ++ builtins.attrValues monstercatPkgs.haskellPackages;
+    ];
   };
 }

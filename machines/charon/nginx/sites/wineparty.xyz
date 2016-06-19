@@ -1,12 +1,12 @@
 
 server {
-  listen 443 ssl;
+  listen 80;
   server_name www.wineparty.xyz;
   root /www/wineparty.xyz/public;
   index index.html index.htm;
 
-  ssl_certificate /etc/letsencrypt/live/wineparty.xyz/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/wineparty.xyz/privkey.pem;
+# ssl_certificate /etc/letsencrypt/live/wineparty.xyz/fullchain.pem;
+# ssl_certificate_key /etc/letsencrypt/live/wineparty.xyz/privkey.pem;
 
   location / {
     try_files $uri $uri/ =404;
@@ -15,12 +15,12 @@ server {
 
 server {
   listen 80;
-  server_name wineparty.xyz www.wineparty.xyz;
-  return 301 https://www.wineparty.xyz$request_uri;
+  server_name wineparty.xyz;
+  return 301 http://www.wineparty.xyz$request_uri;
 }
 
 server {
   listen 443 ssl;
-  server_name wineparty.xyz;
-  return 301 https://www.wineparty.xyz$request_uri;
+  server_name wineparty.xyz www.wineparty.xyz;
+  return 301 http://www.wineparty.xyz$request_uri;
 }
