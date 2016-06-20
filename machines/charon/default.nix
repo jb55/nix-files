@@ -12,10 +12,21 @@
     authentication = ''
       # type db  user address        method
       local  all all                 trust
+      host   all all  127.0.0.1/32   trust
       host   all all  172.24.0.0/16  trust
     '';
     extraConfig = ''
       listen_addresses = '0.0.0.0'
+    '';
+  };
+
+  systemd.services.postgrest = {
+    description = "PostgREST";
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = ''
+      ${pkgs.haskellPackages.postgrest}/bin/postgrest \
+        'postgres://localhost/wineparty' \
+        -a jb55
     '';
   };
 }
