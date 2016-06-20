@@ -19,6 +19,10 @@
 
   systemd.services.postgrest = {
     description = "PostgREST";
+
+    serviceConfig.wantedBy = [ "multi-user.target" ];
+    serviceConfig.after    = [ "postgresql.target" ];
+
     serviceConfig.Type = "simple";
     serviceConfig.ExecStart = ''
       ${pkgs.haskellPackages.postgrest}/bin/postgrest \
