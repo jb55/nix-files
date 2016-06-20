@@ -26,4 +26,6 @@
         -a jb55
     '';
   };
+
+  systemd.services.postgrest.enable = true;
 }
