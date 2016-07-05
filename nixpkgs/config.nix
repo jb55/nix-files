@@ -31,6 +31,8 @@ in {
 
     ical2org = super.callPackage ./scripts/ical2org { };
 
+    ds4ctl = super.callPackage ./scripts/ds4ctl { };
+
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
       withHoogle = true;
