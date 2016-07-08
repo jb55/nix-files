@@ -162,7 +162,7 @@ in {
       monadloc
       mongoDB
       monoid-extras
-      monstercat-backend
+      # monstercat-backend
       network
       newtype
       numbers
@@ -188,12 +188,14 @@ in {
       pipes-mongodb
       pipes-network
       pipes-parse
+      pipes-postgresql-simple
       pipes-safe
       pipes-shell
       pipes-text
       pipes-wai
       posix-paths
       postgresql-simple
+      postgresql-binary
       postgresql-simple-sop
       pretty-show
       profunctors
