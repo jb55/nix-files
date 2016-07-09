@@ -2,6 +2,9 @@
 let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     callPackage = pkgs.callPackage;
+    regularFiles = builtins.filterSource (f: type: type == "symlink"
+                                                || type == "directory"
+                                                || type == "regular");
 in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
@@ -28,6 +31,8 @@ in {
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
+
+    jb55-dotfiles = regularFiles <dotfiles>;
 
     ical2org = super.callPackage ./scripts/ical2org { };
 

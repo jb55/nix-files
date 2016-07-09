@@ -31,5 +31,21 @@
     '';
   };
 
+  # from https://github.com/garbas/dotfiles/blob/b76677b9f3fb43e8d40f4872d327bee93c720f3e/nixops/floki.nix#L236
+  # thanks @garbas
+  systemd.services.weechat = with pkgs; {
+    enable = true;
+    description = "Weechat IRC Client (in tmux)";
+    environment = { TERM = "${rxvt_unicode.terminfo}"; };
+    path = [ tmux weechat rxvt_unicode.terminfo which ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+      ExecStart = "${tmux}/bin/tmux -S /run/tmux-weechat new-session -d -s weechat -n 'weechat' '${weechat}/bin/weechat-curses -d ${jb55-dotfiles}/.weechat'";
+      ExecStop = "${tmux}/bin/tmux -S /run/tmux-weechat kill-session -t weechat";
+    };
+  };
+
   systemd.services.postgrest.enable = true;
 }
