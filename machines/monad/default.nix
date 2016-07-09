@@ -23,7 +23,7 @@
     wantedBy = [ "multi-user.target" ];
     after = [ "systemd-udev-settle.service" ];
 
-    startAt = "*:0/1";
+    startAt = "*:*:0/15";
 
     serviceConfig.Type = "oneshot";
     serviceConfig.ExecStart = ''
