@@ -91,6 +91,7 @@ in {
       aeson-qq
       async
       attoparsec
+      binary-serialise-cbor
       bifunctors
       bitcoin-api
       bitcoin-api-extra
@@ -277,6 +278,6 @@ in {
       yaml
       zippers
       zlib
-    ] ++ builtins.attrValues monstercatPkgs.haskellPackages;
+    ];
   };
 }
