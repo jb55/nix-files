@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ds4ctl-${version}";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "jb55";
     repo = "ds4ctl";
     rev = version;
-    sha256 = "0pq2l0fsksfvxjb2jvv7984pjrw1537wajvr5csl7a1ldvng0llz";
+    sha256 = "19kcax09z4kka7f7ilyjq0hwg4wl5871f2nnaqyz3raa91r2wba0";
   };
 
   makeFlags = "PREFIX=$(out)";
