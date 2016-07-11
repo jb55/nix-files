@@ -34,5 +34,23 @@
     '';
   };
 
+  systemd.services.weechat = {
+    description = "Weechat relay server";
+
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig.Type = "oneshot";
+    serviceConfig.RemainAfterExit = "yes";
+    serviceConfig.ExecStart = pkgs.writeScript "weechat-service" ''
+      #!${pkgs.bash}/bin/bash
+      set -e
+      ${pkgs.rsync}/bin/rsync -rlD ${pkgs.jb55-dotfiles}/.weechat/ /tmp/weechat/
+      ${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat new-session -d -s weechat -n 'weechat' '${pkgs.weechat}/bin/weechat-curses -d /tmp/weechat'
+    '';
+    serviceConfig.ExecStop = "${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat kill-session -t weechat";
+
+  };
+
+  systemd.services.weechat.enable = true;
   systemd.services.postgrest.enable = true;
 }
