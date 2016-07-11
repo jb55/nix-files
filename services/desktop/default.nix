@@ -36,7 +36,8 @@
   services.xserver = {
     enable = true;
     layout = "us";
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
+
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch";
 
     wacom.enable = true;
 
