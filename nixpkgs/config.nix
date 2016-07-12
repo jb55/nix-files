@@ -100,7 +100,6 @@ in {
       amazonka-s3
       async
       attoparsec
-      binary-serialise-cbor
       bifunctors
       bitcoin-api
       bitcoin-api-extra

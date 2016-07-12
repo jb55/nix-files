@@ -8,6 +8,7 @@
       corefonts
       inconsolata
       ubuntu_font_family
+      emojione
       fira-code
       fira-mono
       kochi-substitute
