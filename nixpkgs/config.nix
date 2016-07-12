@@ -86,10 +86,18 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
+      Boolean
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      SafeSemaphore
+      Spock
       aeson
+      aeson-qq
+      aeson-applicative
       amazonka
       amazonka-s3
-      aeson-qq
       async
       attoparsec
       binary-serialise-cbor
@@ -105,7 +113,6 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
-      Boolean
       bson-lens
       cased
       cassava
@@ -121,6 +128,7 @@ in {
       envy
       exceptions
       failure
+      filepath
       fingertree
       foldl
       free
@@ -131,11 +139,9 @@ in {
       hspec
       hspec-expectations
       html
-      HTTP
       http-client
       http-date
       http-types
-      HUnit
       io-memoize
       keys
       language-bash
@@ -155,20 +161,21 @@ in {
       logict
       mime-mail
       mime-types
-      MissingH
       mmorph
       monad-control
       monad-coroutine
-      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
+      monadloc
       mongoDB
       monoid-extras
+      # monstercat-backend
       network
       newtype
       numbers
+      options
       optparse-applicative
       parsec
       parsers
@@ -190,16 +197,17 @@ in {
       pipes-mongodb
       pipes-network
       pipes-parse
+      pipes-postgresql-simple
       pipes-safe
       pipes-shell
       pipes-text
       pipes-wai
       posix-paths
       postgresql-simple
+      postgresql-binary
       postgresql-simple-sop
       pretty-show
       profunctors
-      QuickCheck
       random
       reducers
       reflection
@@ -213,7 +221,6 @@ in {
       retry
       rex
       safe
-      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -231,7 +238,6 @@ in {
       simple-reflect
       speculation
       split
-      Spock
       spoon
       stm
       stm-chans
@@ -260,7 +266,9 @@ in {
       test-framework-hunit
       text
       text-format
+      formatting
       time
+      time-patterns
       tinytemplate
       transformers
       transformers-base

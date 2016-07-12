@@ -1,8 +1,9 @@
 { mkDerivation, base, bytestring, cassava, flexible-instances
-, http-types, massager, pipes, pipes-csv, stdenv, streaming
+, http-types, payment, data-default, pipes, pipes-csv, stdenv, streaming
 , streaming-wai, text, unordered-containers, vector, wai, warp
 , word8
 }:
+with stdenv.lib;
 mkDerivation {
   pname = "massager-service";
   version = "0.1.0";
@@ -10,7 +11,7 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    base bytestring cassava flexible-instances http-types massager
+    base bytestring data-default cassava flexible-instances http-types payment
     pipes pipes-csv streaming streaming-wai text unordered-containers
     vector wai warp word8
   ];

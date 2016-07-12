@@ -10,6 +10,7 @@
       ubuntu_font_family
       fira-code
       fira-mono
+      kochi-substitute
       source-code-pro
       ipafont
     ];

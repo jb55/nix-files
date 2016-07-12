@@ -21,6 +21,7 @@
 , flexible
 , flexible-instances
 , foldl
+, formatting
 , hashable
 , haskellPackages
 , keys
@@ -40,6 +41,7 @@
 , safe
 , stdenv
 , syb
+, split
 , text
 , time
 , transformers
@@ -48,9 +50,9 @@
 , yaml
 }:
 mkDerivation {
-  pname = "massager";
+  pname = "payment";
   version = "0.1.2";
-  src = /dropbox/projects/monstercat/haskell/hspayment2;
+  src = /dropbox/projects/monstercat/haskell/massager;
   buildDepends = [
     Decimal
     MissingH
@@ -69,6 +71,8 @@ mkDerivation {
     errors
     envy
     filepath
+    formatting
+    split
     flexible
     flexible-instances
     foldl

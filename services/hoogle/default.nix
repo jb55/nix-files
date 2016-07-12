@@ -47,7 +47,9 @@ in {
   config = mkIf cfg.enable {
     systemd.services.hoogle = {
       description = "Hoogle Haskell documentation search";
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        Restart = "always";
         ExecStart =
           let env = cfg.haskellPackages.ghcWithHoogle cfg.packages;
               hoogleEnv = pkgs.buildEnv {
@@ -58,7 +60,6 @@ in {
             ${hoogleEnv}/bin/hoogle server --local -p ${toString cfg.port}
           '';
       };
-      serviceConfig.Restart = "always";
     };
   };
 
