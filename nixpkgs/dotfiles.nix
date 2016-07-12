@@ -6,10 +6,7 @@
 , machineSessionCommands ? ""
 }:
 let
-  regularFiles = builtins.filterSource (f: type: type == "symlink"
-                                              || type == "directory"
-                                              || type == "regular");
-  dotfiles = regularFiles <dotfiles>;
+  dotfiles = pkgs.jb55-dotfiles;
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
     md5 = "04d86f9b50e42d46d566bded9a91ee2c";

@@ -12,6 +12,4 @@
       listen_addresses = '10.243.14.20'
     '';
   };
-
-  systemd.services.massager.enable = false;
 }

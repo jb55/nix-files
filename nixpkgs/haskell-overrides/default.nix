@@ -2,30 +2,8 @@
 pkgs: self: super:
 let overrideCabal = pkgs.haskell.lib.overrideCabal;
 in {
-  # streaming-wai = self.callPackage ~/src/haskell/streaming-wai {};
-  # pipes = overrideCabal super.pipes (drv: {
-  #   version = "4.1.7";
-  #   sha256 = "104620e6868cc2c4f84c85416ecfce32d53fbbbecaacc7466a0566f574f9d616";
-  # });
-  # pipes-csv = overrideCabal super.pipes-csv (attrs: {
-  #   version = "1.4.2";
-  #   src = pkgs.fetchFromGitHub {
-  #     owner = "jb55";
-  #     repo = "pipes-csv";
-  #     rev = "061cff94a67b9b090260e0f31eb6eeeed2952632";
-  #     sha256 = "0z3mnhy1ims0r60iq3278wrpqsv552cr7b6bmzff2dfy0xd2x48r";
-  #   };
-  # });
-  # cassava = overrideCabal super.cassava (attrs: {
-  #   version = "0.4.3.1";
-  #   src = pkgs.fetchFromGitHub {
-  #     owner = "jb55";
-  #     repo = "cassava";
-  #     rev = "2eb6e29bd5e141c1a9f0e980f7ac1c915e06e02a";
-  #     sha256 = "1r1dv7yaalxja06jxqi7rjcdkb72mb2prnk8crzqap0gkmbahqcd";
-  #   };
-  # });
-  # monstercat-backend = self.callPackage ./monstercat-backend.nix { };
-  # massager-service = self.callPackage ./massager-service.nix { };
-  # payment = self.callPackage ./payment.nix { };
-} // monstercatPkgs.haskellPackages
+  binary-serialise-cbor = super.callPackage (pkgs.fetchurl {
+    url = "https://jb55.com/s/c356f537dc7ddffd.nix";
+    sha1 = "c356f537dc7ddffdc225d2f2d0c23632dce16955";
+  }) {};
+}

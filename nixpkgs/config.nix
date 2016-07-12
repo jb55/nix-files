@@ -2,6 +2,9 @@
 let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     callPackage = pkgs.callPackage;
+    regularFiles = builtins.filterSource (f: type: type == "symlink"
+                                                || type == "directory"
+                                                || type == "regular");
 in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
@@ -29,7 +32,11 @@ in {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
 
+    jb55-dotfiles = regularFiles <dotfiles>;
+
     ical2org = super.callPackage ./scripts/ical2org { };
+
+    ds4ctl = super.callPackage ./scripts/ds4ctl { };
 
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
@@ -63,6 +70,7 @@ in {
     haskellTools = hp: with hp; [
       #ghc-mod
       #hdevtools
+      binary-serialise-cbor
       alex
       cabal-install
       cabal2nix
