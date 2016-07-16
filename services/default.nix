@@ -7,7 +7,7 @@
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
-  services.openssh.permitRootLogin = false;
+  services.openssh.permitRootLogin = "no";
 
   services.logrotate = {
     enable = true;
