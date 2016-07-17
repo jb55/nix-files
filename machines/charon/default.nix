@@ -51,7 +51,7 @@ in
     serviceConfig.Type = "oneshot";
     serviceConfig.RemainAfterExit = "yes";
     serviceConfig.ExecStart = pkgs.writeScript "weechat-service" ''
-      #!${pkgs.bash}/bin/bash
+#!${pkgs.bash}/bin/bash
       set -e
       ${pkgs.rsync}/bin/rsync -rlD ${pkgs.jb55-dotfiles}/.weechat/ /tmp/weechat/
       ${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat new-session -d -s weechat -n 'weechat' '${pkgs.weechat}/bin/weechat-curses -d /tmp/weechat'
@@ -60,8 +60,30 @@ in
 
   };
 
+  systemd.services.dnsmonitor = {
+    description = "DNS monitor";
+    
+    wantedBy = [ "multi-user.target" ];
+    after    = [ "postgresql.target" "dnsmasq.target" ];
+
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = pkgs.writeScript "dnsmonitor" ''
+#!${pkgs.bash}/bin/bash
+      ${pkgs.coreutils}/bin/stdbuf -o 0 \
+        ${pkgs.wireshark}/bin/tshark \
+          -l -i enp0s4 -n -T fields \
+          -e "ip.src" \
+          -e "dns.qry.name" \
+          -e "dns.a" -Y "dns.flags.response eq 1" \
+			| ${pkgs.coreutils}/bin/stdbuf -o 0 ${pkgs.gnused}/bin/sed 's#\([0-9\.]\{8,\}\)#"\1"#g' \
+			| ${pkgs.coreutils}/bin/stdbuf -o 0 ${pkgs.gawk}/bin/gawk -F '\t' '{printf "insert into req (src_ip, name, ip) values ('"'"'{%s}'"'"', '"'"'%s'"'"', '"'"'{%s}'"'"');\n", $1, $2, $3}' \
+			| ${pkgs.postgresql}/bin/psql -d dns >/dev/null
+    '';
+  };
+
   systemd.services.weechat.enable = true;
   systemd.services.postgrest.enable = true;
+  systemd.services.dnsmonitor.enable = true;
 
   services.dnsmasq.enable = true;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
