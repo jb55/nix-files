@@ -9,19 +9,43 @@ let machine = "monad";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
-    userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
-      machineSessionCommands = machineConfig.sessionCommands;
-    };
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
-    theme = {
+    private = import ./private.nix;
+    theme = rec {
+      packages = with pkgs; [
+        gnome.gnome_icon_theme
+        gtk-engine-murrine
+        shared_mime_info
+        icon-package
+        package
+      ];
+      gtk2rc = pkgs.writeText "gtk2rc" ''
+        gtk-icon-theme-name = "${icons}"
+        gtk-theme-name = "${name}"
+
+        binding "gtk-binding-menu" {
+          bind "j" { "move-current" (next) }
+          bind "k" { "move-current" (prev) }
+          bind "h" { "move-current" (parent) }
+          bind "l" { "move-current" (child) }
+        }
+        class "GtkMenuShell" binding "gtk-binding-menu"
+      '';
+      environment = {
+        GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+        GTK_DATA_PREFIX = "${package}";
+        GTK_EXEC_PREFIX = "${package}";
+        GTK_PATH = "${package}:${pkgs.gtk3.out}";
+        GTK_THEME = "${name}";
+        QT_STYLE_OVERRIDE = "GTK+";
+        GTK2_RC_FILES = "${gtk2rc}:${package}/share/themes/${name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
+      };
       package = pkgs.theme-vertex;
-      name = "Vertex-Dark";
-    };
-    icon-theme = {
-      package = pkgs.numix-icon-theme;
-      name = "Numix";
+      icon-package = pkgs.numix-icon-theme;
+      name  = "Vertex-Dark";
+      icons = "Numix";
     };
     private = import ./private.nix;
     user = {
@@ -49,9 +73,9 @@ in {
       # ./services/hoogle
       ./hardware/desktop
       ./fonts
-      (import ./environment/desktop { inherit userConfig theme icon-theme; })
+      (import ./environment/desktop theme )
       (import ./timers/sync-ical2org.nix home)
-      (import ./services/desktop { inherit userConfig theme icon-theme; })
+      (import ./services/desktop theme)
     ] else []);
 
   # Use the GRUB 2 boot loader.
@@ -74,4 +98,5 @@ in {
   i18n.consoleUseXkbConfig = true;
 
   programs.zsh.enable = true;
+
 }

@@ -11,6 +11,7 @@ in {
   allowBroken = false;
   zathura.useMupdf = true;
 
+
   firefox = {
     enableGoogleTalkPlugin = true;
     enableAdobeFlash = true;
