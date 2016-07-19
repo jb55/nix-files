@@ -47,7 +47,7 @@ in {
     enable = true;
     layout = "us";
 
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:rwin_switch, compose:ralt";
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:rwin";
 
     wacom.enable = true;
 
