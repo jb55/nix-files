@@ -104,6 +104,7 @@ in {
     path        = theme.packages;
     description = "Taffybar status bar";
     serviceConfig = {
+      Restart = "always";
       ExecStart = pkgs.writeScript "taffybar-wrapper" ''
 #! ${pkgs.bash}/bin/bash
         set -e
