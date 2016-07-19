@@ -12,7 +12,6 @@ let machine = "monad";
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
-    private = import ./private.nix;
     theme = rec {
       packages = with pkgs; [
         gnome.gnome_icon_theme
