@@ -1,15 +1,9 @@
 { config, lib, pkgs, ... }:
 {
-  imports = [
-    ./networking
-    ./hardware
-    ./services
-  ];
-  # sessionCommands = ''
-  #   ${pkgs.xlibs.xset}/bin/xset m 0 0
-  # '';
+  imports = [ ./hardware ];
 
   systemd.services.postgrest = {
+    enable = true;
     description = "PostgREST";
 
     wantedBy = [ "multi-user.target" ];
@@ -23,5 +17,18 @@
     '';
   };
 
-  systemd.services.postgrest.enable = true;
+  networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];
+
+  # services.postgresql = {
+  #   dataDir = "/var/db/postgresql/9.5/";
+  #   enable = true;
+  #   authentication = pkgs.lib.mkForce ''
+  #     # type db  user address        method
+  #     local  all all                 trust
+  #     host   all all  10.243.0.0/16  trust
+  #   '';
+  #   extraConfig = ''
+  #     listen_addresses = '10.243.14.20'
+  #   '';
+  # };
 }

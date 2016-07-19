@@ -72,17 +72,6 @@ in {
       };
     };
 
-    config = ''
-      Section "InputClass"
-        Identifier "Razer Razer DeathAdder 2013"
-        MatchIsPointer "yes"
-        Option "AccelerationProfile" "-1"
-        Option "ConstantDeceleration" "5"
-        Option "AccelerationScheme" "none"
-        Option "AccelSpeed" "-1"
-      EndSection
-    '';
-
     videoDrivers = [ "nvidia" ];
 
     screenSection = ''
