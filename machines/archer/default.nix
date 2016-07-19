@@ -14,7 +14,7 @@
     description = "PostgREST";
 
     wantedBy = [ "multi-user.target" ];
-    after = [ "postgresql.target" ];
+    after =    [ "postgresql.service" ];
 
     serviceConfig.Type = "simple";
     serviceConfig.ExecStart = ''

@@ -1,6 +1,15 @@
-{ userConfig, theme, icon-theme }:
+theme:
 { config, lib, pkgs, ... }:
-{
+let bgimg = pkgs.fetchurl {
+      url = "http://jb55.com/img/haskell-space.jpg";
+      md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+    };
+    displayEnv = {
+      DISPLAY = ":0";
+      # XAUTHORITY = "/home/jb55/.Xauthority";
+    };
+    defaultEnvironment = theme.environment // displayEnv;
+in {
   # sync ical to org
   systemd.services.sync-ical2org.enable = true;
   services.hoogle = {
@@ -47,7 +56,6 @@
     };
 
     displayManager = {
-      sessionCommands = "${userConfig}/bin/xinitrc";
       lightdm = {
         enable = true;
         background = "${pkgs.fetchurl {
@@ -55,7 +63,8 @@
           md5 = "04d86f9b50e42d46d566bded9a91ee2c";
         }}";
         greeters.gtk = {
-          theme = theme;
+          theme.name = theme.name;
+          theme.package = theme.package;
           # iconTheme = icon-theme;
         };
       };
@@ -87,6 +96,95 @@
     drivers = [ pkgs.gutenprint ] ;
   };
 
+  systemd.user.services.taffybar = {
+    enable      = true;
+    environment = defaultEnvironment;
+    path        = theme.packages;
+    description = "Taffybar status bar";
+    wantedBy    = [ "default.target" ];
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = 3;
+      ExecStart = pkgs.writeScript "taffybar-wrapper" ''
+#! ${pkgs.bash}/bin/bash
+        set -e
+        export $(grep ^DBUS_SESSION_BUS_ADDRESS $HOME/.dbus/session-bus/*-0)
+        export PATH=${pkgs.iproute}/bin:"$PATH"
+
+        "${pkgs.haskellPackages.ghcWithPackages (pkgs: with pkgs; [ taffybar ])}"/bin/taffybar
+      '';
+    };
+  };
+
+  systemd.user.services.volumeicon = {
+    enable      = true;
+    environment = defaultEnvironment;
+    path        = theme.packages;
+    description = "Volume icon for status bar";
+    wantedBy    = [ "default.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.volumeicon}/bin/volumeicon";
+      Restart = "always";
+      RestartSec = 3;
+    };
+  };
+
+  systemd.user.services.xautolock = {
+    enable      = false;
+    description = "X auto screen locker";
+    wantedBy    = [ "default.target" ];
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = 3;
+      ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker slock";
+    };
+  };
+
+  systemd.user.services.clipit = {
+    enable      = true;
+    environment = defaultEnvironment;
+    path        = theme.packages;
+    description = "ClipIt clipboard manager";
+    wantedBy    = [ "default.target" ];
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = 3;
+      ExecStart = "${pkgs.clipit}/bin/clipit";
+    };
+  };
+
+  systemd.user.services.xbindkeys = {
+    enable      = true;
+    environment = displayEnv;
+    description = "X key bind helper";
+    wantedBy    = [ "default.target" ];
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = 3;
+      ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
+    };
+  };
+
+  systemd.user.services.xinitrc = {
+    enable      = true;
+    environment = displayEnv;
+    description = "X session init commands";
+    wantedBy    = [ "taffybar.service" ];
+    partOf      = [ "display-manager.service" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeScript "xinitrc" ''
+#!${pkgs.bash}/bin/bash
+        ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
+        ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+        ${pkgs.xlibs.xmodmap}/bin/xmodmap ${pkgs.jb55-dotfiles}/.Xmodmap
+        ${pkgs.xlibs.xset}/bin/xset r rate 200 50
+      '';
+    };
+  };
+
   systemd.user.services.urxvtd = {
     enable = true;
     description = "RXVT-Unicode Daemon";
@@ -94,6 +192,7 @@
     path = [ pkgs.rxvt_unicode-with-plugins ];
     serviceConfig = {
       Restart = "always";
+      RestartSec = 3;
       ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
     };
   };
