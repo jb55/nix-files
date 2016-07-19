@@ -37,6 +37,7 @@ let machine = "monad";
         GTK_DATA_PREFIX = "${package}";
         GTK_EXEC_PREFIX = "${package}";
         GTK_PATH = "${package}:${pkgs.gtk3.out}";
+        GTK_IM_MODULE = "xim";
         GTK_THEME = "${name}";
         QT_STYLE_OVERRIDE = "GTK+";
         GTK2_RC_FILES = "${gtk2rc}:${package}/share/themes/${name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
