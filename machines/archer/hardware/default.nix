@@ -25,6 +25,6 @@
     options = ["noatime" "nodiratime" "discard"];
   };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/d4e4ae51-9179-439d-925b-8df42dd1bfc5"; } ] ;
+  # swapDevices =
+  #   [ { device = "/dev/disk/by-uuid/d4e4ae51-9179-439d-925b-8df42dd1bfc5"; } ] ;
 }

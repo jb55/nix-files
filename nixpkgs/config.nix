@@ -113,6 +113,7 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
+      bound
       bson-lens
       cased
       cassava

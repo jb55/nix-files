@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 {
-  imports = [ ./hardware ];
+  imports = [
+    ./hardware
+    ./nginx
+  ];
 
   systemd.services.postgrest = {
     enable = true;
@@ -17,18 +20,20 @@
     '';
   };
 
+  networking.firewall.trustedInterfaces = ["zt0" "zt1"];
   networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];
 
-  # services.postgresql = {
-  #   dataDir = "/var/db/postgresql/9.5/";
-  #   enable = true;
-  #   authentication = pkgs.lib.mkForce ''
-  #     # type db  user address        method
-  #     local  all all                 trust
-  #     host   all all  10.243.0.0/16  trust
-  #   '';
-  #   extraConfig = ''
-  #     listen_addresses = '10.243.14.20'
-  #   '';
-  # };
+  services.postgresql = {
+    dataDir = "/var/db/postgresql/9.5/";
+    enable = true;
+    # extraPlugins = with pkgs; [ pgmp ];
+    authentication = pkgs.lib.mkForce ''
+      # type db  user address        method
+      local  all all                 trust
+      host   all all  10.243.0.0/16  trust
+    '';
+    extraConfig = ''
+      listen_addresses = '10.243.14.20'
+    '';
+  };
 }
