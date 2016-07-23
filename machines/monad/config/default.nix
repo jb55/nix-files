@@ -1,4 +1,4 @@
 pkgs: {
-  sessionCommands = ''
-  '';
+  # sessionCommands = ''
+  # '';
 }

@@ -4,6 +4,7 @@ let bgimg = pkgs.fetchurl {
       url = "http://jb55.com/img/haskell-space.jpg";
       md5 = "04d86f9b50e42d46d566bded9a91ee2c";
     };
+    sessionTrigger = "taffybar.service";
     displayEnv = {
       DISPLAY = ":0";
       # XAUTHORITY = "/home/jb55/.Xauthority";
@@ -56,6 +57,7 @@ in {
     };
 
     displayManager = {
+      sessionCommands = "${pkgs.systemd}/bin/systemctl start --user taffybar";
       lightdm = {
         enable = true;
         background = "${pkgs.fetchurl {
@@ -101,10 +103,8 @@ in {
     environment = defaultEnvironment;
     path        = theme.packages;
     description = "Taffybar status bar";
-    wantedBy    = [ "default.target" ];
     serviceConfig = {
       Restart = "always";
-      RestartSec = 3;
       ExecStart = pkgs.writeScript "taffybar-wrapper" ''
 #! ${pkgs.bash}/bin/bash
         set -e
@@ -121,7 +121,7 @@ in {
     environment = defaultEnvironment;
     path        = theme.packages;
     description = "Volume icon for status bar";
-    wantedBy    = [ "default.target" ];
+    wantedBy    = [ sessionTrigger ];
     serviceConfig = {
       ExecStart = "${pkgs.volumeicon}/bin/volumeicon";
       Restart = "always";
@@ -132,7 +132,7 @@ in {
   systemd.user.services.xautolock = {
     enable      = false;
     description = "X auto screen locker";
-    wantedBy    = [ "default.target" ];
+    wantedBy    = [ sessionTrigger ];
     serviceConfig = {
       Restart = "always";
       RestartSec = 3;
@@ -145,10 +145,8 @@ in {
     environment = defaultEnvironment;
     path        = theme.packages;
     description = "ClipIt clipboard manager";
-    wantedBy    = [ "default.target" ];
+    wantedBy    = [ sessionTrigger ];
     serviceConfig = {
-      Restart = "always";
-      RestartSec = 3;
       ExecStart = "${pkgs.clipit}/bin/clipit";
     };
   };
@@ -157,10 +155,8 @@ in {
     enable      = true;
     environment = displayEnv;
     description = "X key bind helper";
-    wantedBy    = [ "default.target" ];
+    wantedBy    = [ sessionTrigger ];
     serviceConfig = {
-      Restart = "always";
-      RestartSec = 3;
       ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
     };
   };
@@ -169,7 +165,7 @@ in {
     enable      = true;
     environment = displayEnv;
     description = "X session init commands";
-    wantedBy    = [ "taffybar.service" ];
+    wantedBy    = [ sessionTrigger ];
     partOf      = [ "display-manager.service" ];
 
     serviceConfig = {
