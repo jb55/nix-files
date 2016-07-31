@@ -2,7 +2,7 @@ extra:
 { config, lib, pkgs, ... }:
 let private   = extra.private;
     pythonEnv = import ./requirements.nix {};
-    pokemonMap = pkgs.ftchFromGitHub {
+    pokemonMap = pkgs.fetchFromGitHub {
       owner  = "AHAAAAAAA";
       repo   = "PokemonGo-Map";
       rev    = "v2.1.0";
