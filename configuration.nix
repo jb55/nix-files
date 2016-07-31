@@ -41,7 +41,7 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./certs
-      ./services
+      (import ./services private)
       ./environment
       (import ./networking machine)
       (machinePath "")

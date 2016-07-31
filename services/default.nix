@@ -1,5 +1,8 @@
+private:
 { config, lib, pkgs, ... }:
 {
+  imports = [ (import ./pokemongo-map private) ];
+
   services.zerotierone.enable = true;
 
   services.mongodb.enable = true;
