@@ -9,7 +9,7 @@ let private   = extra.private;
       sha256 = "0pdciiyayr3a4x229af8lbq0mx8ndxvhpnbrgrpbl075sx52zl1y";
     };
     services = def: {
-      systemd.services."pogom-${def.subdomain}" = {
+      "pogom-${def.subdomain}" = {
         description = "PokemonGO-Map, ${def.subdomain}";
 
         wantedBy = [ "multi-user.target" ];
@@ -34,7 +34,7 @@ let private   = extra.private;
             -p "$PASSWORD" \
             -l "$LOCATION" \
             -st $STEP_COUNT \
-            -D /var/db/pogom/pogom.db \
+            -D /var/db/pogom/pogom-${def.subdomain}.db \
             -wh "https://jb55.com/pogom" \
             -H 0.0.0.0 \
             -P $PORT \
@@ -42,4 +42,5 @@ let private   = extra.private;
         '';
       };
     };
-in lib.lists.fold (a: b: a // b) {} (map services private.pokemaps)
+in { systemd.services = lib.lists.fold (a: b: a // b) {} (map services private.pokemaps);
+   }

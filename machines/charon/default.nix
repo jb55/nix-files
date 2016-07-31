@@ -1,3 +1,4 @@
+extra:
 { config, lib, pkgs, ... }:
 let adblock-hosts = pkgs.fetchurl {
       url    = "https://jb55.com/s/ad-sources.txt";
@@ -12,7 +13,7 @@ in
   imports = [
     ./networking
     ./hardware
-    ./nginx
+    (import ./nginx extra)
   ];
 
   services.postgresql = {
@@ -81,9 +82,12 @@ in
     '';
   };
 
-  systemd.services.weechat.enable = true;
+  systemd.services.weechat.enable = false;
   systemd.services.postgrest.enable = true;
-  systemd.services.dnsmonitor.enable = true;
+  systemd.services.dnsmonitor.enable = false;
+
+  systemd.services.pogom-pokemap.enable = true;
+  systemd.services.pogom-gqpogo.enable = true;
 
   services.dnsmasq.enable = false;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
@@ -95,5 +99,4 @@ in
   networking.firewall.allowedTCPPorts = [ 22 443 80 5432 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
   networking.firewall.trustedInterfaces = ["zt0"];
-} // let enabler = x: { systemd.services."pogom${x.subdomain}" };
-     in lib.lists.fold {a: b: a // b} {} (map enabler extra.private.pokemaps);
+}
