@@ -1,7 +1,7 @@
-private:
+extra:
 { config, lib, pkgs, ... }:
 {
-  imports = [ (import ./pokemongo-map private) ];
+  imports = [ (import ./pokemongo-map extra) ];
 
   services.zerotierone.enable = true;
 
