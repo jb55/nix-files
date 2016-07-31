@@ -35,4 +35,5 @@ extra:
   systemd.services.postgrest.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 22 443 80 5432 ];
-}
+} // let enabler = x: { systemd.services."pogom${x.subdomain}" };
+     in lib.lists.fold {a: b: a // b} {} (map enabler extra.private.pokemaps);
