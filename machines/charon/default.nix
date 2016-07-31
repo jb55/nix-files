@@ -5,7 +5,7 @@ let adblock-hosts = pkgs.fetchurl {
     };
     dnsmasq-adblock = pkgs.fetchurl {
       url = "https://jb55.com/s/dnsmasq-ad-sources.txt";
-      sha256 = "f1af2fd53abaa15d3fd94a3318f45434a7a07dcf3e09d626b81e302ac254afb6";
+      sha256 = "3b34e565fb240c4ac1d261cb223bdc2d992fa755b5f6e981144e5b18f96f260d";
     };
 in
 {
@@ -85,7 +85,7 @@ in
   systemd.services.postgrest.enable = true;
   systemd.services.dnsmonitor.enable = true;
 
-  services.dnsmasq.enable = true;
+  services.dnsmasq.enable = false;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
   services.dnsmasq.extraConfig = ''
     addn-hosts=${adblock-hosts}
