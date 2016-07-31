@@ -1,11 +1,12 @@
+extra:
 { config, lib, pkgs, ... }:
 let sites = [./sites/jb55.com
              ./sites/npmrepo.com
              ./sites/wineparty.xyz
             ];
     logDir = "/var/log/nginx";
-    pokemap = import ./pokemap;
-    pokemaps = map (pm: pokemap pm.subdomain pm.port) config.private.pokemaps;
+    pokemap = import ./pokemap.nix;
+    pokemaps = map (pm: pokemap pm.subdomain pm.port) extra.private.pokemaps;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
