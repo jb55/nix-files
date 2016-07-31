@@ -12,6 +12,7 @@ let machine = "charon";
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = "";
     };
+    extra = { inherit private; };
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
@@ -41,10 +42,10 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./certs
-      ./services
+      (import ./services extra)
       ./environment
       (import ./networking machine)
-      (machinePath "")
+      (import (machinePath "") extra)
     ] ++ (if isDesktop then [
       # ./services/hoogle
       ./hardware/desktop

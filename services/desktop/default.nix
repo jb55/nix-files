@@ -37,7 +37,7 @@
     enable = true;
     layout = "us";
 
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch";
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:rwin";
 
     wacom.enable = true;
 
@@ -60,17 +60,6 @@
         };
       };
     };
-
-    config = ''
-      Section "InputClass"
-        Identifier "Razer Razer DeathAdder 2013"
-        MatchIsPointer "yes"
-        Option "AccelerationProfile" "-1"
-        Option "ConstantDeceleration" "5"
-        Option "AccelerationScheme" "none"
-        Option "AccelSpeed" "-1"
-      EndSection
-    '';
 
     videoDrivers = [ "nvidia" ];
 

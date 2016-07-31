@@ -1,5 +1,8 @@
+extra:
 { config, lib, pkgs, ... }:
 {
+  imports = [ (import ./pokemongo-map extra) ];
+
   services.zerotierone.enable = true;
 
   #services.mongodb.enable = true;

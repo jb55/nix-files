@@ -1,3 +1,4 @@
+extra:
 { config, lib, pkgs, ... }:
 {
   imports = [
@@ -28,6 +29,17 @@
 
     # vive audio
     KERNEL=="hidraw*", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0012", MODE="0666"
+  '';
+
+  services.xserver.config = ''
+    Section "InputClass"
+      Identifier "Razer Razer DeathAdder 2013"
+      MatchIsPointer "yes"
+      Option "AccelerationProfile" "-1"
+      Option "ConstantDeceleration" "5"
+      Option "AccelerationScheme" "none"
+      Option "AccelSpeed" "-1"
+    EndSection
   '';
 
   systemd.services.ds4ctl = {

@@ -1,11 +1,6 @@
 { config, lib, pkgs, ... }:
-let sites = [./sites/jb55.com
-             ./sites/npmrepo.com
-             ./sites/wineparty.xyz
-            ];
+let sites = [];
     logDir = "/var/log/nginx";
-    pokemap = import ./pokemap;
-    pokemaps = map (pm: pokemap pm.subdomain pm.port) config.private.pokemaps;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -64,12 +59,16 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      80;
+        listen      172.24.14.20:80 default_server;
         server_name "";
-        return      444;
-      }
 
-      ${lib.concatStringsSep "\n\n" pokemaps}
+        root /www/zt;
+        index index.html index.htm;
+
+        location / {
+          try_files $uri $uri/ =404;
+        }
+      }
 
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
     '';

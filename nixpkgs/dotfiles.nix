@@ -21,6 +21,7 @@ let
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
     ${pkgs.haskellPackages.taffybar}/bin/taffybar &
     ${pkgs.clipit}/bin/clipit &
+    ${pkgs.volumeicon}/bin/volumeicon &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
