@@ -679,6 +679,25 @@ self: {
 
 
 
+  "pysqlite" = python.mkDerivation {
+    name = "pysqlite-2.8.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/cc/a4/023ee9dba54b3cf0c5a4d0fb2f1ad80332ef23549dd4b551a9f2cbe88786/pysqlite-2.8.2.tar.gz";
+      sha256= "613d139e97ce0561dee312e29f3be4751d01fd1a085aa448dd53a003810e0008";
+    };
+    doCheck = commonDoCheck;
+    buildInputs = commonBuildInputs;
+    propagatedBuildInputs = [ ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "";
+      license = "zlib/libpng license";
+      description = "DB-API 2.0 interface for SQLite 3.x";
+    };
+    passthru.top_level = false;
+  };
+
+
+
   "pytz" = python.mkDerivation {
     name = "pytz-2016.6.1";
     src = pkgs.fetchurl {
