@@ -10,6 +10,7 @@ let private   = extra.private;
     };
     services = def: {
       "pogom-${def.subdomain}" = {
+        enable = false;
         description = "PokemonGO-Map, ${def.subdomain}";
 
         wantedBy = [ "multi-user.target" ];
