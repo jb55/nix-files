@@ -1,9 +1,12 @@
+extra:
 { config, lib, pkgs, ... }:
 {
+  imports = [ (import ./pokemongo-map extra) ];
+
   services.zerotierone.enable = true;
 
-  services.mongodb.enable = true;
-  services.redis.enable = true;
+  #services.mongodb.enable = true;
+  #services.redis.enable = true;
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
