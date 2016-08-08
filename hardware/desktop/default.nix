@@ -2,6 +2,10 @@
 {
   boot.supportedFilesystems = ["ntfs" "exfat"];
 
+  # disable annoying chromium audit logs
+  security.audit.enable = false;
+  boot.kernelParams = [ "audit=0" ];
+
   hardware = {
     bluetooth.enable = true;
     pulseaudio = {
