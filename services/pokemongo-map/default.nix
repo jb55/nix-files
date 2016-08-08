@@ -5,8 +5,8 @@ let private   = extra.private;
     pokemonMap = pkgs.fetchFromGitHub {
       owner  = "jb55";
       repo   = "PokemonGo-Map";
-      rev    = "00229d4c869c9c6928b390f82aae136d416c102f";
-      sha256 = "17rh2dw488j7j6phfm4yyn0vr74id0lmnx362gnl9r5dmqmrizdg";
+      rev    = "a63721bfadc318b1f158f53e0cc532a4e16091ef";
+      sha256 = "11m8h38glpbm2va4xxjfsvpigfmmjf531w1db2nqfccnkw872k75";
     };
     services = def: {
       "pogom-${def.subdomain}" = {
