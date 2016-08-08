@@ -3,10 +3,10 @@ extra:
 let private   = extra.private;
     pythonEnv = import ./requirements.nix {};
     pokemonMap = pkgs.fetchFromGitHub {
-      owner  = "AHAAAAAAA";
+      owner  = "jb55";
       repo   = "PokemonGo-Map";
-      rev    = "v2.1.0";
-      sha256 = "0pdciiyayr3a4x229af8lbq0mx8ndxvhpnbrgrpbl075sx52zl1y";
+      rev    = "00229d4c869c9c6928b390f82aae136d416c102f";
+      sha256 = "17rh2dw488j7j6phfm4yyn0vr74id0lmnx362gnl9r5dmqmrizdg";
     };
     services = def: {
       "pogom-${def.subdomain}" = {
