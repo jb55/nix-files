@@ -577,8 +577,8 @@ self: {
   "pgoapi" = python.mkDerivation {
     name = "pgoapi-1.1.6";
     src = pkgs.fetchurl {
-      url = "https://github.com/keyphact/pgoapi/archive/master.tar.gz";
-      sha256= "ed753318a0729cf30f41b922e7bb1781572e2314c38f49493f2d1e13973c202f";
+      url = "https://github.com/jb55/pgoapi/archive/master.tar.gz";
+      sha256= "c7009bb6d06d85e727a1157cbacf0a7ce8a043c2c7bb85acf91448762452e088";
     };
     doCheck = commonDoCheck;
     buildInputs = commonBuildInputs;
