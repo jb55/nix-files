@@ -578,7 +578,7 @@ self: {
     name = "pgoapi-1.1.6";
     src = pkgs.fetchurl {
       url = "https://github.com/jb55/pgoapi/archive/master.tar.gz";
-      sha256= "c7009bb6d06d85e727a1157cbacf0a7ce8a043c2c7bb85acf91448762452e088";
+      sha256= "50974aee8acd3fb50a76ae80536ca767ab153e77e66519489f288e76b36d24d6";
     };
     doCheck = commonDoCheck;
     buildInputs = commonBuildInputs;
