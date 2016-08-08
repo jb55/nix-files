@@ -36,6 +36,8 @@ in {
 
     ical2org = super.callPackage ./scripts/ical2org { };
 
+    footswitch = super.callPackage ./scripts/footswitch { };
+
     ds4ctl = super.callPackage ./scripts/ds4ctl { };
 
     haskellEnvHoogle = haskellEnvFun {

@@ -1,0 +1,37 @@
+diff --git a/Makefile b/Makefile
+index e3e4814..6605e65 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+-INSTALL = /usr/bin/install -c
+-INSTALLDATA = /usr/bin/install -c -m 644
++INSTALL = install -D
++INSTALLDATA = install -D -m 644
+ PROGNAME = footswitch
+ CFLAGS = -Wall
+ UNAME := $(shell uname)
+@@ -7,11 +7,7 @@ ifeq ($(UNAME), Darwin)
+ 	CFLAGS += -DOSX
+ 	LDFLAGS = -lhidapi
+ else
+-	ifeq ($(UNAME), Linux)
+-		LDFLAGS = `pkg-config hidapi-libusb --libs`
+-	else
+-		LDFLAGS = -lhidapi
+-	endif
++LDFLAGS = -lhidapi-hidraw
+ endif
+ 
+ all: $(PROGNAME)
+@@ -20,9 +16,9 @@ $(PROGNAME): $(PROGNAME).c common.h common.c debug.h debug.c
+ 	$(CC) $(PROGNAME).c common.c debug.c -o $(PROGNAME) $(CFLAGS) $(LDFLAGS)
+ 
+ install: all
+-	$(INSTALL) $(PROGNAME) /usr/bin
++	$(INSTALL) $(PROGNAME) $(PREFIX)/bin/$(PROGNAME)
+ ifeq ($(UNAME), Linux)
+-	$(INSTALLDATA) 19-footswitch.rules /etc/udev/rules.d
++	$(INSTALLDATA) 19-footswitch.rules $(PREFIX)/etc/udev/rules.d
+ endif
+ 
+ clean:

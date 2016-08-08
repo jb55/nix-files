@@ -1,7 +1,10 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  imports = [ (import ./pokemongo-map extra) ];
+  imports = [
+    (import ./pokemongo-map extra)
+    ./footswitch
+  ];
 
   services.zerotierone.enable = true;
 
