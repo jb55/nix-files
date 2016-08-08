@@ -21,8 +21,11 @@ extra:
     '';
   };
 
-  systemd.services.footswitch.enable = true;
-  systemd.services.footswitch-led.enable = true;
+  services.footswitch = {
+    enable = true;
+    enable-led = true;
+    led = "input4::scrolllock";
+  };
 
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
   networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];

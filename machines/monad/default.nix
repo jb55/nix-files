@@ -56,6 +56,12 @@ extra:
     '';
   };
 
+  services.footswitch = {
+    enable = true;
+    enable-led = true;
+    led = "input5::numlock";
+  };
+
   systemd.services.ds4ctl.enable = true;
 
 }
