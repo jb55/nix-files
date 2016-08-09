@@ -29,7 +29,13 @@ extra:
 
     # vive audio
     KERNEL=="hidraw*", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0012", MODE="0666"
+
+    # rtl-sdr
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2832", MODE="0666", SYMLINK+="rtl_sdr"
+
   '';
+
+  boot.blacklistedKernelModules = ["dvb_usb_rtl28xxu"];
 
   services.xserver.config = ''
     Section "InputClass"
@@ -54,6 +60,12 @@ extra:
     serviceConfig.ExecStart = ''
       ${pkgs.ds4ctl}/bin/ds4ctl
     '';
+  };
+
+  services.footswitch = {
+    enable = true;
+    enable-led = true;
+    led = "input5::numlock";
   };
 
   systemd.services.ds4ctl.enable = true;
