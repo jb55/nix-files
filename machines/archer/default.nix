@@ -21,10 +21,13 @@ extra:
     '';
   };
 
+  services.mongodb.enable = true;
+  services.redis.enable = true;
+
   services.footswitch = {
     enable = true;
     enable-led = true;
-    led = "input4::scrolllock";
+    led = "input2::scrolllock";
   };
 
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
