@@ -6,6 +6,7 @@
   services.hoogle = {
     enable = false;
     packages = pkgs.myHaskellPackages;
+    haskellPackages = pkgs.haskellPackages;
   };
 
   services.redshift = {
@@ -35,10 +36,8 @@
   services.xserver = {
     enable = true;
     layout = "us";
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps";
 
-    startGnuPGAgent = true;
-    #wacom.enable = true;
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:rwin";
 
     desktopManager = {
       default = "none";

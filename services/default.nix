@@ -1,6 +1,10 @@
+extra:
 { config, lib, pkgs, ... }:
 {
-  services.zerotierone.enable = true;
+  imports = [
+    (import ./pokemongo-map extra)
+    ./footswitch
+  ];
 
   services.mongodb.enable = false;
   services.redis.enable = false;
@@ -10,18 +14,17 @@
     authentication = "local all all ident";
   };
 
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = true;
-  };
+  services.openssh.enable = true;
+  services.openssh.passwordAuthentication = false;
+  services.openssh.permitRootLogin = "no";
 
   services.logrotate = {
     enable = false;
     config = ''
       dateext
       dateformat %Y-%m-%d.
-      compresscmd ${pkgs.xz}/bin/xz
-      uncompresscmd ${pkgs.xz}/bin/unxz
+      compresscmd ${pkgs.xz.bin}/bin/xz
+      uncompresscmd ${pkgs.xz.bin}/bin/unxz
       compressext .xz
     '';
   };

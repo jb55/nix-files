@@ -1,6 +1,10 @@
 { pkgs }:
-let haskellOverrides = import ./haskell-overrides.nix;
+let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
+    haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     callPackage = pkgs.callPackage;
+    regularFiles = builtins.filterSource (f: type: type == "symlink"
+                                                || type == "directory"
+                                                || type == "regular");
 in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
@@ -28,7 +32,13 @@ in {
       plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
 
+    jb55-dotfiles = regularFiles <dotfiles>;
+
     ical2org = super.callPackage ./scripts/ical2org { };
+
+    footswitch = super.callPackage ./scripts/footswitch { };
+
+    ds4ctl = super.callPackage ./scripts/ds4ctl { };
 
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
@@ -62,6 +72,7 @@ in {
     haskellTools = hp: with hp; [
       #ghc-mod
       #hdevtools
+      binary-serialise-cbor
       alex
       cabal-install
       cabal2nix
@@ -77,10 +88,18 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
+      Boolean
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      SafeSemaphore
+      Spock
       aeson
+      aeson-qq
+      aeson-applicative
       amazonka
       amazonka-s3
-      aeson-qq
       async
       attoparsec
       bifunctors
@@ -95,7 +114,7 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
-      Boolean
+      bound
       bson-lens
       cased
       cassava
@@ -111,9 +130,8 @@ in {
       envy
       exceptions
       failure
+      filepath
       fingertree
-      # flexible
-      # flexible-instances
       foldl
       free
       generics-sop
@@ -123,11 +141,9 @@ in {
       hspec
       hspec-expectations
       html
-      HTTP
       http-client
       http-date
       http-types
-      HUnit
       io-memoize
       keys
       language-bash
@@ -147,21 +163,21 @@ in {
       logict
       mime-mail
       mime-types
-      MissingH
       mmorph
       monad-control
       monad-coroutine
-      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
-      # money
+      monadloc
       mongoDB
       monoid-extras
+      # monstercat-backend
       network
       newtype
       numbers
+      options
       optparse-applicative
       parsec
       parsers
@@ -183,16 +199,17 @@ in {
       pipes-mongodb
       pipes-network
       pipes-parse
+      pipes-postgresql-simple
       pipes-safe
       pipes-shell
       pipes-text
       pipes-wai
       posix-paths
       postgresql-simple
+      postgresql-binary
       postgresql-simple-sop
       pretty-show
       profunctors
-      QuickCheck
       random
       reducers
       reflection
@@ -206,7 +223,6 @@ in {
       retry
       rex
       safe
-      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -224,7 +240,6 @@ in {
       simple-reflect
       speculation
       split
-      Spock
       spoon
       stm
       stm-chans
@@ -253,7 +268,9 @@ in {
       test-framework-hunit
       text
       text-format
+      formatting
       time
+      time-patterns
       tinytemplate
       transformers
       transformers-base

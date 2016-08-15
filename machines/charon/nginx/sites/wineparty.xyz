@@ -1,0 +1,23 @@
+
+server {
+  listen 80;
+  server_name www.wineparty.xyz;
+  root /www/wineparty.xyz/public;
+  index index.html index.htm;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+}
+
+server {
+  listen 80;
+  server_name wineparty.xyz;
+  return 301 http://www.wineparty.xyz$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name wineparty.xyz www.wineparty.xyz;
+  return 301 http://www.wineparty.xyz$request_uri;
+}

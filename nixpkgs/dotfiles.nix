@@ -6,10 +6,7 @@
 , machineSessionCommands ? ""
 }:
 let
-  regularFiles = builtins.filterSource (f: type: type == "symlink"
-                                              || type == "directory"
-                                              || type == "regular");
-  dotfiles = regularFiles <dotfiles>;
+  dotfiles = pkgs.jb55-dotfiles;
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space-1024x600.jpg";
     md5 = "5887080b0582fe3d27000a16b6a739b1";
@@ -23,6 +20,7 @@ let
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
     ${pkgs.clipit}/bin/clipit &
+    ${pkgs.volumeicon}/bin/volumeicon &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
