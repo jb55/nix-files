@@ -8,18 +8,18 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules =  [ "uhci_hcd" "ehci_pci" "ata_piix" "usb_storage" ];
+  boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ata_piix" "usb_storage" ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  boot.loader.grub.device = "/dev/disk/by-label/nixos";
+  boot.loader.grub.device = "/dev/sdb";
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/9ecb0aa4-3155-43c0-9464-176f6e5d4a9d";
+    { device = "/dev/disk/by-uuid/81ea3402-2a59-4dd5-a86d-5183cd5d6508";
       fsType = "ext4";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/0743d0bf-ec13-4ab1-a497-b35202d082d6"; }
+    [ { device = "/dev/disk/by-uuid/072733dd-0722-424e-9128-f0ad3d6f2570"; }
     ];
 
 }

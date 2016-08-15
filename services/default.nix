@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  services.zerotierone.enable = false;
+  services.zerotierone.enable = true;
 
   services.mongodb.enable = false;
   services.redis.enable = false;
