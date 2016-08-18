@@ -29,7 +29,7 @@ in {
     };
 
     pidgin-with-plugins = super.pidgin-with-plugins.override {
-      plugins = (with super; [ pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
+      plugins = (with super; [ purple-hangouts pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
     };
 
     jb55-dotfiles = regularFiles <dotfiles>;
