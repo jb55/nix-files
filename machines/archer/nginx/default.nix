@@ -59,10 +59,10 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      172.24.14.20:80 default_server;
-        server_name "";
+        listen      80 default_server;
+        server_name _;
 
-        root /www/zt;
+        root /www/public;
         index index.html index.htm;
 
         location / {

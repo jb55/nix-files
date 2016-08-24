@@ -41,9 +41,11 @@ extra:
       # type db  user address        method
       local  all all                 trust
       host   all all  10.243.0.0/16  trust
+      host   all all  192.168.1.0/16 trust
+
     '';
     extraConfig = ''
-      listen_addresses = '10.243.14.20'
+      listen_addresses = '10.243.14.20,192.168.1.49'
     '';
   };
 }
