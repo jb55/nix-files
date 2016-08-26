@@ -1,10 +1,15 @@
 extra:
 { config, lib, pkgs, ... }:
-{
+let ztip = "10.243.14.20";
+in {
   imports = [
     ./hardware
-    ./nginx
+    (import ./nginx (extra // { inherit ztip; }))
   ];
+
+  networking.extraHosts = ''
+    127.0.0.1 melpa.org
+  '';
 
   systemd.services.postgrest = {
     enable = true;
@@ -17,21 +22,47 @@ extra:
     serviceConfig.ExecStart = ''
       ${pkgs.haskellPackages.postgrest}/bin/postgrest \
         'postgres://pg-dev-zero.monstercat.com/Monstercat' \
-        -a jb55
+        -a jb55 \
+        +RTS -N -I2
     '';
   };
 
   services.mongodb.enable = true;
   services.redis.enable = true;
+  services.gitlab.enable = false;
+  services.gitlab.databasePassword = "gitlab";
 
   services.footswitch = {
     enable = true;
     enable-led = true;
-    led = "input2::scrolllock";
+    led = "input3::scrolllock";
   };
 
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
   networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];
+
+  services.fcgiwrap.enable = true;
+
+  # systemd.services.trend-bot = {
+  #   enable = true;
+
+  #   description = "tc trend bot";
+
+  #   wantedBy = [ "multi-user.target" ];
+  #   after    = [ "network-online.target" "postgresql.service" ];
+
+  #   environment = {
+  #     TC_PASS = extra.private.tc-pass;
+  #   };
+
+  #   serviceConfig.Type = "oneshot";
+  #   serviceConfig.ExecStart = writeScript "trend-bot" ''
+  #     #!${pkgs.bash}/bin/bash
+  #     ${pkgs.postgresql}/bin/psql ${private.}
+  #   '';
+
+  #   startAt = "*-*-* 23:59:00";
+  # };
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";

@@ -1,0 +1,17 @@
+
+server {
+  listen 80;
+  server_name archer.;
+  root /www/jb55/public;
+  index index.html index.htm;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+}
+
+server {
+  listen 80;
+  server_name www.archer.;
+  return 301 https://archer.$request_uri;
+}
