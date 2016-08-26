@@ -6,6 +6,32 @@ let tunecore-trend-bot = import (pkgs.fetchurl {
     }) { inherit pkgs; };
 in
 {
+  systemd.services.notify-failed = {
+    description = "Job failure notifier";
+
+    serviceConfig.ExecStart = let script = pkgs.writeScript "trend-bot-fail" ''
+      #!${pkgs.bash}/bin/bash
+
+      UNIT=$1
+
+      sendmail -t <<ERRMAIL
+      To: bill@monstercat.com
+      From: systemd <root@$HOSTNAME>
+      Subject: $UNIT Failed
+      Content-Transfer-Encoding: 8bit
+      Content-Type: text/plain; charset=UTF-8
+
+      $2
+      $3
+      $4
+
+      $(systemctl status $UNIT)
+      ERRMAIL
+    '';
+    in "${script} %I 'Hostname: %H' 'Machine ID: %m' 'Boot ID: %b'";
+
+  };
+
   systemd.services.trend-bot = {
     enable = true;
 
@@ -35,17 +61,7 @@ in
         ${pkgs.postgresql}/bin/psql 'postgresql://jb55@pg-dev-zero.monstercat.com/Monstercat' -c "$sql"
     '';
 
-    serviceConfig.OnFailure = pkgs.writeScript "trend-bot-fail" ''
-      ${pkgs.ssmtp}/bin/sendmail -t <<ERRMAIL
-      To: bill@monstercat.com
-      From: systemd <root@$HOSTNAME>
-      Subject: Tunecore Trend bot failed
-      Content-Transfer-Encoding: 8bit
-      Content-Type: text/plain; charset=UTF-8
-
-      $(systemctl status --full "$2")
-      ERRMAIL
-    '';
+    serviceConfig.OnFailure = "notify-failed@%n.service";
 
     restartIfChanged = false;
     startAt = "*-*-* 23:59:00";
