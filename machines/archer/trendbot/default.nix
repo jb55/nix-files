@@ -14,7 +14,7 @@ in
 
       UNIT=$1
 
-      sendmail -t <<ERRMAIL
+      /var/setuid-wrappers/sendmail -t <<ERRMAIL
       To: bill@monstercat.com
       From: systemd <root@$HOSTNAME>
       Subject: $UNIT Failed
@@ -49,16 +49,28 @@ in
     serviceConfig.ExecStart = pkgs.writeScript "trend-bot" ''
       #!${pkgs.bash}/bin/bash
       day=$(date "--date=today -3 days" +%F)
-      sql=$(cat <<EOF
+      sqlq=$(cat <<EOF
       BEGIN;
       DELETE FROM tunecore_trends WHERE period = '$day';
       COPY tunecore_trends FROM STDIN CSV;
       COMMIT;
       EOF
       )
+
+      sql () {
+        ${pkgs.postgresql}/bin/psql 'postgresql://jb55@pg-dev-zero.monstercat.com/Monstercat' -c "$1"
+      }
+
       ${tunecore-trend-bot}/bin/tunecore-trend-bot $day $day | \
         ${pkgs.gnused}/bin/sed 1d | \
-        ${pkgs.postgresql}/bin/psql 'postgresql://jb55@pg-dev-zero.monstercat.com/Monstercat' -c "$sql"
+        sql "$sqlq"
+
+      items=$(sql "select count(*) as count from tunecore_trends where period = '$day'" | sed '1,2d;4,10d;s/^\s//g')
+
+      if [ "$items" -lt "37000" ]; then
+        # should be around ~40k line items as of 2016-08-29
+        exit 1;
+      fi
     '';
 
     unitConfig.OnFailure = "notify-failed@%n.service";
