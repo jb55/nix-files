@@ -101,8 +101,8 @@ in
   systemd.services.postgrest.enable = true;
   systemd.services.dnsmonitor.enable = false;
 
-  systemd.services.pogom-pokemap.enable = true;
-  systemd.services.pogom-gqpogo.enable = true;
+  systemd.services.pogom-pokemap.enable = false;
+  systemd.services.pogom-gqpogo.enable = false;
 
   services.dnsmasq.enable = false;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
