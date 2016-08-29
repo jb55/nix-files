@@ -45,7 +45,7 @@ in
     };
 
     serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = true;
+    serviceConfig.RemainAfterExit = false;
     serviceConfig.ExecStart = pkgs.writeScript "trend-bot" ''
       #!${pkgs.bash}/bin/bash
       day=$(date "--date=today -3 days" +%F)
@@ -61,7 +61,7 @@ in
         ${pkgs.postgresql}/bin/psql 'postgresql://jb55@pg-dev-zero.monstercat.com/Monstercat' -c "$sql"
     '';
 
-    serviceConfig.OnFailure = "notify-failed@%n.service";
+    unitConfig.OnFailure = "notify-failed@%n.service";
 
     restartIfChanged = false;
     startAt = "*-*-* 23:59:00";
