@@ -8,6 +8,12 @@ let adblock-hosts = pkgs.fetchurl {
       url = "https://jb55.com/s/dnsmasq-ad-sources.txt";
       sha256 = "3b34e565fb240c4ac1d261cb223bdc2d992fa755b5f6e981144e5b18f96f260d";
     };
+    npmrepo = (import (pkgs.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "npm-repo-proxy";
+      rev    = "1.0.0";
+      sha256 = "0rjy5rq4gniqa1dlig4mg3m6yxchz7hdw5disayr7gxmc6kj18mx";
+    }) {}).package;
 in
 {
   imports = [
@@ -28,6 +34,15 @@ in
     extraConfig = ''
       listen_addresses = '0.0.0.0'
     '';
+  };
+
+  systemd.services.npmrepo = {
+    description = "npmrepo.com";
+
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
   };
 
   systemd.services.postgrest = {
