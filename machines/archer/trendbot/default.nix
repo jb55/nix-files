@@ -6,7 +6,7 @@ let tunecore-trend-bot = import (pkgs.fetchurl {
     }) { inherit pkgs; };
 in
 {
-  systemd.services.notify-failed = {
+  systemd.services."notify-failed@" = {
     description = "Job failure notifier";
 
     serviceConfig.ExecStart = let script = pkgs.writeScript "trend-bot-fail" ''
@@ -45,7 +45,6 @@ in
     };
 
     serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = false;
     serviceConfig.ExecStart = pkgs.writeScript "trend-bot" ''
       #!${pkgs.bash}/bin/bash
       day=$(date "--date=today -3 days" +%F)
@@ -69,6 +68,7 @@ in
 
       if [ "$items" -lt "37000" ]; then
         # should be around ~40k line items as of 2016-08-29
+        echo "got $items lines, which is less than the required 37000 items"
         exit 1;
       fi
     '';
