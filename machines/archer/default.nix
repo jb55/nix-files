@@ -8,10 +8,6 @@ in {
     (import ./trendbot extra)
   ];
 
-  networking.extraHosts = ''
-    127.0.0.1 melpa.org
-  '';
-
   systemd.services.postgrest = {
     enable = true;
     description = "PostgREST";
