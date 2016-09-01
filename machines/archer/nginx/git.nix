@@ -9,6 +9,12 @@ let gitwebConf = pkgs.writeText "gitweb.conf" ''
       export PERL5LIB=$PERL5LIB:${with pkgs.perlPackages; pkgs.lib.makePerlPath [ CGI HTMLParser ]}
       ${pkgs.perl}/bin/perl ${pkgs.git}/share/gitweb/gitweb.cgi
     '';
+    gitweb-theme = pkgs.fetchFromGitHub {
+      owner  = "kogakure";
+      repo   = "gitweb-theme";
+      rev    = "4305b3551551c470339c24a6567b1ac9e642ae54";
+      sha256 = "0gagy0jvqb3mc587b6yy8l9g5j5wqr2xlz128v6f01364cb7whmv";
+    };
 in
 if config.services.fcgiwrap.enable then ''
   server {
@@ -37,7 +43,7 @@ if config.services.fcgiwrap.enable then ''
       }
 
       location /repos/static {
-        alias ${pkgs.git}/share/gitweb/static;
+        alias ${gitweb-theme};
       }
 
       location /repos {
