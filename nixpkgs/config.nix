@@ -289,6 +289,6 @@ in {
       yaml
       zippers
       zlib
-    ] ++ builtins.attrValues monstercatPkgs.haskellPackages;
+    ];
   };
 }
