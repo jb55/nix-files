@@ -35,6 +35,8 @@ if config.services.fcgiwrap.enable then ''
         include                       ${pkgs.nginx}/conf/fastcgi_params;
         fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
 
+        client_max_body_size 0;
+
         # export all repositories under GIT_PROJECT_ROOT
 
         fastcgi_param GIT_HTTP_EXPORT_ALL "";
