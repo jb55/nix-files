@@ -1,9 +1,6 @@
 extra:
 { config, lib, pkgs, ... }:
-let tunecore-trend-bot = import (pkgs.fetchurl {
-      url = https://jb55.com/s/655208fa649caddf.nix;
-      sha1 = "655208fa649caddf5be1049f4edc17bf6b1aa2ef";
-    }) { inherit pkgs; };
+let tunecore-trend-bot = import ./trendbot.nix { inherit pkgs; };
 in
 {
   systemd.services."notify-failed@" = {

@@ -1,6 +1,6 @@
 extra:
 { config, lib, pkgs, ... }:
-let sites = [ ./sites/hoogle ];
+let sites = [ ];
     logDir = "/var/log/nginx";
     gitExtra = {
       git = {
@@ -8,6 +8,7 @@ let sites = [ ./sites/hoogle ];
       };
     };
     gitCfg = import ./git.nix { inherit config pkgs; extra = extra // gitExtra; };
+    hoogle = import ./hoogle.nix extra.ztip;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -80,6 +81,7 @@ in {
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
 
       ${gitCfg}
+      ${hoogle}
     '';
   };
 }
