@@ -1,6 +1,14 @@
+extra:
 { config, lib, pkgs, ... }:
-let sites = [];
+let sites = [ ];
     logDir = "/var/log/nginx";
+    gitExtra = {
+      git = {
+        projectroot = "/var/git";
+      };
+    };
+    gitCfg = import ./git.nix { inherit config pkgs; extra = extra // gitExtra; };
+    hoogle = import ./hoogle.nix extra.ztip;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -59,10 +67,10 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      172.24.14.20:80 default_server;
-        server_name "";
+        listen      80 default_server;
+        server_name _;
 
-        root /www/zt;
+        root /www/public;
         index index.html index.htm;
 
         location / {
@@ -71,6 +79,9 @@ in {
       }
 
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
+
+      ${gitCfg}
+      ${hoogle}
     '';
   };
 }

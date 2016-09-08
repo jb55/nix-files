@@ -58,7 +58,7 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
 
-  programs.ssh.startAgent = !isDesktop;
+  programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
 
