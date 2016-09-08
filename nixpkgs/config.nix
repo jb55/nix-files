@@ -271,6 +271,7 @@ in {
       formatting
       time
       time-patterns
+      time-units
       tinytemplate
       transformers
       transformers-base
