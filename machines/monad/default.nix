@@ -12,6 +12,9 @@ extra:
   virtualisation.virtualbox.host.enable = false;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
+  services.mongodb.enable = true;
+  services.redis.enable = true;
+
   services.udev.extraRules = ''
     # ds4
     KERNEL=="uinput", MODE="0666"
