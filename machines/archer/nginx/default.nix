@@ -9,6 +9,7 @@ let sites = [ ];
     };
     gitCfg = import ./git.nix { inherit config pkgs; extra = extra // gitExtra; };
     hoogle = import ./hoogle.nix extra.ztip;
+    nixserve = import ./nix-serve.nix extra;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -82,6 +83,7 @@ in {
 
       ${gitCfg}
       ${hoogle}
+      ${nixserve}
     '';
   };
 }

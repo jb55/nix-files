@@ -13,6 +13,9 @@ let machine = "archer";
       machineSessionCommands = machineConfig.sessionCommands;
     };
     extra = { inherit private; };
+    caches = if machine == "archer"
+               then []
+               else [ "cache.zero.monster.cat" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
@@ -63,6 +66,9 @@ in {
   time.timeZone = "America/Vancouver";
 
   nixpkgs.config = nixpkgsConfig;
+
+  nix.binaryCaches = caches;
+  nix.trustedBinaryCaches = caches;
 
   virtualisation.docker.enable = false;
 
