@@ -39,7 +39,7 @@ in {
     gnome3.nautilus
     haskellPackages.taffybar
     pavucontrol
-    pidgin
+    pidgin-with-plugins
     rxvt_unicode
     scrot
     slock
