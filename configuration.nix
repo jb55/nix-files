@@ -64,7 +64,7 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
 
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];
