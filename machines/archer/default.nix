@@ -1,10 +1,15 @@
 extra:
 { config, lib, pkgs, ... }:
-let ztip = "10.243.14.20";
+let extras = rec { ztip = "10.243.14.20";
+                   nix-serve = {
+                     port = 10845;
+                     bindAddress = ztip;
+                   };
+                 };
 in {
   imports = [
     ./hardware
-    (import ./nginx (extra // { inherit ztip; }))
+    (import ./nginx (extra // extras))
     (import ./trendbot extra)
   ];
 
@@ -28,6 +33,10 @@ in {
   services.redis.enable = true;
   services.gitlab.enable = false;
   services.gitlab.databasePassword = "gitlab";
+
+  services.nix-serve.enable = true;
+  services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
+  services.nix-serve.port = extras.nix-serve.port;
 
   services.footswitch = {
     enable = true;
