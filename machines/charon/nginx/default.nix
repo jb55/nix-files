@@ -5,8 +5,6 @@ let sites = [./sites/jb55.com
              ./sites/wineparty.xyz
             ];
     logDir = "/var/log/nginx";
-    pokemap = import ./pokemap.nix;
-    pokemaps = map (pm: pokemap pm.subdomain pm.port) extra.private.pokemaps;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -69,8 +67,6 @@ in {
         server_name "";
         return      444;
       }
-
-      ${lib.concatStringsSep "\n\n" pokemaps}
 
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
     '';

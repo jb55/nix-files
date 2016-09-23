@@ -22,6 +22,11 @@ in
     (import ./nginx extra)
   ];
 
+  security.acme.certs."jb55.com" = {
+    webroot = "/var/www/challenges";
+    email = "bill@casarin.me";
+  };
+
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
     enable = true;
@@ -59,24 +64,21 @@ in
     '';
   };
 
-  systemd.services.weechat = {
-    description = "Weechat relay server";
+#   systemd.services.weechat = {
+#     description = "Weechat relay server";
+#     wantedBy = [ "multi-user.target" ];
+#     serviceConfig.Type = "oneshot";
+#     serviceConfig.RemainAfterExit = "yes";
+#     serviceConfig.ExecStart = pkgs.writeScript "weechat-service" ''
+# #!${pkgs.bash}/bin/bash
+#       set -e
+#       ${pkgs.rsync}/bin/rsync -rlD ${pkgs.jb55-dotfiles}/.weechat/ /tmp/weechat/
+#       ${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat new-session -d -s weechat -n 'weechat' '${pkgs.weechat}/bin/weechat-curses -d /tmp/weechat'
+#     '';
+#     serviceConfig.ExecStop = "${pkgs.tmux}/bin/tmux -S /run/tmux-weechat kill-session -t weechat";
+#   };
 
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = "yes";
-    serviceConfig.ExecStart = pkgs.writeScript "weechat-service" ''
-#!${pkgs.bash}/bin/bash
-      set -e
-      ${pkgs.rsync}/bin/rsync -rlD ${pkgs.jb55-dotfiles}/.weechat/ /tmp/weechat/
-      ${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat new-session -d -s weechat -n 'weechat' '${pkgs.weechat}/bin/weechat-curses -d /tmp/weechat'
-    '';
-    serviceConfig.ExecStop = "${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat kill-session -t weechat";
-
-  };
-
-  systemd.services.weechat.enable = false;
+  # systemd.services.weechat.enable = false;
   systemd.services.postgrest.enable = true;
 
   services.dnsmasq.enable = false;
