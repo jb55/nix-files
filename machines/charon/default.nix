@@ -78,7 +78,7 @@ in
 
   systemd.services.dnsmonitor = {
     description = "DNS monitor";
-    
+
     wantedBy = [ "multi-user.target" ];
     after    = [ "postgresql.target" "dnsmasq.target" ];
 
