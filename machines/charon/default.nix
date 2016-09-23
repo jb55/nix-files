@@ -76,33 +76,8 @@ in
 
   };
 
-  systemd.services.dnsmonitor = {
-    description = "DNS monitor";
-
-    wantedBy = [ "multi-user.target" ];
-    after    = [ "postgresql.target" "dnsmasq.target" ];
-
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = pkgs.writeScript "dnsmonitor" ''
-#!${pkgs.bash}/bin/bash
-      ${pkgs.coreutils}/bin/stdbuf -o 0 \
-        ${pkgs.wireshark}/bin/tshark \
-          -l -i enp0s4 -n -T fields \
-          -e "ip.src" \
-          -e "dns.qry.name" \
-          -e "dns.a" -Y "dns.flags.response eq 1" \
-			| ${pkgs.coreutils}/bin/stdbuf -o 0 ${pkgs.gnused}/bin/sed 's#\([0-9\.]\{8,\}\)#"\1"#g' \
-			| ${pkgs.coreutils}/bin/stdbuf -o 0 ${pkgs.gawk}/bin/gawk -F '\t' '{printf "insert into req (src_ip, name, ip) values ('"'"'{%s}'"'"', '"'"'%s'"'"', '"'"'{%s}'"'"');\n", $1, $2, $3}' \
-			| ${pkgs.postgresql}/bin/psql -d dns >/dev/null
-    '';
-  };
-
   systemd.services.weechat.enable = false;
   systemd.services.postgrest.enable = true;
-  systemd.services.dnsmonitor.enable = false;
-
-  systemd.services.pogom-pokemap.enable = false;
-  systemd.services.pogom-gqpogo.enable = false;
 
   services.dnsmasq.enable = false;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
