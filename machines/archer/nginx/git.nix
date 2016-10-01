@@ -48,6 +48,14 @@ if config.services.fcgiwrap.enable then ''
         alias ${gitweb-theme};
       }
 
+      location /add-repo {
+        include ${pkgs.nginx}/conf/fastcgi_params;
+        gzip off;
+
+        fastcgi_param SCRIPT_FILENAME /var/git/mkrepod;
+        fastcgi_pass  unix:${config.services.fcgiwrap.socketAddress};
+      }
+
       location /repos {
         include ${pkgs.nginx}/conf/fastcgi_params;
         gzip off;
