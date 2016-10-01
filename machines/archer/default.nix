@@ -11,6 +11,7 @@ in {
     ./hardware
     (import ./nginx (extra // extras))
     (import ./trendbot extra)
+    (import ./transaction-bot extra)
   ];
 
   systemd.services.postgrest = {
