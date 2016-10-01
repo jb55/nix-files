@@ -9,6 +9,7 @@ let extras = rec { ztip = "10.243.14.20";
 in {
   imports = [
     ./hardware
+    ./fail-notifier
     (import ./nginx (extra // extras))
     (import ./trendbot extra)
     (import ./transaction-bot extra)
