@@ -29,6 +29,10 @@ in {
     '';
   };
 
+  services.namecoind.enable = false;
+  services.namecoind.wallet = "/home/jb55/.namecoin/wallet.dat";
+  services.namecoind.userFile = "/home/jb55/.namecoin/user";
+
   services.mongodb.enable = true;
   services.redis.enable = true;
   services.gitlab.enable = false;
