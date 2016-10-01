@@ -88,16 +88,9 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      Boolean
-      HTTP
-      HUnit
-      MissingH
-      QuickCheck
-      SafeSemaphore
-      Spock
       aeson
-      aeson-qq
       aeson-applicative
+      aeson-qq
       amazonka
       amazonka-s3
       async
@@ -114,8 +107,10 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
+      Boolean
       bound
       bson-lens
+      bytestring-show
       cased
       cassava
       cereal
@@ -133,6 +128,7 @@ in {
       filepath
       fingertree
       foldl
+      formatting
       free
       generics-sop
       hamlet
@@ -141,9 +137,11 @@ in {
       hspec
       hspec-expectations
       html
+      HTTP
       http-client
       http-date
       http-types
+      HUnit
       io-memoize
       keys
       language-bash
@@ -163,14 +161,15 @@ in {
       logict
       mime-mail
       mime-types
+      MissingH
       mmorph
       monad-control
       monad-coroutine
+      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
-      monadloc
       mongoDB
       monoid-extras
       # monstercat-backend
@@ -205,11 +204,12 @@ in {
       pipes-text
       pipes-wai
       posix-paths
-      postgresql-simple
       postgresql-binary
+      postgresql-simple
       postgresql-simple-sop
       pretty-show
       profunctors
+      QuickCheck
       random
       reducers
       reflection
@@ -223,6 +223,7 @@ in {
       retry
       rex
       safe
+      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -240,6 +241,7 @@ in {
       simple-reflect
       speculation
       split
+      Spock
       spoon
       stm
       stm-chans
@@ -268,7 +270,6 @@ in {
       test-framework-hunit
       text
       text-format
-      formatting
       time
       time-patterns
       time-units
@@ -276,6 +277,7 @@ in {
       transformers
       transformers-base
       turtle
+      unagi-chan
       uniplate
       unix-compat
       unordered-containers

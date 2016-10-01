@@ -9,11 +9,12 @@ extra:
   networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 ];
   networking.firewall.allowedUDPPorts = [ 11155 ];
 
-  virtualisation.virtualbox.host.enable = false;
+  virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
   services.mongodb.enable = true;
   services.redis.enable = true;
+  services.tor.enable = true;
 
   services.udev.extraRules = ''
     # ds4
@@ -72,5 +73,20 @@ extra:
   };
 
   systemd.services.ds4ctl.enable = true;
+
+  services.postgresql = {
+    dataDir = "/var/db/postgresql/9.5/";
+    enable = true;
+    # extraPlugins = with pkgs; [ pgmp ];
+    authentication = pkgs.lib.mkForce ''
+      # type db  user address            method
+      local  all all                     trust
+      host   all all  172.24.172.226/16  trust
+      host   all all  192.168.86.100/16  trust
+    '';
+    extraConfig = ''
+      listen_addresses = '172.24.172.226,192.168.86.100,127.0.0.1'
+    '';
+  };
 
 }

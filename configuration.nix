@@ -15,7 +15,7 @@ let machine = "monad";
     extra = { inherit private; };
     caches = if machine == "archer"
                then []
-               else [ "http://cache.zero.monster.cat" ];
+               else [ "http://cache.nixos.org" "http://cache.zero.monster.cat" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
@@ -69,6 +69,7 @@ in {
 
   nix.binaryCaches = caches;
   nix.trustedBinaryCaches = caches;
+  nix.requireSignedBinaryCaches = false;
 
   virtualisation.docker.enable = false;
 
