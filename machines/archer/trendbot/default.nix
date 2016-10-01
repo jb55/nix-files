@@ -12,7 +12,7 @@ in
     after    = [ "network-online.target" "postgresql.service" ];
 
     environment = {
-      TC_PASS = extra.private.tc-pass;
+      TUNECORE_PASS = extra.private.tc-pass;
     };
 
     serviceConfig.Type = "oneshot";
