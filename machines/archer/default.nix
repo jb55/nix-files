@@ -45,7 +45,7 @@ in {
   };
 
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
-  networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];
+  networking.firewall.allowedTCPPorts = [ 22 143 80 ];
 
   services.fcgiwrap.enable = true;
 
