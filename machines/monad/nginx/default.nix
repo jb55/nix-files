@@ -7,7 +7,7 @@ let sites = [ ];
       git = {
         projectroot = "/var/git";
       };
-      host = "git.zero.jb55.com"
+      host = "git.zero.jb55.com";
     };
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
 in {

@@ -3,6 +3,7 @@ extra:
 {
   imports = [
     ./hardware
+    (import ./nginx extra)
   ];
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
@@ -18,6 +19,7 @@ extra:
   services.mysql.package = pkgs.mariadb;
   services.redis.enable = true;
   services.tor.enable = true;
+  services.fcgiwrap.enable = true;
 
   services.udev.extraRules = ''
     # ds4
