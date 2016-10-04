@@ -50,19 +50,19 @@ in
     serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
   };
 
-  systemd.services.postgrest = {
-    description = "PostgREST";
+  # systemd.services.postgrest = {
+  #   description = "PostgREST";
 
-    wantedBy = [ "multi-user.target" ];
-    after    = [ "postgresql.target" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   after    = [ "postgresql.target" ];
 
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = ''
-      ${pkgs.haskellPackages.postgrest}/bin/postgrest \
-        'postgres://localhost/wineparty' \
-        -a jb55
-    '';
-  };
+  #   serviceConfig.Type = "simple";
+  #   serviceConfig.ExecStart = ''
+  #     ${pkgs.haskellPackages.postgrest}/bin/postgrest \
+  #       'postgres://localhost/wineparty' \
+  #       -a jb55
+  #   '';
+  # };
 
 #   systemd.services.weechat = {
 #     description = "Weechat relay server";
