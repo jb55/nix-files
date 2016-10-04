@@ -3,6 +3,7 @@ extra:
 let sites = [./sites/jb55.com
              ./sites/npmrepo.com
              ./sites/wineparty.xyz
+             ./sites/hearpress.com
             ];
     logDir = "/var/log/nginx";
 in {

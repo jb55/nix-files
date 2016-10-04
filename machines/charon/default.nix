@@ -28,6 +28,11 @@ in
     email = "bill@casarin.me";
   };
 
+  security.acme.certs."hearpress.com" = {
+    webroot = "/var/www/challenges";
+    email = "bill@casarin.me";
+  };
+
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
     enable = true;
