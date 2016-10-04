@@ -12,7 +12,10 @@ let machine = "charon";
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = "";
     };
-    extra = { inherit private; };
+    extra = {
+      inherit private;
+      git-server = import ./misc/git-server.nix;
+    };
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";

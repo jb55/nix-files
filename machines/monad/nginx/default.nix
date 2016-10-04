@@ -3,13 +3,13 @@ extra:
 let sites = [ ];
     logDir = "/var/log/nginx";
     gitExtra = {
+      ztip = "10.243.172.226";
       git = {
         projectroot = "/var/git";
       };
+      host = "git.zero.jb55.com";
     };
-    gitCfg = import ./git.nix { inherit config pkgs; extra = extra // gitExtra; };
-    hoogle = import ./hoogle.nix extra.ztip;
-    nixserve = import ./nix-serve.nix extra;
+    gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -70,20 +70,14 @@ in {
       server {
         listen      80 default_server;
         server_name _;
-
         root /www/public;
         index index.html index.htm;
-
         location / {
           try_files $uri $uri/ =404;
         }
       }
 
-      ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
-
       ${gitCfg}
-      ${hoogle}
-      ${nixserve}
     '';
   };
 }
