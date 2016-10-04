@@ -44,13 +44,13 @@ in {
 
     haskellToolsEnv = super.buildEnv {
       name = "haskellTools";
-      paths = haskellTools haskellPackages;
+      paths = haskellTools super.haskellPackages;
     };
 
     haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
       let hp = if compiler != null
                  then super.haskell.packages.${compiler}
-                 else haskellPackages;
+                 else super.haskellPackages;
 
           ghcWith = if withHoogle
                       then hp.ghcWithHoogle

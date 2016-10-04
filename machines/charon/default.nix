@@ -14,6 +14,7 @@ let adblock-hosts = pkgs.fetchurl {
       rev    = "1.0.0";
       sha256 = "0rjy5rq4gniqa1dlig4mg3m6yxchz7hdw5disayr7gxmc6kj18mx";
     }) {}).package;
+    hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
 in
 {
   imports = [
@@ -79,7 +80,21 @@ in
 #   };
 
   # systemd.services.weechat.enable = false;
-  systemd.services.postgrest.enable = true;
+
+  systemd.services.hearpress = {
+    description = "Hearpress server";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "postgresql.service" ];
+
+    environment = {
+      PG_CS = "postgresql://jb55@localhost/hearpress";
+      AWS_ACCESS_KEY_ID = extra.private.aws.access_key;
+      AWS_SECRET_ACCESS_KEY = extra.private.aws.secret_key;
+    };
+
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${hearpress}/bin/hearpressd";
+  };
 
   services.dnsmasq.enable = false;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
@@ -88,7 +103,7 @@ in
     conf-file=${dnsmasq-adblock}
   '';
 
-  networking.firewall.allowedTCPPorts = [ 22 443 80 5432 53 ];
-  networking.firewall.allowedUDPPorts = [ 53 ];
+  networking.firewall.allowedTCPPorts = [ 22 443 80 ];
+  networking.firewall.allowedUDPPorts = [ ];
   networking.firewall.trustedInterfaces = ["zt0"];
 }
