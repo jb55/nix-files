@@ -17,6 +17,7 @@ server {
   }
 
   location /blobs {
+    resolver 8.8.8.8;
     proxy_pass https://hearpress.s3.amazonaws.com$request_uri;
   }
 }
