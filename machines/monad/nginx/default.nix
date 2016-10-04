@@ -3,7 +3,7 @@ extra:
 let sites = [ ];
     logDir = "/var/log/nginx";
     gitExtra = {
-      ztip = "10.243.172.226";
+      ztip = "172.24.172.226";
       git = {
         projectroot = "/var/git";
       };
