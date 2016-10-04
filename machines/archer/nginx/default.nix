@@ -79,6 +79,20 @@ in {
         }
       }
 
+      server {
+        listen       ${extra.ztip}:80;
+        server_name  siren.zero.monster.cat;
+
+        location / {
+          include ${pkgs.nginx}/conf/fastcgi_params;
+          gzip off;
+
+          fastcgi_param SCRIPT_FILENAME /home/jb55/src/c/libsirenofshame/siren-rest.fcgi;
+          fastcgi_param PATH_INFO       $uri;
+          fastcgi_pass  unix:${config.services.fcgiwrap.socketAddress};
+        }
+      }
+
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
 
       ${gitCfg}

@@ -3,10 +3,10 @@ extra:
 let import-scripts = (import <monstercatpkgs> { }).import-scripts;
 in
 {
-  systemd.services.trend-bot = {
+  systemd.services.transaction-bot = {
     enable = true;
 
-    description = "tc trend bot";
+    description = "tc transaction bot";
 
     wantedBy = [ "multi-user.target" ];
     after    = [ "network-online.target" "postgresql.service" ];
@@ -16,12 +16,11 @@ in
     };
 
     serviceConfig.Type = "oneshot";
-    serviceConfig.ExecStart = "${import-scripts}/bin/trend-bot";
-
+    serviceConfig.ExecStart = "${import-scripts}/bin/tunecore-transaction-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
     restartIfChanged = false;
-    startAt = "*-*-* 23:59:00";
+    startAt = "Sat *-*-* 01:00:00";
   };
 }
 

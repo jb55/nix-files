@@ -9,8 +9,10 @@ let extras = rec { ztip = "10.243.14.20";
 in {
   imports = [
     ./hardware
+    ./fail-notifier
     (import ./nginx (extra // extras))
     (import ./trendbot extra)
+    (import ./transaction-bot extra)
   ];
 
   systemd.services.postgrest = {
@@ -45,7 +47,7 @@ in {
   };
 
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
-  networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];
+  networking.firewall.allowedTCPPorts = [ 22 143 80 ];
 
   services.fcgiwrap.enable = true;
 
