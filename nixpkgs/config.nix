@@ -89,7 +89,7 @@ in {
 
     myHaskellPackages = hp: with hp; [
       aeson
-      aeson-applicative
+      # aeson-applicative
       aeson-qq
       amazonka
       amazonka-s3
@@ -108,7 +108,7 @@ in {
       blaze-markup
       blaze-textual
       Boolean
-      bound
+      # bound
       bson-lens
       bytestring-show
       cased
@@ -117,6 +117,8 @@ in {
       comonad
       comonad-transformers
       compact-string-fix
+      cryptonite
+      cryptonite-conduit
       directory
       dlist
       dlist-instances
@@ -144,7 +146,7 @@ in {
       HUnit
       io-memoize
       keys
-      language-bash
+      # language-bash
       language-c
       language-javascript
       lens
@@ -200,13 +202,13 @@ in {
       pipes-parse
       pipes-postgresql-simple
       pipes-safe
-      pipes-shell
+      # pipes-shell
       pipes-text
       pipes-wai
       posix-paths
       postgresql-binary
       postgresql-simple
-      postgresql-simple-sop
+      # postgresql-simple-sop
       pretty-show
       profunctors
       QuickCheck
@@ -217,7 +219,7 @@ in {
       regex-base
       regex-compat
       regex-posix
-      regular
+      # regular
       relational-record
       resourcet
       retry
@@ -234,7 +236,7 @@ in {
       servant-docs
       servant-lucid
       servant-server
-      servant-swagger
+      # servant-swagger
       shake
       shakespeare
       shelly

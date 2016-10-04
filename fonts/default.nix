@@ -4,7 +4,7 @@
     enableFontDir = true;
     enableGhostscriptFonts = true;
     enableCoreFonts = true;
-    fontconfig.defaultFonts.serif = [ "Bookerly" ];
+    # fontconfig.defaultFonts.serif = [ "Bookerly" ];
     fonts = with pkgs; [
       corefonts
       inconsolata
@@ -14,7 +14,6 @@
       fira-mono
       kochi-substitute
       source-code-pro
-      bookerly
       ipafont
     ];
   };

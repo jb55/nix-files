@@ -12,7 +12,10 @@ let machine = "monad";
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = machineConfig.sessionCommands;
     };
-    extra = { inherit private; };
+    extra = {
+      inherit private;
+      git-server = import ./misc/git-server.nix;
+    };
     caches = if machine == "archer"
                then []
                else [ "http://cache.nixos.org" "http://cache.zero.monster.cat" ];

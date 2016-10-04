@@ -1,4 +1,3 @@
-
 { extra, config, pkgs }:
 let gitwebConf = pkgs.writeText "gitweb.conf" ''
       # path to git projects (<project>.git)

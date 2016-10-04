@@ -6,13 +6,16 @@ extra:
   ];
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-  networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 ];
-  networking.firewall.allowedUDPPorts = [ 11155 ];
+  # networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 ];
+  # networking.firewall.allowedUDPPorts = [ ];
+  networking.firewall.trustedInterfaces = ["zt1"];
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
   services.mongodb.enable = true;
+  services.mysql.enable = false;
+  services.mysql.package = pkgs.mariadb;
   services.redis.enable = true;
   services.tor.enable = true;
 
@@ -71,7 +74,6 @@ extra:
     enable-led = true;
     led = "input5::numlock";
   };
-
   systemd.services.ds4ctl.enable = true;
 
   services.postgresql = {

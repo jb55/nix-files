@@ -25,7 +25,6 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    gnome.gnome_icon_theme
     gtk-engine-murrine
     shared_mime_info
     theme.package
@@ -35,7 +34,7 @@ in {
     clipit
     dragon-drop
     dropbox-cli
-    emacs25pre
+    emacs
     gnome3.eog
     gnome3.nautilus
     haskellPackages.taffybar
