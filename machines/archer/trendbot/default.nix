@@ -12,6 +12,7 @@ in
     after    = [ "network-online.target" "postgresql.service" ];
 
     environment = {
+      TUNECORE_USER = extra.private.tc-user;
       TUNECORE_PASS = extra.private.tc-pass;
     };
 
