@@ -1,18 +1,20 @@
 extra:
 { config, lib, pkgs, ... }:
-let extras = rec { ztip = "10.243.14.20";
-                   nix-serve = {
-                     port = 10845;
-                     bindAddress = ztip;
-                   };
-                 };
+let extras = (rec { ztip = "10.243.14.20";
+                    nix-serve = {
+                      port = 10845;
+                      bindAddress = ztip;
+                    };
+                    import-scripts = (import <monstercatpkgs> { }).import-scripts;
+                 }) // extra;
 in {
   imports = [
     ./hardware
     ./fail-notifier
-    (import ./nginx (extra // extras))
-    (import ./trendbot extra)
-    (import ./transaction-bot extra)
+    (import ./nginx extras)
+    (import ./trendbot extras)
+    (import ./transaction-bot extras)
+    (import ./tunecore-sales-bot extras)
   ];
 
   systemd.services.postgrest = {

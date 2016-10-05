@@ -1,7 +1,5 @@
 extra:
 { config, lib, pkgs, ... }:
-let import-scripts = (import <monstercatpkgs> { }).import-scripts;
-in
 {
   systemd.services.trend-bot = {
     enable = true;
@@ -17,7 +15,7 @@ in
     };
 
     serviceConfig.Type = "oneshot";
-    serviceConfig.ExecStart = "${import-scripts}/bin/trend-bot";
+    serviceConfig.ExecStart = "${extra.import-scripts}/bin/trend-bot";
 
     unitConfig.OnFailure = "notify-failed@%n.service";
 
