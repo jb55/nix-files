@@ -21,6 +21,7 @@ in
     ./networking
     ./hardware
     (import ./nginx extra)
+    (import ./vidstats extra)
   ];
 
   security.acme.certs."jb55.com" = {
