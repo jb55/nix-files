@@ -15,6 +15,7 @@ in {
     (import ./trendbot extras)
     (import ./transaction-bot extras)
     (import ./tunecore-sales-bot extras)
+    (import ./bandcamp-sales-bot extras)
   ];
 
   systemd.services.postgrest = {

@@ -20,7 +20,6 @@ extra:
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-sales-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
-    restartIfChanged = false;
     # monthly
     startAt = "*-*-01 02:20:00";
   };
