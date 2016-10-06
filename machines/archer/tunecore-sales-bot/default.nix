@@ -2,12 +2,7 @@ extra:
 { config, lib, pkgs, ... }:
 {
   systemd.services.tunecore-sales-bot = {
-    enable = true;
-
     description = "tc sales bot";
-
-    wantedBy = [ "multi-user.target" ];
-    after    = [ "network-online.target" "postgresql.service" ];
 
     environment = {
       TUNECORE_USER = extra.private.tc-user;
@@ -16,7 +11,6 @@ extra:
       AWS_SECRET_ACCESS_KEY = extra.private.aws_secret_key;
     };
 
-    serviceConfig.Type = "oneshot";
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-sales-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
