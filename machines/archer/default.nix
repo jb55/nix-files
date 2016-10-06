@@ -11,6 +11,7 @@ in {
   imports = [
     ./hardware
     ./fail-notifier
+    (import ./backups extras)
     (import ./nginx extras)
     (import ./trendbot extras)
     (import ./transaction-bot extras)
