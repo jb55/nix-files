@@ -32,15 +32,6 @@ in {
   services.nginx = {
     enable = true;
 
-    config = ''
-      worker_processes 2;
-
-      events {
-      	worker_connections 768;
-        # multi_accept on;
-      }
-    '';
-
     httpConfig = ''
       port_in_redirect off;
       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;

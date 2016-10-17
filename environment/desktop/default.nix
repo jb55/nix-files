@@ -25,17 +25,16 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    gnome.gnome_icon_theme
     gtk-engine-murrine
     shared_mime_info
     theme.package
     icon-theme.package
 
-    chromium
+    # chromium
     clipit
     dragon-drop
-    dropbox-cli
-    emacs25pre
+    # dropbox-cli
+    emacs
     gnome3.eog
     gnome3.nautilus
     haskellPackages.taffybar
@@ -44,7 +43,7 @@ in {
     rxvt_unicode
     scrot
     slock
-    spotify
+    # spotify
     userConfig
     vlc
     weechat

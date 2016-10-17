@@ -33,6 +33,12 @@
     '';
   };
 
+  services.udev.extraRules = ''
+    # trezor
+    SUBSYSTEM=="usb", ATTR{idVendor}=="534c", ATTR{idProduct}=="0001", MODE="0666", GROUP="dialout", SYMLINK+="trezor%n"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="534c", ATTRS{idProduct}=="0001",  MODE="0666", GROUP="dialout"
+  '';
+
   services.xserver = {
     enable = true;
     layout = "us";

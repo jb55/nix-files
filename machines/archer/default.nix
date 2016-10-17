@@ -19,25 +19,21 @@ in {
     (import ./bandcamp-sales-bot extras)
   ];
 
-  systemd.services.postgrest = {
-    enable = true;
-    description = "PostgREST";
+  # systemd.services.postgrest = {
+  #   enable = false;
+  #   description = "PostgREST";
 
-    wantedBy = [ "multi-user.target" ];
-    after =    [ "postgresql.service" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   after =    [ "postgresql.service" ];
 
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = ''
-      ${pkgs.haskellPackages.postgrest}/bin/postgrest \
-        'postgres://pg-dev-zero.monstercat.com/Monstercat' \
-        -a jb55 \
-        +RTS -N -I2
-    '';
-  };
-
-  services.namecoind.enable = false;
-  services.namecoind.wallet = "/home/jb55/.namecoin/wallet.dat";
-  services.namecoind.userFile = "/home/jb55/.namecoin/user";
+  #   serviceConfig.Type = "simple";
+  #   serviceConfig.ExecStart = ''
+  #     ${pkgs.haskellPackages.postgrest}/bin/postgrest \
+  #       'postgres://pg-dev-zero.monstercat.com/Monstercat' \
+  #       -a jb55 \
+  #       +RTS -N -I2
+  #   '';
+  # };
 
   services.mongodb.enable = true;
   services.redis.enable = true;

@@ -4,7 +4,9 @@
     enableFontDir = true;
     enableGhostscriptFonts = true;
     enableCoreFonts = true;
-    fontconfig.defaultFonts.serif = [ "Bookerly" ];
+    fontconfig.defaultFonts.serif = [ "Noto Serif" ];
+    fontconfig.defaultFonts.monospace  = [ "Noto Mono" ];
+    fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     fonts = with pkgs; [
       corefonts
       inconsolata
@@ -13,8 +15,9 @@
       fira-code
       fira-mono
       kochi-substitute
+      noto-fonts
+      noto-fonts-emoji
       source-code-pro
-      bookerly
       ipafont
     ];
   };

@@ -36,7 +36,7 @@ in
               -r 0x6D3E2004415AF4A3 \
          | ${pkgs.awscli}/bin/aws s3 \
               cp - \
-              "s3://data.monstercat.com/backups/$filename"
+              "s3://data.monstercat.com/backups/pg-dev/$filename"
 
     '';
     in "${script}";

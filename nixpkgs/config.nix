@@ -97,7 +97,7 @@ in {
       Spock
       aeson
       aeson-qq
-      aeson-applicative
+      # aeson-applicative
       amazonka
       amazonka-s3
       async
@@ -110,11 +110,11 @@ in {
       bitcoin-tx
       blaze-builder
       blaze-builder-conduit
-      blaze-builder-enumerator
+      # blaze-builder-enumerator
       blaze-html
       blaze-markup
       blaze-textual
-      bound
+      # bound
       bson-lens
       cased
       cassava
@@ -127,7 +127,7 @@ in {
       dlist-instances
       doctest
       either
-      envy
+      # envy
       exceptions
       failure
       filepath
@@ -146,7 +146,7 @@ in {
       http-types
       io-memoize
       keys
-      language-bash
+      # language-bash
       language-c
       language-javascript
       lens
@@ -201,13 +201,13 @@ in {
       pipes-parse
       pipes-postgresql-simple
       pipes-safe
-      pipes-shell
+      # pipes-shell
       pipes-text
       pipes-wai
       posix-paths
       postgresql-simple
       postgresql-binary
-      postgresql-simple-sop
+      # postgresql-simple-sop
       pretty-show
       profunctors
       random
@@ -217,7 +217,7 @@ in {
       regex-base
       regex-compat
       regex-posix
-      regular
+      # regular
       relational-record
       resourcet
       retry
@@ -233,7 +233,7 @@ in {
       servant-docs
       servant-lucid
       servant-server
-      servant-swagger
+      # servant-swagger
       shake
       shakespeare
       shelly
