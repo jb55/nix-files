@@ -1,18 +1,18 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  systemd.services.trend-bot = {
-    description = "tc trend bot";
+  systemd.services.transaction-bot = {
+    description = "tc transaction bot";
 
     environment = {
       TUNECORE_USER = extra.private.tc-user;
       TUNECORE_PASS = extra.private.tc-pass;
     };
 
-    serviceConfig.ExecStart = "${extra.import-scripts}/bin/trend-bot";
+    serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-transaction-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
-    startAt = "*-*-* 23:59:00";
+    startAt = "Sat *-*-* 01:00:00";
   };
 }
 

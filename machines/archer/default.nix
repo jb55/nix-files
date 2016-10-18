@@ -1,33 +1,39 @@
 extra:
 { config, lib, pkgs, ... }:
-let extras = rec { ztip = "10.243.14.20";
-                   nix-serve = {
-                     port = 10845;
-                     bindAddress = ztip;
-                   };
-                 };
+let extras = (rec { ztip = "10.243.14.20";
+                    nix-serve = {
+                      port = 10845;
+                      bindAddress = ztip;
+                    };
+                    import-scripts = (import <monstercatpkgs> { }).import-scripts;
+                 }) // extra;
 in {
   imports = [
     ./hardware
-    (import ./nginx (extra // extras))
-    (import ./trendbot extra)
+    ./fail-notifier
+    (import ./backups extras)
+    (import ./nginx extras)
+    (import ./trendbot extras)
+    (import ./transaction-bot extras)
+    (import ./tunecore-sales-bot extras)
+    (import ./bandcamp-sales-bot extras)
   ];
 
-  systemd.services.postgrest = {
-    enable = true;
-    description = "PostgREST";
+  # systemd.services.postgrest = {
+  #   enable = false;
+  #   description = "PostgREST";
 
-    wantedBy = [ "multi-user.target" ];
-    after =    [ "postgresql.service" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   after =    [ "postgresql.service" ];
 
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = ''
-      ${pkgs.haskellPackages.postgrest}/bin/postgrest \
-        'postgres://pg-dev-zero.monstercat.com/Monstercat' \
-        -a jb55 \
-        +RTS -N -I2
-    '';
-  };
+  #   serviceConfig.Type = "simple";
+  #   serviceConfig.ExecStart = ''
+  #     ${pkgs.haskellPackages.postgrest}/bin/postgrest \
+  #       'postgres://pg-dev-zero.monstercat.com/Monstercat' \
+  #       -a jb55 \
+  #       +RTS -N -I2
+  #   '';
+  # };
 
   services.mongodb.enable = true;
   services.redis.enable = true;
@@ -45,7 +51,7 @@ in {
   };
 
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
-  networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 5432 ];
+  networking.firewall.allowedTCPPorts = [ 22 143 80 ];
 
   services.fcgiwrap.enable = true;
 

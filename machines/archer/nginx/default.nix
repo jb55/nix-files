@@ -32,15 +32,6 @@ in {
   services.nginx = {
     enable = true;
 
-    config = ''
-      worker_processes 2;
-
-      events {
-      	worker_connections 768;
-        # multi_accept on;
-      }
-    '';
-
     httpConfig = ''
       port_in_redirect off;
       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -76,6 +67,20 @@ in {
 
         location / {
           try_files $uri $uri/ =404;
+        }
+      }
+
+      server {
+        listen       ${extra.ztip}:80;
+        server_name  siren.zero.monster.cat;
+
+        location / {
+          include ${pkgs.nginx}/conf/fastcgi_params;
+          gzip off;
+
+          fastcgi_param SCRIPT_FILENAME /home/jb55/src/c/libsirenofshame/siren-rest.fcgi;
+          fastcgi_param PATH_INFO       $uri;
+          fastcgi_pass  unix:${config.services.fcgiwrap.socketAddress};
         }
       }
 
