@@ -187,9 +187,9 @@ in {
       persistent-postgresql
       persistent-template
       pipes
-      pipes-async
+      # pipes-async
       pipes-attoparsec
-      pipes-binary
+      # pipes-binary
       pipes-bytestring
       pipes-concurrency
       pipes-csv
@@ -270,7 +270,7 @@ in {
       text-format
       formatting
       time
-      time-patterns
+      # time-patterns
       time-units
       tinytemplate
       transformers

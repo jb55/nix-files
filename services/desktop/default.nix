@@ -70,7 +70,7 @@
     videoDrivers = [ "nvidia" ];
 
     screenSection = ''
-      Option "metamodes" "1920x1080 +0+0"
+      Option "metamodes" "1920x1080_144 +0+0"
       Option "dpi" "96 x 96"
     '';
 

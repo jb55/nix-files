@@ -12,10 +12,13 @@ let machine = "archer";
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = machineConfig.sessionCommands;
     };
-    extra = { inherit private; };
+    extra = {
+      inherit private;
+      git-server = import ./misc/git-server.nix;
+    };
     caches = if machine == "archer"
                then []
-               else [ "http://cache.zero.monster.cat" ];
+               else [ "http://cache.nixos.org" "http://cache.zero.monster.cat" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";

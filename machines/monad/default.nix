@@ -3,14 +3,23 @@ extra:
 {
   imports = [
     ./hardware
+    (import ./nginx extra)
   ];
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-  networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 ];
-  networking.firewall.allowedUDPPorts = [ 11155 ];
+  # networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 ];
+  # networking.firewall.allowedUDPPorts = [ ];
+  networking.firewall.trustedInterfaces = ["zt1"];
 
-  virtualisation.virtualbox.host.enable = false;
+  virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
+
+  services.mongodb.enable = true;
+  services.mysql.enable = false;
+  services.mysql.package = pkgs.mariadb;
+  services.redis.enable = true;
+  services.tor.enable = true;
+  services.fcgiwrap.enable = true;
 
   services.udev.extraRules = ''
     # ds4
@@ -67,7 +76,21 @@ extra:
     enable-led = true;
     led = "input5::numlock";
   };
-
   systemd.services.ds4ctl.enable = true;
+
+  services.postgresql = {
+    dataDir = "/var/db/postgresql/9.5/";
+    enable = true;
+    # extraPlugins = with pkgs; [ pgmp ];
+    authentication = pkgs.lib.mkForce ''
+      # type db  user address            method
+      local  all all                     trust
+      host   all all  172.24.172.226/16  trust
+      host   all all  192.168.86.100/16  trust
+    '';
+    extraConfig = ''
+      listen_addresses = '172.24.172.226,192.168.86.100,127.0.0.1'
+    '';
+  };
 
 }
