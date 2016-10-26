@@ -1,6 +1,15 @@
 { config, lib, pkgs, ... }:
 let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
-    myPackages = builtins.attrValues jb55pkgs;
+    myPackages = with jb55pkgs; [
+       csv-delim
+       csv-scripts
+       dbopen
+       extname
+       mandown
+       snap
+       sharefile
+       samp
+    ];
     myHaskellPackages = with pkgs.haskellPackages; [
       skeletons
     ];

@@ -30,10 +30,10 @@ in {
     theme.package
     icon-theme.package
 
-    chromium
+    # chromium
     clipit
     dragon-drop
-    dropbox-cli
+    # dropbox-cli
     emacs
     gnome3.eog
     gnome3.nautilus
@@ -43,7 +43,7 @@ in {
     rxvt_unicode
     scrot
     slock
-    spotify
+    # spotify
     userConfig
     vlc
     weechat
