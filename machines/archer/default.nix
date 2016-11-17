@@ -61,6 +61,8 @@ in {
     setSendmail = true;
   };
 
+  systemd.services.postgresql.after = [ "zerotierone.service" ];
+
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
     enable = true;
