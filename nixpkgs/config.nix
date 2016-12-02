@@ -72,7 +72,7 @@ in {
     haskellTools = hp: with hp; [
       #ghc-mod
       #hdevtools
-      binary-serialise-cbor
+      #binary-serialise-cbor
       alex
       cabal-install
       cabal2nix
