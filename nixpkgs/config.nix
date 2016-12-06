@@ -135,6 +135,11 @@ in {
       foldl
       free
       generics-sop
+      gogol
+      gogol-core
+      gogol-sheets
+      gogol-youtube
+      gogol-youtube-reporting
       hamlet
       hashable
       heroku
