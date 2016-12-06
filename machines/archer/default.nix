@@ -40,7 +40,10 @@ in {
 
   services.printing.drivers = [ pkgs.samsung-unified-linux-driver_4_01_17 ];
   services.mongodb.enable = true;
-  services.redis.enable = true;
+  services.redis = {
+    enable = true;
+    bind = extras.ztip;
+  };
   services.gitlab.enable = false;
   services.gitlab.databasePassword = "gitlab";
 

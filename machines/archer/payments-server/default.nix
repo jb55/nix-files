@@ -42,7 +42,7 @@ in
       POSTGRES_PASSWORD = "";
       POSTGRES_HOST     = "db.zero.monster.cat";
       POSTGRES_DATABASE = "Monstercat";
-      REDIS_URL         = "redis.zero.monster.cat";
+      REDIS_URL         = "redis://redis.zero.monster.cat:6379";
       PORT              = port;
       AWS_ACCESS_KEY    = aws_access_key;
       AWS_PRIVATE_KEY   = aws_secret_key;
@@ -51,6 +51,7 @@ in
     };
 
     serviceConfig.ExecStart = "${payments-server}/bin/payments-server";
+    serviceConfig.Restart = "always";
     unitConfig.OnFailure = "notify-failed@%n.service";
   };
 }
