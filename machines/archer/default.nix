@@ -18,6 +18,7 @@ in {
     (import ./transaction-bot extras)
     (import ./tunecore-sales-bot extras)
     (import ./bandcamp-sales-bot extras)
+    (import ./payments-server extras)
   ];
 
   # systemd.services.postgrest = {
