@@ -284,6 +284,7 @@ in {
       uniplate
       unix-compat
       unordered-containers
+      probability
       uuid
       vector
       void
