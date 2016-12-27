@@ -3,8 +3,8 @@ extra:
 let cfg = extra.private.vidstats;
     videostats = (import (pkgs.fetchgit {
       url    = "http://git.zero.jb55.com/edm-video-stats";
-      rev    = "a6a928d0603be012c9415ece95f3f8b6ff23cab";
-      sha256 = "1xdr1ikslbw719shzqhbf88xfnrxjzq5fhf4dr095388jvh5c6zd";
+      rev    = "4514bd35d111257f71235fcb121cfbbc6c11eb15";
+      sha256 = "0sd26vvffk12a3ax98qlcd0kw7lgnszx9lxyqfya913qkgcyrzmb";
     }) {}).package;
     client_secret = pkgs.fetchurl {
       name = "client_secret.json";
