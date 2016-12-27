@@ -11,8 +11,8 @@ let adblock-hosts = pkgs.fetchurl {
     npmrepo = (import (pkgs.fetchFromGitHub {
       owner  = "jb55";
       repo   = "npm-repo-proxy";
-      rev    = "1.0.0";
-      sha256 = "0rjy5rq4gniqa1dlig4mg3m6yxchz7hdw5disayr7gxmc6kj18mx";
+      rev    = "81182f25cb783a986d7b7ee4a63f0ca6ca9c8989";
+      sha256 = "0zj7ys0383fs3hykax5bd6q5wrhzcipy8j3div83mba2n7c13f8l";
     }) {}).package;
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
 in
