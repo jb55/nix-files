@@ -1,12 +1,14 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  imports = [ ];
+  imports = [ ./systemd-failure-emailer ];
 
   services.zerotierone.enable = true;
 
   #services.mongodb.enable = true;
   #services.redis.enable = true;
+
+  services.systemd-failure-emailer.enable = true;
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;

@@ -33,7 +33,7 @@ in
     serviceConfig.Type = "oneshot";
     serviceConfig.ExecStart = "${videostats}/bin/video-stats";
 
-    # unitConfig.OnFailure = "notify-failed@%n.service";
+    unitConfig.OnFailure = "systemd-failure-emailer@%n.service";
 
     startAt = "*-*-* 05:24:00";
   };
