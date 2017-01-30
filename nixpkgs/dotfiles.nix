@@ -25,6 +25,7 @@ let
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+    ${pkgs.twmn}/bin/twmnd &
   '' + "\n" + impureSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;
   xinitrc-refresh = writeScript "xinitrc-refresh" impureSessionCommands;

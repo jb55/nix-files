@@ -64,6 +64,11 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
 
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+    DefaultTimeoutStartSec=20s
+  '';
+
   programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";

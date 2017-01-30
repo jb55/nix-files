@@ -11,9 +11,10 @@ extra:
   # networking.firewall.allowedUDPPorts = [ ];
   networking.firewall.trustedInterfaces = ["zt1"];
 
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enable = false;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
+  programs.mosh.enable = true;
   services.mongodb.enable = true;
   services.mysql.enable = false;
   services.mysql.package = pkgs.mariadb;
@@ -55,6 +56,15 @@ extra:
       Option "AccelerationScheme" "none"
       Option "AccelSpeed" "-1"
     EndSection
+
+    Section "InputClass"
+      Identifier "Logitech M705"
+      MatchIsPointer "yes"
+      Option "AccelerationProfile" "-1"
+      Option "ConstantDeceleration" "5"
+      Option "AccelerationScheme" "none"
+      Option "AccelSpeed" "-1"
+    EndSection
   '';
 
   systemd.services.ds4ctl = {
@@ -87,6 +97,7 @@ extra:
       local  all all                     trust
       host   all all  172.24.172.226/16  trust
       host   all all  192.168.86.100/16  trust
+      host   all all  127.0.0.1/16       trust
     '';
     extraConfig = ''
       listen_addresses = '172.24.172.226,192.168.86.100,127.0.0.1'

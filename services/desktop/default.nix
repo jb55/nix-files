@@ -20,7 +20,7 @@
   };
 
   services.mpd = {
-    enable = true;
+    enable = false;
     dataDir = "/home/jb55/mpd";
     user = "jb55";
     group = "users";
@@ -37,6 +37,11 @@
     # trezor
     SUBSYSTEM=="usb", ATTR{idVendor}=="534c", ATTR{idProduct}=="0001", MODE="0666", GROUP="dialout", SYMLINK+="trezor%n"
     KERNEL=="hidraw*", ATTRS{idVendor}=="534c", ATTRS{idProduct}=="0001",  MODE="0666", GROUP="dialout"
+    # yubikey neo
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0116", MODE="0666"
+
+    # yubikey4
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0407", MODE="0666"
   '';
 
   services.xserver = {
@@ -70,7 +75,7 @@
     videoDrivers = [ "nvidia" ];
 
     screenSection = ''
-      Option "metamodes" "1920x1080_144 +0+0"
+      Option "metamodes" "1920x1080_144 +0+0 { ForceCompositionPipeline = On }"
       Option "dpi" "96 x 96"
     '';
 

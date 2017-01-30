@@ -24,6 +24,8 @@ in {
   packageOverrides = super: rec {
     bluez = pkgs.bluez5;
 
+    # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
+
     haskellPackages = super.haskellPackages.override {
       overrides = haskellOverrides pkgs;
     };
@@ -72,7 +74,7 @@ in {
     haskellTools = hp: with hp; [
       #ghc-mod
       #hdevtools
-      binary-serialise-cbor
+      # binary-serialise-cbor
       alex
       cabal-install
       cabal2nix
@@ -88,16 +90,9 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      Boolean
-      HTTP
-      HUnit
-      MissingH
-      QuickCheck
-      SafeSemaphore
-      Spock
       aeson
-      aeson-qq
       # aeson-applicative
+      aeson-qq
       amazonka
       amazonka-s3
       async
@@ -114,6 +109,7 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
+      Boolean
       # bound
       bson-lens
       cased
@@ -127,23 +123,32 @@ in {
       dlist-instances
       doctest
       either
+      elm-export
       # envy
       exceptions
       failure
       filepath
       fingertree
       foldl
+      formatting
       free
       generics-sop
+      gogol
+      gogol-core
+      gogol-sheets
+      gogol-youtube
+      gtk
       hamlet
       hashable
       heroku
       hspec
       hspec-expectations
       html
+      HTTP
       http-client
       http-date
       http-types
+      HUnit
       io-memoize
       keys
       # language-bash
@@ -163,14 +168,15 @@ in {
       logict
       mime-mail
       mime-types
+      MissingH
       mmorph
       monad-control
       monad-coroutine
+      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
-      monadloc
       mongoDB
       monoid-extras
       # monstercat-backend
@@ -205,11 +211,12 @@ in {
       pipes-text
       pipes-wai
       posix-paths
-      postgresql-simple
       postgresql-binary
+      postgresql-simple
       # postgresql-simple-sop
       pretty-show
       profunctors
+      QuickCheck
       random
       reducers
       reflection
@@ -223,6 +230,7 @@ in {
       retry
       rex
       safe
+      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -231,6 +239,7 @@ in {
       servant-cassava
       servant-client
       servant-docs
+      servant-elm
       servant-lucid
       servant-server
       # servant-swagger
@@ -240,6 +249,7 @@ in {
       simple-reflect
       speculation
       split
+      Spock
       spoon
       stm
       stm-chans
@@ -268,7 +278,6 @@ in {
       test-framework-hunit
       text
       text-format
-      formatting
       time
       # time-patterns
       time-units
