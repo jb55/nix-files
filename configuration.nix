@@ -14,6 +14,7 @@ let machine = "charon";
     };
     extra = {
       inherit private;
+      ztip = "172.24.206.82";
       git-server = import ./misc/git-server.nix;
     };
     zsh = "${pkgs.zsh}/bin/zsh";

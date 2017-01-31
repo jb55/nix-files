@@ -21,10 +21,16 @@ in
     ./networking
     ./hardware
     (import ./nginx extra)
+    (import ./sheetzen extra)
     (import ./vidstats extra)
   ];
 
   security.acme.certs."jb55.com" = {
+    webroot = "/var/www/challenges";
+    email = "bill@casarin.me";
+  };
+
+  security.acme.certs."sheetzen.com" = {
     webroot = "/var/www/challenges";
     email = "bill@casarin.me";
   };
@@ -40,11 +46,10 @@ in
     authentication = ''
       # type db  user address        method
       local  all all                 trust
-      host   all all  127.0.0.1/32   trust
       host   all all  172.24.0.0/16  trust
     '';
     extraConfig = ''
-      listen_addresses = '0.0.0.0'
+      listen_addresses = '${extra.ztip}'
     '';
   };
 
