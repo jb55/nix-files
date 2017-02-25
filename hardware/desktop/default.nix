@@ -10,5 +10,6 @@
       support32Bit = true;
     };
     opengl.driSupport32Bit = true;
+    opengl.driSupport = true;
   };
 }
