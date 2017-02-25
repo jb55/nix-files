@@ -76,6 +76,7 @@ in {
   nixpkgs.config = nixpkgsConfig;
 
   nix.binaryCaches = caches;
+  nix.useSandbox = true;
   nix.trustedBinaryCaches = caches;
   nix.requireSignedBinaryCaches = false;
 
