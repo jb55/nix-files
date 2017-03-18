@@ -9,7 +9,15 @@ let sites = [ ];
       };
       host = "git.zero.jb55.com";
     };
+    razornetExtra = {
+      ztip = "10.144.172.226";
+      git = {
+        projectroot = "/var/razorgit";
+      };
+      host = "git.razor.jb55.com";
+    };
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
+    razornetGit = extra.git-server { inherit config pkgs; extra = extra // razornetExtra; };
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -78,6 +86,8 @@ in {
       }
 
       ${gitCfg}
+
+      ${razornetGit}
     '';
   };
 }

@@ -57,5 +57,7 @@ in {
     zathura
   ];
 
-  security.setuidPrograms = [ "slock" ];
+  security.wrappers = {
+    slock.source = "${pkgs.slock}/bin/slock";
+  };
 }

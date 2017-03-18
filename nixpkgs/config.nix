@@ -17,7 +17,7 @@ in {
   };
 
   chromium = {
-    enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+    enablePepperFlash = false; # Chromium's non-NSAPI alternative to Adobe Flash
     enablePepperPDF = false;
   };
 
@@ -189,7 +189,7 @@ in {
       parsers
       pcg-random
       persistent
-      persistent-mongoDB
+      #persistent-mongoDB
       persistent-postgresql
       persistent-template
       pipes
@@ -239,7 +239,7 @@ in {
       servant-cassava
       servant-client
       servant-docs
-      servant-elm
+      # servant-elm
       servant-lucid
       servant-server
       # servant-swagger

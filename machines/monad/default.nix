@@ -1,5 +1,12 @@
 extra:
 { config, lib, pkgs, ... }:
+let
+  chromecastIP = "192.168.86.190";
+  iptables = "iptables -A nixos-fw";
+  openTCP = dev: port: ''
+    ip46tables -A nixos-fw -i ${dev} -p tcp --dport ${toString port} -j nixos-fw-accept
+  '';
+in
 {
   imports = [
     ./hardware
@@ -7,11 +14,14 @@ extra:
   ];
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-  # networking.firewall.allowedTCPPorts = [ 8999 22 143 80 5000 ];
-  # networking.firewall.allowedUDPPorts = [ ];
-  networking.firewall.trustedInterfaces = ["zt1"];
 
-  virtualisation.virtualbox.host.enable = false;
+  networking.firewall.extraCommands = ''
+    ${openTCP "zt2" 80}
+    ${iptables} -p udp -s ${chromecastIP} -j nixos-fw-accept
+    ${iptables} -p tcp -s ${chromecastIP} -j nixos-fw-accept
+  '';
+
+  virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
   programs.mosh.enable = true;
@@ -43,6 +53,8 @@ extra:
     # rtl-sdr
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2832", MODE="0666", SYMLINK+="rtl_sdr"
 
+    # arduino
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0043", MODE="0666", SYMLINK+="arduino"
   '';
 
   boot.blacklistedKernelModules = ["dvb_usb_rtl28xxu"];
