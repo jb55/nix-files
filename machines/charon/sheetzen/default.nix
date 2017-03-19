@@ -4,8 +4,8 @@ let port = "1080";
     sname = "sheetzen.com";
     sheetzen = (import (pkgs.fetchgit {
       url    = "http://git.zero.jb55.com/socialtracker";
-      rev    = "7bd919245c3c44a1ec9556d1982513ae6f2bf670";
-      sha256 = "0i1990p9r35sf6x0jm1dpp0nbbmzq50v9h5r5qrryglrdllmp8n6";
+      rev    = "cb98961832bf02c3bd489c9a7014cf5ae1b2998a";
+      sha256 = "0j3zppz755flb7rm57fl0bmkrhpzbh4vfba00c617i7gvs39d6m8";
     }) {});
 in
 {
@@ -70,6 +70,7 @@ in
       PGDATABASE = "sheetzen";
       ENV = "Production";
       JWT_KEYFILE = "${sheetzen}/share/sheetzen/credentials/token-key.json";
+      CREDENTIAL_PATH = "${sheetzen}/share/sheetzen/credentials/SocialTracker.json";
       PORT = "${port}";
     };
 
