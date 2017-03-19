@@ -22,7 +22,7 @@ in
     ./hardware
     (import ./nginx extra)
     (import ./sheetzen extra)
-    (import ./vidstats extra)
+    #(import ./vidstats extra)
   ];
 
   security.acme.certs."jb55.com" = {
