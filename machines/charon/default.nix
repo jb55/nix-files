@@ -40,6 +40,18 @@ in
     email = "bill@casarin.me";
   };
 
+  services.mailz = {
+    enable = true;
+    domain = "jb55.com";
+
+    users = {
+      jb55 = {
+        password = "$6$v.e2AKb42hpEyrvy$sagyhMNjLFhUQjDjeJy6IIzIlct4xvREF8q4Lns6gTpemTL7/yqG.zxuAUiw5QZ9hvWuEWvp4zD83UEIUb/OS/";
+        aliases = [ "postmaster" "bill" "will" "william" "me" "jb" ];
+      };
+    };
+  };
+
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
     enable = true;

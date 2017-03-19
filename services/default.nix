@@ -1,7 +1,7 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  imports = [ ./systemd-failure-emailer ];
+  imports = [ ./systemd-failure-emailer ./mailz ];
 
   services.zerotierone.enable = true;
 
