@@ -17,6 +17,7 @@ in
 
   networking.firewall.extraCommands = ''
     ${openTCP "zt2" 80}
+    ${openTCP "zt1" 80}
     ${iptables} -p udp -s ${chromecastIP} -j nixos-fw-accept
     ${iptables} -p tcp -s ${chromecastIP} -j nixos-fw-accept
   '';
