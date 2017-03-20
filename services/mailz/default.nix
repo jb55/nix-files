@@ -272,6 +272,7 @@ in
           ${mailbox "Alerts"}
           ${mailbox "GitHub"}
           ${mailbox "Lists.ats"}
+          ${mailbox "Lists.icn"}
           ${mailbox "Lists.craigslist"}
           ${mailbox "Lists.bitcoin"}
           ${mailbox "Lists.elm"}
