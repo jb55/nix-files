@@ -5,6 +5,11 @@ with lib;
 
 let
   cfg = config.services.mailz;
+  mailbox = name: ''
+    mailbox ${name} {
+      auto = subscribe
+    }
+  '';
 
   # Convert:
   #
@@ -80,6 +85,11 @@ in
         type = types.str;
       };
 
+      sieves = mkOption {
+        default = "";
+        type = types.str;
+      };
+
       group = mkOption {
         default = "vmail";
         type = types.str;
@@ -146,10 +156,7 @@ in
 
   config = mkIf (cfg.enable && cfg.users != { }) {
     nixpkgs.config.packageOverrides = pkgs: {
-      opensmtpd = overrideDerivation pkgs.opensmtpd (oldAttrs: {
-        # Needed to listen on both IPv4 and IPv6
-        patches = oldAttrs.patches ++ [ ./opensmtpd.diff ];
-      });
+      opensmtpd = pkgs.callPackage ./opensmtpd.nix { };
       opensmtpd-extras = pkgs.opensmtpd-extras.override {
         # Needed to have PRNG working in chroot (for dkim-signer)
         openssl = pkgs.libressl;
@@ -177,8 +184,8 @@ in
       serverConfiguration = ''
         filter filter-pause pause
         filter filter-regex regex "${files.regex}"
-        filter filter-spamassassin spamassassin "-saccept"
-        filter filter-dkim-signer dkim-signer "-d${cfg.domain}" "-p${cfg.dkimDirectory}/${cfg.domain}/default.private"
+        filter filter-spamassassin spamassassin "-s accept"
+        filter filter-dkim-signer dkim-signer "-d ${cfg.domain}" "-p${cfg.dkimDirectory}/${cfg.domain}/default.private"
         filter in chain filter-pause filter-regex filter-spamassassin
         filter out chain filter-dkim-signer
 
@@ -190,9 +197,7 @@ in
         table aliases file:${files.aliases}
 
         listen on 0.0.0.0 port 25 hostname ${cfg.domain} filter in tls pki ${cfg.domain}
-        listen on :: port 25 hostname ${cfg.domain} filter in tls pki ${cfg.domain}
         listen on 0.0.0.0 port 587 hostname ${cfg.domain} filter out tls-require pki ${cfg.domain} auth <credentials>
-        listen on :: port 587 hostname ${cfg.domain} filter out tls-require pki ${cfg.domain} auth <credentials>
 
         accept from any for domain "${cfg.domain}" recipient <recipients> alias <aliases> deliver to lmtp localhost:24
         accept from local for any relay
@@ -211,7 +216,10 @@ in
       sslServerCert = "${config.security.acme.directory}/${cfg.domain}/fullchain.pem";
       sslServerKey = "${config.security.acme.directory}/${cfg.domain}/key.pem";
       enablePAM = false;
-      sieveScripts = { before = files.spamassassinSieve; };
+      sieveScripts = {
+        before = files.spamassassinSieve;
+        before2 = pkgs.writeText "sieves" cfg.sieves;
+      };
       extraConfig = ''
         postmaster_address = postmaster@${cfg.domain}
 
@@ -247,7 +255,7 @@ in
           }
 
           mailbox Spam {
-              auto = create
+              auto = subscribe
               special_use = \Junk
           }
 
@@ -256,10 +264,25 @@ in
               special_use = \Trash
           }
 
-          mailbox Archive {
+          mailbox Archives {
               auto = subscribe
               special_use = \Archive
           }
+
+          ${mailbox "Alerts"}
+          ${mailbox "GitHub"}
+          ${mailbox "Lists.ats"}
+          ${mailbox "Lists.craigslist"}
+          ${mailbox "Lists.bitcoin"}
+          ${mailbox "Lists.elm"}
+          ${mailbox "Lists.haskell"}
+          ${mailbox "Lists.nix"}
+          ${mailbox "Lists.nixpkgs"}
+          ${mailbox "Lists.shen"}
+          ${mailbox "Lists.spacemacs"}
+          ${mailbox "Monstercat"}
+          ${mailbox "Updates"}
+
         }
 
         protocol lmtp {
@@ -279,6 +302,6 @@ in
       gid = cfg.gid;
     };
 
-    networking.firewall.allowedTCPPorts = [ 25 587 993 ];
+    networking.firewall.allowedTCPPorts = [ 25 ];
   };
 }

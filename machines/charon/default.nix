@@ -46,10 +46,14 @@ in
 
     users = {
       jb55 = {
-        password = "$6$v.e2AKb42hpEyrvy$sagyhMNjLFhUQjDjeJy6IIzIlct4xvREF8q4Lns6gTpemTL7/yqG.zxuAUiw5QZ9hvWuEWvp4zD83UEIUb/OS/";
+        password = "$6$KHmFLeDBaXBE1Jkg$eEN8HM3LpZ4muDK/JWC25qW9xSZq0AqsF4tlzEan7yctROJ9A/lSqz6gN1b1GtwE7efroXGHtDi2FEJ2ujDAl0";
         aliases = [ "postmaster" "bill" "will" "william" "me" "jb" ];
       };
     };
+
+    sieves = builtins.readFile ./dovecot/filters.sieve;
+  };
+
   };
 
   services.postgresql = {
@@ -125,6 +129,8 @@ in
     addn-hosts=${adblock-hosts}
     conf-file=${dnsmasq-adblock}
   '';
+
+  security.setuidPrograms = [ "sendmail" ];
 
   networking.firewall.allowedTCPPorts = [ 22 443 80 ];
   networking.firewall.allowedUDPPorts = [ ];
