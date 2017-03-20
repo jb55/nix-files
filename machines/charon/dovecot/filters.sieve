@@ -3,7 +3,7 @@ require ["body","fileinto","imap4flags","reject"];
 
 if size :over 100K {
   reject text:
-Sorry, this email does not accept large attachments
+Sorry, this mailbox does not accept large attachments
 over 100KB. Please share a Dropbox/Gdrive/etc link instead.
 
 Cheers,
