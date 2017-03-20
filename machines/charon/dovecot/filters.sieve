@@ -90,29 +90,17 @@ if allof (header :contains "list-id" "ccnx.ccnx.org") {
 	fileinto "Lists.icn";
 }
 
-# rule:[elm-dev]
-if allof (header :contains "list-id" "elm-dev@googlegroups.com") {
-	fileinto "Lists.elm";
-}
-
 # Elm
-if anyof ( header :contains "list-id" "elm-discuss@googlegroups.com"
-         , address :is ["to", "cc"] "elm-discuss@googlegroups.com"
-         )
-{
+if header :contains "list-id" [ "elm-discuss", "elm-dev" ] {
 	fileinto "Lists.elm";
 }
-
 
 # GitHub
-if anyof ( header :contains "list-id"
-             [ "nix.NixOS.github.com"
-             , "hydra.NixOS.github.com"
-             ]
-         , address :is ["to", "cc"] 
-             [ "nix-dev@lists.science.uu.nl"
-             ]
-         )
+if header :contains "list-id"
+     [ "nix.NixOS.github.com"
+     , "hydra.NixOS.github.com"
+     , "nix-dev.lists.science.uu.nl"
+     ]
 {
 	fileinto "Lists.nix";
 }
