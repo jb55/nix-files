@@ -29,42 +29,21 @@ if allof (header :contains "from" "noreply@outbound.getsentry.com") {
 }
 
 # rule:[Haskell Streaming]
-if allof (header :contains "list-id" "<streaming-haskell.googlegroups.com>") {
+if header :contains "list-id"
+  [ "streaming-haskell.googlegroups.com"
+  , "cabal-devel.haskell.org"
+  , "commercialhaskell.googlegroups.com"
+  , "ghc-devs.haskell.org"
+  , "haskell-cafe.haskell.org"
+  , "haskell.haskell.org"
+  , "haskell-pipes.googlegroups.com"
+  , "shake-build-system@googlegroups.com"
+  ]
+{
 	fileinto "Lists.haskell";
 }
 
-# rule:[Haskell Pipes]
-if allof (header :contains "list-id" "haskell-pipes.googlegroups.com") {
-	fileinto "Lists.haskell";
-}
 
-# rule:[Nixpkgs]
-if allof (header :contains "list-id" "nixpkgs.NixOS.github.com") {
-	fileinto "Lists.nixpkgs";
-}
-
-# rule:[Haskell]
-if allof (header :contains "list-id" "cabal-devel.haskell.org") {
-	fileinto "Lists.haskell";
-}
-
-if allof (header :contains "list-id" "haskell-cafe.haskell.org") {
-	fileinto "Lists.haskell";
-}
-
-if allof (header :contains "list-id" "ghc-devs.haskell.org") {
-	fileinto "Lists.haskell";
-}
-
-# rule:[Haskell]
-if allof (header :contains "list-id" "commercialhaskell.googlegroups.com") {
-	fileinto "Lists.haskell";
-}
-
-# rule:[Haskell]
-if allof (header :contains "list-id" "haskell.haskell.org") {
-	fileinto "Lists.haskell";
-}
 
 # rule:[Alerts]
 if allof (header :contains "from" "builds@circleci.com") {
@@ -82,12 +61,12 @@ if allof (header :contains "to" "bill@monstercat.com") {
 }
 
 # rule:[Updates]
-if allof (header :contains "from" "no-reply@twitch.tv") {
-	fileinto "Updates";
-}
-
-# rule:[Meetup]
-if allof (header :contains "from" "info@meetup.com") {
+if header :contains "from" [ "no-reply@twitch.tv"
+                           , "notify@twitter.com"
+                           , "info@meetup.com"
+                           , "no-reply@mail.goodreads.com"
+                           ]
+{
 	fileinto "Updates";
 }
 
@@ -116,11 +95,6 @@ if allof (header :contains "list-id" "elm-dev@googlegroups.com") {
 	fileinto "Lists.elm";
 }
 
-# rule:[Updates]
-if allof (header :contains "from" "no-reply@mail.goodreads.com") {
-	fileinto "Updates";
-}
-
 # Elm
 if anyof ( header :contains "list-id" "elm-discuss@googlegroups.com"
          , address :is ["to", "cc"] "elm-discuss@googlegroups.com"
@@ -129,46 +103,44 @@ if anyof ( header :contains "list-id" "elm-discuss@googlegroups.com"
 	fileinto "Lists.elm";
 }
 
+
+# GitHub
 if anyof ( header :contains "list-id"
-             [ "nix-dev@lists.science.uu.nl"
-             , "NixOS/nix <nix.NixOS.github.com>"
-             , "NixOS/hydra <hydra.NixOS.github.com>"
+             [ "nix.NixOS.github.com"
+             , "hydra.NixOS.github.com"
              ]
          , address :is ["to", "cc"] 
              [ "nix-dev@lists.science.uu.nl"
-             , "NixOS/nix <nix.NixOS.github.com>"
-             , "NixOS/hydra <hydra.NixOS.github.com>"
              ]
          )
 {
 	fileinto "Lists.nix";
 }
-
-# rule:[Spacemacs]
-if allof (header :contains "list-id" "syl20bnr/spacemacs <spacemacs.syl20bnr.github.com>") {
+elsif header :contains "list-id" "spacemacs.syl20bnr.github.com" {
 	fileinto "Lists.spacemacs";
+}
+elsif header :contains "list-id" "streaming.michaelt.github.com" {
+	fileinto "Lists.haskell";
+}
+elsif header :contains "list-id" "nixpkgs.NixOS.github.com" {
+	fileinto "Lists.nixpkgs";
+}
+elsif header :contains "from" "notifications@github.com" {
+  # file into github if it doesn't match any other github lists
+	fileinto "GitHub";
 }
 
 # rule:[Updates]
-if allof (header :contains "from" "gab.ai") {
+if header :contains "from" "gab.ai" {
 	fileinto "Updates";
 }
 
-# rule:[haskell-commercial]
-if allof (header :contains "list-id" "commercialhaskell@googlegroups.com") {
-	fileinto "Lists.haskell";
-}
-
-if allof (header :contains "to" "mention@noreply.github.com") {
+if header :contains "to" "mention@noreply.github.com" {
 	addflag "\\Flagged";
 }
 
-if allof (header :contains "list-id" "ndn-interest@lists.cs.ucla.edu") {
-	fileinto "Lists.ndn";
-}
-
-if allof (header :contains "list-id" "shake-build-system@googlegroups.com") {
-	fileinto "Lists.haskell";
+if header :contains "list-id" "ndn-interest.lists.cs.ucla.edu" {
+	fileinto "Lists.icn";
 }
 
 # rule:[ats]
@@ -181,10 +153,6 @@ if allof (header :contains "list-id" "qilang@googlegroups.com") {
 	fileinto "Lists.shen";
 }
 
-# rule:[Haskell Streaming]
-if allof (header :contains "list-id" "michaelt/streaming <streaming.michaelt.github.com>") {
-	fileinto "Lists.haskell";
-}
 
 # rule:[Craigslist]
 if allof (header :contains "from" "reply.craigslist.org") {
@@ -196,8 +164,4 @@ if allof (header :contains "from" "noreply@md.getsentry.com") {
 	fileinto "Alerts";
 }
 
-# rule:[github]
-if allof (header :contains "from" "notifications@github.com") {
-	fileinto "GitHub";
-}
 
