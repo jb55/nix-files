@@ -31,7 +31,6 @@ in {
     theme.package
     icon-theme.package
 
-    # chromium
     clipit
     dragon-drop
     # dropbox-cli
