@@ -38,7 +38,7 @@ if header :contains "list-id"
   , "haskell.haskell.org"
   , "libraries.haskell.org"
   , "haskell-pipes.googlegroups.com"
-  , "shake-build-system@googlegroups.com"
+  , "shake-build-system.googlegroups.com"
   ]
 {
 	fileinto "Lists.haskell";
