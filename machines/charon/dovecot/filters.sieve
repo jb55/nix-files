@@ -36,6 +36,7 @@ if header :contains "list-id"
   , "ghc-devs.haskell.org"
   , "haskell-cafe.haskell.org"
   , "haskell.haskell.org"
+  , "libraries.haskell.org"
   , "haskell-pipes.googlegroups.com"
   , "shake-build-system@googlegroups.com"
   ]
