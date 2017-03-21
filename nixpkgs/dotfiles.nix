@@ -26,6 +26,12 @@ let
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
     ${pkgs.twmn}/bin/twmnd &
+
+    gpg-connect-agent /bye
+    GPG_TTY=$(tty)
+    export GPG_TTY
+    unset SSH_AGENT_PID
+    export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
   '' + "\n" + impureSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;
   xinitrc-refresh = writeScript "xinitrc-refresh" impureSessionCommands;

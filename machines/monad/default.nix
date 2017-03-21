@@ -26,9 +26,11 @@ in
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
   programs.mosh.enable = true;
+
   services.mongodb.enable = true;
   services.mysql.enable = false;
   services.mysql.package = pkgs.mariadb;
+  services.trezord.enable = true;
   services.redis.enable = true;
   services.tor.enable = true;
   services.fcgiwrap.enable = true;
