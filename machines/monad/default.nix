@@ -82,6 +82,21 @@ in
     EndSection
   '';
 
+
+  systemd.user.services.muchsync = {
+    description = "muchsync - notmuch email sync with charon";
+    path = with pkgs; [ notmuch openssh ];
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.muchsync}/bin/muchsync charon";
+  };
+
+  systemd.user.timers.muchsync = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*:0/10";
+    };
+  };
+
   systemd.services.ds4ctl = {
     description = "Dim ds4 leds based on power";
 
