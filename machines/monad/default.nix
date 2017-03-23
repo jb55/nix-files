@@ -2,6 +2,12 @@ extra:
 { config, lib, pkgs, ... }:
 let
   chromecastIP = "192.168.86.190";
+  extras = (rec { ztip = "172.24.172.226";
+                    nix-serve = {
+                      port = 10845;
+                      bindAddress = ztip;
+                    };
+                }) // extra;
   iptables = "iptables -A nixos-fw";
   openTCP = dev: port: ''
     ip46tables -A nixos-fw -i ${dev} -p tcp --dport ${toString port} -j nixos-fw-accept
@@ -82,6 +88,25 @@ in
     EndSection
   '';
 
+  services.nix-serve.enable = true;
+  services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
+  services.nix-serve.port = extras.nix-serve.port;
+  services.nginx.httpConfig = lib.mkIf (config.services.nginx.enable && config.services.nix-serve.enable) ''
+    server {
+      listen ${extras.nix-serve.bindAddress}:80;
+      server_name cache.monad.jb55.com;
+
+      location / {
+        proxy_pass  http://${extras.nix-serve.bindAddress}:${toString extras.nix-serve.port};
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+  '';
 
   systemd.user.services.muchsync = {
     description = "muchsync - notmuch email sync with charon";
