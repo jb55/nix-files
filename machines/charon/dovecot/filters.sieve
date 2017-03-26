@@ -1,18 +1,36 @@
 
 require ["body","fileinto","imap4flags","reject"];
 
-if size :over 100K {
-  reject text:
-Sorry, this mailbox does not accept large attachments
-over 100KB. Please share a Dropbox/Gdrive/etc link instead.
-
-Cheers,
-.
-  ;
-}
-
 if allof (header :contains "from" "Microsoft Canada") {
 	addflag "\\Seen";
+}
+
+if header :contains "X-RSS-Feed" "reddit.com" {
+  fileinto "Reddit";
+}
+elsif header :contains "X-RSS-Feed" "arxiv.org" {
+  fileinto "Arxiv";
+}
+elsif header :contains "X-RSS-Feed" "youtube.com" {
+  fileinto "YouTube";
+}
+elsif header :contains "X-RSS-Feed" "ycombinator.com" {
+  fileinto "HackerNews";
+}
+elsif header :contains "from" "user@rss2email.invalid"  {
+  fileinto "RSS";
+}
+
+if header :contains "list-id" "lobsters-izs7WbyfQp@lobste.rs" {
+  fileinto "Lists.lobsters";
+}
+
+if header :contains "to" "cryptography@metzdowd.com" {
+  fileinto "Lists";
+}
+
+if header :contains "user-agent" "rss2email" {
+  fileinto "RSS";
 }
 
 if allof (header :contains "from" "post@tinyportal.net") {

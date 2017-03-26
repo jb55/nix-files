@@ -270,9 +270,16 @@ in
           }
 
           ${mailbox "Alerts"}
+          ${mailbox "RSS"}
           ${mailbox "GitHub"}
+          ${mailbox "Lists"}
+          ${mailbox "YouTube"}
           ${mailbox "Lists.ats"}
+          ${mailbox "Arxiv"}
+          ${mailbox "Reddit"}
+          ${mailbox "Lists.lobsters"}
           ${mailbox "Lists.icn"}
+          ${mailbox "HackerNews"}
           ${mailbox "Lists.craigslist"}
           ${mailbox "Lists.bitcoin"}
           ${mailbox "Lists.elm"}

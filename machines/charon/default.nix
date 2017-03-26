@@ -106,6 +106,18 @@ in
 
   # systemd.services.weechat.enable = false;
 
+  systemd.user.services.rss2email = {
+    description = "run rss2email";
+    path = with pkgs; [ rss2email ];
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.rss2email}/bin/r2e run";
+  };
+
+  systemd.user.timers.rss2email = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "hourly";
+  };
+
   systemd.services.hearpress = {
     description = "Hearpress server";
     wantedBy = [ "multi-user.target" ];
