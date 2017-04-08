@@ -1,6 +1,7 @@
 { pkgs }:
 let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
+    jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
     callPackage = pkgs.callPackage;
     regularFiles = builtins.filterSource (f: type: type == "symlink"
                                                 || type == "directory"
@@ -52,9 +53,60 @@ in {
       withHoogle = false;
     };
 
-    haskellToolsEnv = super.buildEnv {
-      name = "haskellTools";
+    haskell-tools-env = super.buildEnv {
+      name = "haskell-tools";
       paths = haskellTools haskellPackages;
+    };
+
+    jb55-tools-env = pkgs.buildEnv {
+      name = "jb55-tools";
+      paths = with jb55pkgs; [
+        csv-delim
+        csv-scripts
+        dbopen
+        extname
+        mandown
+        snap
+        sharefile
+        samp
+      ];
+    };
+ 
+    jvm-tools-env = pkgs.buildEnv {
+      name = "jvm-tools";
+      paths = with pkgs; [
+        gradle
+        maven
+        oraclejdk
+      ];
+    };
+
+    gaming-env = pkgs.buildEnv {
+      name = "gaming";
+      paths = with pkgs; [
+        steam
+      ];
+    };
+
+    git-tools-env = pkgs.buildEnv {
+      name = "git-tools";
+      paths = with pkgs; [
+        diffstat
+        diffutils
+        gist
+        # git-lfs
+        gitAndTools.diff-so-fancy
+        gitAndTools.git-imerge
+        gitAndTools.git-extras
+        gitAndTools.gitFull
+        gitAndTools.hub
+        gitAndTools.tig
+        #haskPkgs.git-all
+        #haskPkgs.git-monitor
+        github-release
+        patch
+        patchutils
+      ];
     };
 
     haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
