@@ -81,6 +81,22 @@ in {
       ];
     };
 
+    mk-rust-env = name: rustVer: pkgs.buildEnv {
+      name = "rust-dev-${name}";
+      paths = with pkgs; with rustVer; [
+        clang
+        rustracer
+        rustracerd
+        cargo
+        rustc
+        rustfmt
+        rust-bindgen
+      ];
+    };
+
+    rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustNightly;
+    rust-dev-env-beta = mk-rust-env "beta" pkgs.rustBeta;
+
     gaming-env = pkgs.buildEnv {
       name = "gaming";
       paths = with pkgs; [
