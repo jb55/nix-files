@@ -10,7 +10,7 @@ let sites = [ ];
       host = "git.zero.jb55.com";
     };
     razornetExtra = {
-      ztip = "10.144.172.226";
+      ztip = "172.29.172.226";
       git = {
         projectroot = "/var/razorgit";
       };
