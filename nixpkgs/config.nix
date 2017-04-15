@@ -87,15 +87,14 @@ in {
         clang
         rustracer
         rustracerd
-        cargo
-        rustc
+        rust
         rustfmt
         rust-bindgen
       ];
     };
 
-    rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustNightly;
-    rust-dev-env-beta = mk-rust-env "beta" pkgs.rustBeta;
+    rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustChannels.nightly;
+    rust-dev-env-beta = mk-rust-env "beta" pkgs.rustChannels.beta;
 
     gaming-env = pkgs.buildEnv {
       name = "gaming";
