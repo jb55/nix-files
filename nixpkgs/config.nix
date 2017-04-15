@@ -88,6 +88,7 @@ in {
         rustracer
         rustracerd
         rust
+        cargo-edit
         rustfmt
         rust-bindgen
       ];
