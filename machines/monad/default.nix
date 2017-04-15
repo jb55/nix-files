@@ -143,6 +143,15 @@ in
   };
   systemd.services.ds4ctl.enable = true;
 
+  networking.defaultMailServer = {
+    directDelivery = true;
+    hostName = "smtp.jb55.com:587";
+    domain = "jb55.com";
+    useSTARTTLS = true;
+    authUser = "jb55@jb55.com";
+    authPass = extra.private.mailpass;
+  };
+
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
     enable = true;
