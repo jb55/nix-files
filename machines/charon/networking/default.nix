@@ -5,7 +5,7 @@ let
   '';
 in
 {
-  networking.firewall.allowedTCPPorts = [ 22 443 80 ];
+  networking.firewall.allowedTCPPorts = [ 22 443 80 5222 5269 ];
   networking.firewall.trustedInterfaces = ["zt0"];
 
   networking.firewall.extraCommands = ''

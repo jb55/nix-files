@@ -25,8 +25,12 @@ in
     #(import ./vidstats extra)
   ];
 
+  users.extraGroups.jb55cert.members = [ "prosody" ];
+
   security.acme.certs."jb55.com" = {
     webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
     email = "bill@casarin.me";
   };
 
@@ -52,6 +56,26 @@ in
     };
 
     sieves = builtins.readFile ./dovecot/filters.sieve;
+  };
+
+  services.prosody.enable = true;
+  services.prosody.admins = [ "jb55@jb55.com" ];
+  services.prosody.allowRegistration = false;
+  #services.prosody.extraModules = [ "limit_auth" ];
+  services.prosody.extraConfig = ''
+    c2s_require_encryption = true
+  '';
+  services.prosody.ssl = {
+    cert = "${config.security.acme.directory}/jb55.com/fullchain.pem";
+    key = "${config.security.acme.directory}/jb55.com/key.pem";
+  };
+  services.prosody.virtualHosts.jb55 = {
+    enabled = true;
+    domain = "jb55.com";
+    ssl = {
+      cert = "${config.security.acme.directory}/jb55.com/fullchain.pem";
+      key = "${config.security.acme.directory}/jb55.com/key.pem";
+    };
   };
 
   services.postgresql = {
