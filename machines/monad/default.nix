@@ -75,6 +75,7 @@ in
   services.nix-serve.enable = true;
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
+
   services.nginx.httpConfig = lib.mkIf (config.services.nginx.enable && config.services.nix-serve.enable) ''
     server {
       listen ${extras.nix-serve.bindAddress}:80;
@@ -107,6 +108,7 @@ in
   };
 
   systemd.services.ds4ctl = {
+    enable = true;
     description = "Dim ds4 leds based on power";
 
     wantedBy = [ "multi-user.target" ];
@@ -125,16 +127,6 @@ in
     enable-led = true;
     led = "input5::numlock";
   };
-  systemd.services.ds4ctl.enable = true;
-
-  networking.defaultMailServer = {
-    directDelivery = true;
-    hostName = "smtp.jb55.com:587";
-    domain = "jb55.com";
-    useSTARTTLS = true;
-    authUser = "jb55@jb55.com";
-    authPass = extra.private.mailpass;
-  };
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
@@ -150,15 +142,6 @@ in
     extraConfig = ''
       listen_addresses = '172.24.172.226,192.168.86.100,127.0.0.1'
     '';
-  };
-
-  networking.defaultMailServer = {
-    directDelivery = true;
-    hostName = "smtp.jb55.com:587";
-    domain = "jb55.com";
-    useSTARTTLS = true;
-    authUser = "jb55@jb55.com";
-    authPass = extra.private.mailpass;
   };
 
 }

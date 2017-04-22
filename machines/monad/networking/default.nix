@@ -4,6 +4,8 @@ let
   chromecastIP = "192.168.86.190";
   iptables = "iptables -A nixos-fw";
   vpn = {
+    name = "pia";
+    table = "300";
     crt = pkgs.fetchurl {
       url = "https://jb55.com/s/0d1e6ada6bf5ed89.crt";
       sha256 = "920ce965329a8eee3b520aefed44db21c02b730e7d1b7bd540aa1c98d4caae44";
@@ -16,6 +18,12 @@ let
       ${extra.private.vpncred.user}
       ${extra.private.vpncred.pass}
     '';
+    routeup = writeBash "openvpn-pia-routeup" ''
+      ${pkgs.iproute}/bin/ip route add default via $route_vpn_gateway dev $dev metric 1 table ${vpn.table}
+      exit 0
+    '';
+#    up = writeBash "openvpn-pia-preup" config.services.openvpn.servers.pia.up;
+#    down = writeBash "openvpn-pia-stop" config.services.openvpn.servers.pia.down;
   };
   openTCP = dev: port: ''
     ip46tables -A nixos-fw -i ${dev} -p tcp --dport ${toString port} -j nixos-fw-accept
@@ -23,8 +31,8 @@ let
 
   piaConfig = pkgs.writeText "pia-openvpn.conf" config.services.openvpn.servers.pia.config;
 
-  writeSh = fname: body: pkgs.writeScript fname ''
-    #! /bin/sh
+  writeBash = fname: body: pkgs.writeScript fname ''
+    #! ${pkgs.bash}/bin/bash
     ${body}
   '';
 in
@@ -34,23 +42,16 @@ in
   networking.firewall.extraCommands = ''
     ${openTCP "zt2" 80}
     ${openTCP "zt1" 80}
+    ${iptables} -s 192.168.86.0/24 -p tcp --dport 80 -j nixos-fw-accept
     ${iptables} -p udp -s ${chromecastIP} -j nixos-fw-accept
     ${iptables} -p tcp -s ${chromecastIP} -j nixos-fw-accept
   '';
 
-  systemd.services.openvpn-pia.serviceConfig = lib.mkForce {
-    ExecStart = writeSh "openvpn-pia-start" ''
-      ${pkgs.iproute}/bin/ip netns exec pia ${pkgs.openvpn}/sbin/openvpn --config ${piaConfig}
-    '';
-    ExecStartPre = writeSh "openvpn-pia-up" config.services.openvpn.servers.pia.up;
-    ExecStop = writeSh "openvpn-pia-down" config.services.openvpn.servers.pia.down ;
-    Type = "simple";
-    Restart = "always";
-  };
-
+  users.extraGroups.vpn-pia.members = [ "jb55" "transmission" ];
+  systemd.services.openvpn-pia.path = [ pkgs.libcgroup ];
   services.openvpn.servers = {
-    pia = rec {
-      autoStart = false;
+    pia = {
+      autoStart = true;
 
       config = ''
         auth sha1
@@ -72,44 +73,57 @@ in
         reneg-sec 0
         resolv-retry infinite
         tls-client
+        route-noexec
         verb 1
+        route-up ${vpn.routeup}
       '';
 
       up = ''
-        ip netns add pia
-        ip netns exec pia ip addr add 127.0.0.1/8 dev lo
-        ip netns exec pia ip link set lo up
-
-        ip link add vpn0 type veth peer name vpn1
-        ip link set vpn0 up
-        ip link set vpn1 netns pia up
-        ip addr add 10.200.200.1/24 dev vpn0
-        ip netns exec pia ip addr add 10.200.200.2/24 dev vpn1
-        ip netns exec pia ip route add default via 10.200.200.1 dev vpn1
-
-        iptables -A INPUT \! -i vpn0 -s 10.200.200.0/24 -j DROP
-        iptables -t nat -A POSTROUTING -s 10.200.200.0/24 -o en+ -j MASQUERADE
-
+        # enable ip forwarding
         echo 1 > /proc/sys/net/ipv4/ip_forward
 
-        mkdir -p /etc/netns/pia
-        echo 'nameserver 8.8.8.8' > /etc/netns/pia/resolv.conf
+        # create cgroup for 3rd party VPN (can change 'vpn' to your name of choice)
+        mkdir -p /sys/fs/cgroup/net_cls/${vpn.name}
 
-        ip netns exec pia ${lib.getBin pkgs.fping}/bin/fping -q www.google.ca
+        # give it an arbitrary id
+        echo 11 > /sys/fs/cgroup/net_cls/${vpn.name}/net_cls.classid
+
+        # grant a non-root user access
+        cgcreate -t jb55:vpn-pia -a jb55:vpn-pia -g net_cls:${vpn.name}
+
+        # mangle packets in cgroup with a mark
+        iptables -t mangle -A OUTPUT -m cgroup --cgroup 11 -j MARK --set-mark 11
+
+        # NAT packets in cgroup through VPN tun interface
+        iptables -t nat -A POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE
+
+        # redirect DNS queries to port of second instance, more on this later
+        iptables -t nat -A OUTPUT -m cgroup --cgroup 11 -p tcp --dport 53 -j REDIRECT --to-ports 5354
+        iptables -t nat -A OUTPUT -m cgroup --cgroup 11 -p udp --dport 53 -j REDIRECT --to-ports 5354
+
+        # create separate routing table
+        ip rule add fwmark 11 table ${vpn.table}
+
+        # add fallback route that blocks traffic, should the VPN go down
+        ip route add blackhole default metric 2 table ${vpn.table}
+
+        # disable reverse path filtering for all interfaces
+        for i in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $i; done
       '';
 
       down = ''
-        rm -rf /etc/netns/pia
-
         echo 0 > /proc/sys/net/ipv4/ip_forward
 
-        iptables -D INPUT \! -i vpn0 -s 10.200.200.0/24 -j DROP
-        iptables -t nat -D POSTROUTING -s 10.200.200.0/24 -o en+ -j MASQUERADE
+        cgdelete -g net_cls:${vpn.name}
 
-        ip netns delete pia
+        # not sure if cgdelete does this...
+        rm -rf /sys/fs/cgroup/net_cls/${vpn.name}
       '';
     };
   };
+
+  networking.firewall.checkReversePath = false;
+  networking.firewall.logReversePathDrops = true;
 
   services.transmission = {
     enable = true;
@@ -117,23 +131,83 @@ in
       download-dir = "/sand/torrents/downloads";
       incomplete-dir = "/sand/torrents/.incomplete";
       incomplete-dir-enable = true;
-      rpc-whitelist = "10.200.200.1";
+      rpc-whitelist = "127.0.0.1";
     };
 
     port = 14325;
   };
 
-  systemd.services.transmission.after = [ "openvpn.service" ];
   systemd.services.transmission.serviceConfig.User = lib.mkForce "root";
   systemd.services.transmission.serviceConfig.ExecStart = lib.mkForce (
-    writeSh "start-transmission-under-vpn" ''
-      ${pkgs.iproute}/bin/ip netns exec pia \
+    writeBash "start-transmission-under-vpn" ''
+      ${pkgs.libcgroup}/bin/cgexec -g net_cls:pia \
         ${pkgs.sudo}/bin/sudo -u transmission \
           ${pkgs.transmission}/bin/transmission-daemon \
             -f \
             --port ${toString config.services.transmission.port};
     ''
   );
+
+  services.plex = {
+    enable = true;
+    group = "transmission";
+    openFirewall = true;
+  };
+
+  services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
+    server {
+      listen 80;
+
+      # server names for this server.
+      # any requests that come in that match any these names will use the proxy.
+      server_name plex.jb55.com;
+
+      # this is where everything cool happens (you probably don't need to change anything here):
+      location / {
+        # if a request to / comes in, 301 redirect to the main plex page.
+        # but only if it doesn't contain the X-Plex-Device-Name header
+        # this fixes a bug where you get permission issues when accessing the web dashboard
+
+        if ($http_x_plex_device_name = \'\') {
+          rewrite ^/$ http://$http_host/web/index.html;
+        }
+
+        # set some headers and proxy stuff.
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+
+        # include Host header
+        proxy_set_header Host $http_host;
+
+        # proxy request to plex server
+        proxy_pass http://127.0.0.1:32400;
+      }
+    }
+
+    server {
+      listen 80;
+      server_name torrents.jb55.com;
+
+      location / {
+        proxy_read_timeout 300;
+        proxy_pass_header  X-Transmission-Session-Id;
+        proxy_set_header   X-Forwarded-Host   $host;
+        proxy_set_header   X-Forwarded-Server $host;
+        proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_pass         http://127.0.0.1:${toString config.services.transmission.port}/transmission/web/;
+      }
+
+      location /rpc {
+        proxy_pass         http://127.0.0.1:${toString config.services.transmission.port}/transmission/rpc;
+      }
+
+      location /upload {
+        proxy_pass         http://127.0.0.1:${toString config.services.transmission.port}/transmission/upload;
+      }
+    }
+  '';
+
 
   networking.defaultMailServer = {
     directDelivery = true;

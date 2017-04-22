@@ -9,7 +9,7 @@ let
   dotfiles = pkgs.jb55-dotfiles;
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
-    md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+    sha256 = "e08d82e184f34e6a6596faa2932ea9699da9b9a4fbbd7356c344e9fb90473482";
   };
   impureSessionCommands = ''
     #!${pkgs.bash}/bin/bash
