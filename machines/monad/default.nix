@@ -1,32 +1,18 @@
 extra:
 { config, lib, pkgs, ... }:
-let
-  chromecastIP = "192.168.86.190";
-  extras = (rec { ztip = "172.24.172.226";
+let extras = (rec { ztip = "172.24.172.226";
                     nix-serve = {
                       port = 10845;
                       bindAddress = ztip;
                     };
                 }) // extra;
-  iptables = "iptables -A nixos-fw";
-  openTCP = dev: port: ''
-    ip46tables -A nixos-fw -i ${dev} -p tcp --dport ${toString port} -j nixos-fw-accept
-  '';
 in
 {
   imports = [
     ./hardware
+    (import ./networking extra)
     (import ./nginx extra)
   ];
-
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-
-  networking.firewall.extraCommands = ''
-    ${openTCP "zt2" 80}
-    ${openTCP "zt1" 80}
-    ${iptables} -p udp -s ${chromecastIP} -j nixos-fw-accept
-    ${iptables} -p tcp -s ${chromecastIP} -j nixos-fw-accept
-  '';
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
@@ -34,8 +20,6 @@ in
   programs.mosh.enable = true;
 
   services.mongodb.enable = true;
-  services.mysql.enable = false;
-  services.mysql.package = pkgs.mariadb;
   services.trezord.enable = true;
   services.redis.enable = true;
   services.tor.enable = true;
@@ -166,6 +150,15 @@ in
     extraConfig = ''
       listen_addresses = '172.24.172.226,192.168.86.100,127.0.0.1'
     '';
+  };
+
+  networking.defaultMailServer = {
+    directDelivery = true;
+    hostName = "smtp.jb55.com:587";
+    domain = "jb55.com";
+    useSTARTTLS = true;
+    authUser = "jb55@jb55.com";
+    authPass = extra.private.mailpass;
   };
 
 }
