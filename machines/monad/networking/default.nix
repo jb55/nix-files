@@ -97,10 +97,6 @@ in
         # NAT packets in cgroup through VPN tun interface
         iptables -t nat -A POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE
 
-        # redirect DNS queries to port of second instance, more on this later
-        iptables -t nat -A OUTPUT -m cgroup --cgroup 11 -p tcp --dport 53 -j REDIRECT --to-ports 5354
-        iptables -t nat -A OUTPUT -m cgroup --cgroup 11 -p udp --dport 53 -j REDIRECT --to-ports 5354
-
         # create separate routing table
         ip rule add fwmark 11 table ${vpn.table}
 
