@@ -283,6 +283,7 @@ in
           ${mailbox "Lists.craigslist"}
           ${mailbox "Lists.bitcoin"}
           ${mailbox "Lists.elm"}
+          ${mailbox "Lists.emacs"}
           ${mailbox "Lists.haskell"}
           ${mailbox "Lists.nix"}
           ${mailbox "Lists.nixpkgs"}

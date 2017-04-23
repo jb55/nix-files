@@ -25,6 +25,10 @@ if header :contains "list-id" "lobsters-izs7WbyfQp@lobste.rs" {
   fileinto "Lists.lobsters";
 }
 
+if header :contains "list-id" "emacs-devel@gnu.org" {
+  fileinto "Lists.emacs";
+}
+
 if header :contains "to" "cryptography@metzdowd.com" {
   fileinto "Lists";
 }
