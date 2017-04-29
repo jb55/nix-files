@@ -141,7 +141,7 @@ in
   systemd.services.transmission.serviceConfig.User = lib.mkForce "root";
   systemd.services.transmission.serviceConfig.ExecStart = lib.mkForce (
     writeBash "start-transmission-under-vpn" ''
-      ${pkgs.libcgroup}/bin/cgexec -g net_cls:pia \
+      ${pkgs.libcgroup}/bin/cgexec --sticky -g net_cls:pia \
         ${pkgs.sudo}/bin/sudo -u transmission \
           ${pkgs.transmission}/bin/transmission-daemon \
             -f \
