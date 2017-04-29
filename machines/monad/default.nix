@@ -133,17 +133,16 @@ in
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
-    enable = true;
+    enable = false;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
       local  all all                     trust
       host   all all  172.24.172.226/16  trust
-      host   all all  192.168.86.100/16  trust
       host   all all  127.0.0.1/16       trust
     '';
     extraConfig = ''
-      listen_addresses = '172.24.172.226,192.168.86.100,127.0.0.1'
+      listen_addresses = '172.24.172.226,127.0.0.1'
     '';
   };
 
