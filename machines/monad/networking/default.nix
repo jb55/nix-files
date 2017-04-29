@@ -3,6 +3,7 @@ extra:
 let
   chromecastIP = "192.168.86.190";
   iptables = "iptables -A nixos-fw";
+  ipr = "${pkgs.iproute}/bin/ip";
   vpn = {
     name = "pia";
     table = "300";
@@ -45,7 +46,21 @@ in
     ${iptables} -s 192.168.86.0/24 -p tcp --dport 80 -j nixos-fw-accept
     ${iptables} -p udp -s ${chromecastIP} -j nixos-fw-accept
     ${iptables} -p tcp -s ${chromecastIP} -j nixos-fw-accept
-  '';
+  ''
+  # openvpn-pia stuff, we only want to do this once
+  + (if config.services.openvpn.servers.pia != null then ''
+    # mangle packets in cgroup with a mark
+    iptables -t mangle -A OUTPUT -m cgroup --cgroup 11 -j MARK --set-mark 11
+
+    # NAT packets in cgroup through VPN tun interface
+    iptables -t nat -A POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE
+
+    # create separate routing table
+    ${ipr} rule add fwmark 11 table ${vpn.table}
+
+    # add fallback route that blocks traffic, should the VPN go down
+    ${ipr} route add blackhole default metric 2 table ${vpn.table}
+  '' else "");
 
   users.extraGroups.vpn-pia.members = [ "jb55" "transmission" ];
   systemd.services.openvpn-pia.path = [ pkgs.libcgroup ];
@@ -90,18 +105,6 @@ in
 
         # grant a non-root user access
         cgcreate -t jb55:vpn-pia -a jb55:vpn-pia -g net_cls:${vpn.name}
-
-        # mangle packets in cgroup with a mark
-        iptables -t mangle -A OUTPUT -m cgroup --cgroup 11 -j MARK --set-mark 11
-
-        # NAT packets in cgroup through VPN tun interface
-        iptables -t nat -A POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE
-
-        # create separate routing table
-        ip rule add fwmark 11 table ${vpn.table}
-
-        # add fallback route that blocks traffic, should the VPN go down
-        ip route add blackhole default metric 2 table ${vpn.table}
 
         # disable reverse path filtering for all interfaces
         for i in /proc/sys/net/ipv4/conf\/*/rp_filter; do echo 0 > $i; done
