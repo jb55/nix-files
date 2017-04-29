@@ -19,8 +19,6 @@ in {
     binutils
     file
     fzf
-    gist
-    gitAndTools.git-extras
     gitFull
     gnupg
     htop
