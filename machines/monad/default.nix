@@ -16,13 +16,16 @@ in
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
+  users.extraGroups.tor.members = [ "jb55" ];
+  users.extraGroups.nginx.members = [ "jb55" ];
 
-  programs.mosh.enable = true;
+  programs.mosh.enable = false;
+  services.trezord.enable = false;
+  services.redis.enable = false;
 
   services.mongodb.enable = true;
-  services.trezord.enable = true;
-  services.redis.enable = true;
   services.tor.enable = true;
+  services.tor.extraConfig = extras.private.tor.extraConfig;
   services.fcgiwrap.enable = true;
 
   services.udev.extraRules = ''
@@ -76,7 +79,7 @@ in
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
 
-  services.nginx.httpConfig = lib.mkIf (config.services.nginx.enable && config.services.nix-serve.enable) ''
+  services.nginx.httpConfig = (if (config.services.nginx.enable && config.services.nix-serve.enable) then ''
     server {
       listen ${extras.nix-serve.bindAddress}:80;
       server_name cache.monad.jb55.com;
@@ -91,7 +94,7 @@ in
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
       }
     }
-  '';
+  '' else "") + extra.private.tor.nginx;
 
   systemd.user.services.muchsync = {
     description = "muchsync - notmuch email sync with charon";
