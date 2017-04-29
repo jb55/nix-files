@@ -26,7 +26,7 @@
     [ { device = "/dev/disk/by-uuid/d4e4ae51-9179-439d-925b-8df42dd1bfc5"; }
     ];
 
-  hardware.enableAllFirmware = false;
+  hardware.enableAllFirmware = true;
 
   boot.loader.grub.device = "/dev/sda";
 }
