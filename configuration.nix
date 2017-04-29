@@ -22,9 +22,14 @@ let machine = "monad";
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
-    theme = {
+    isDark = true;
+    theme = if isDark then {
       package = pkgs.theme-vertex;
       name = "Vertex-Dark";
+    }
+    else {
+      package = pkgs.arc-theme;
+      name = "Arc";
     };
     icon-theme = {
       package = pkgs.numix-icon-theme;
