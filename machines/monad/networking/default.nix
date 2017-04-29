@@ -104,7 +104,7 @@ in
         ip route add blackhole default metric 2 table ${vpn.table}
 
         # disable reverse path filtering for all interfaces
-        for i in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $i; done
+        for i in /proc/sys/net/ipv4/conf\/*/rp_filter; do echo 0 > $i; done
       '';
 
       down = ''
