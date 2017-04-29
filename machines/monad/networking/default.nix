@@ -133,6 +133,7 @@ in
     port = 14325;
   };
 
+  systemd.services.transmission.requires = [ "openvpn-pia.service" ];
   systemd.services.transmission.serviceConfig.User = lib.mkForce "root";
   systemd.services.transmission.serviceConfig.ExecStart = lib.mkForce (
     writeBash "start-transmission-under-vpn" ''
