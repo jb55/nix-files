@@ -110,20 +110,20 @@ in
     };
   };
 
-  systemd.services.ds4ctl = {
-    enable = true;
-    description = "Dim ds4 leds based on power";
-
-    wantedBy = [ "multi-user.target" ];
-    after = [ "systemd-udev-settle.service" ];
-
-    startAt = "*:*:0/15";
-
-    serviceConfig.Type = "oneshot";
-    serviceConfig.ExecStart = ''
-      ${pkgs.ds4ctl}/bin/ds4ctl
-    '';
-  };
+#  systemd.services.ds4ctl = {
+#    enable = false;
+#    description = "Dim ds4 leds based on power";
+#
+#    wantedBy = [ "multi-user.target" ];
+#    after = [ "systemd-udev-settle.service" ];
+#
+#    startAt = "*:*:0/15";
+#
+#    serviceConfig.Type = "oneshot";
+#    serviceConfig.ExecStart = ''
+#      ${pkgs.ds4ctl}/bin/ds4ctl
+#    '';
+#  };
 
   services.footswitch = {
     enable = true;
