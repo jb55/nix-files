@@ -142,10 +142,9 @@ in
   systemd.services.transmission.serviceConfig.ExecStart = lib.mkForce (
     writeBash "start-transmission-under-vpn" ''
       ${pkgs.libcgroup}/bin/cgexec --sticky -g net_cls:pia \
-        ${pkgs.sudo}/bin/sudo -u transmission \
-          ${pkgs.transmission}/bin/transmission-daemon \
-            -f \
-            --port ${toString config.services.transmission.port};
+        ${pkgs.transmission}/bin/transmission-daemon \
+          -f \
+          --port ${toString config.services.transmission.port};
     ''
   );
 
