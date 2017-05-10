@@ -200,6 +200,8 @@ in {
       comonad-transformers
       compact-string-fix
       directory
+      diagrams
+      colour
       dlist
       dlist-instances
       doctest
