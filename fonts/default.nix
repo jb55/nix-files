@@ -23,7 +23,7 @@ in
     enableGhostscriptFonts = true;
     enableCoreFonts = true;
     fontconfig.defaultFonts.serif = [ "Noto Serif" ];
-    fontconfig.defaultFonts.monospace  = [ "Noto Mono" ];
+    fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     fonts = with pkgs; [
       aldrich
