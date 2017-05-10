@@ -12,8 +12,13 @@
   services.redshift = {
     enable = true;
     temperature.day = 5700;
-    temperature.night = 2700;
+    temperature.night = 3700;
     # gamma=0.8
+
+    brightness = {
+      day = "1.0";
+      night = "0.5";
+    };
 
     latitude="49.270186";
     longitude="-123.109353";
