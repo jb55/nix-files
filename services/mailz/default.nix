@@ -222,6 +222,7 @@ in
       };
       extraConfig = ''
         postmaster_address = postmaster@${cfg.domain}
+        mail_attribute_dict = file:/var/spool/mail/%n/dovecot-attributes
 
         service lmtp {
           inet_listener lmtp {
@@ -295,7 +296,15 @@ in
         }
 
         protocol lmtp {
-          mail_plugins = $mail_plugins sieve
+          mail_plugins = $mail_plugins sieve notify push_notification
+        }
+
+        protocol imap {
+          imap_metadata = yes
+        }
+
+        plugin {
+          push_notification_driver = ox:url=http://jb55:nope@monad.jb55.com:80/you-got-mail user_from_metadata
         }
       '';
     };
