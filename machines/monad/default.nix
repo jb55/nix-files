@@ -6,6 +6,19 @@ let extras = (rec { ztip = "172.24.172.226";
                       bindAddress = ztip;
                     };
                 }) // extra;
+    util = extra.util;
+    email-notify = util.writeBash "email-notify-user" ''
+      export HOME=/home/jb55
+      export PATH=${lib.makeBinPath (with pkgs; [ eject libnotify muchsync notmuch openssh ])}:$PATH
+      (
+        flock -x -w 100 200 || exit 1
+
+        muchsync charon
+
+        #DISPLAY=:0 notify-send --category=email "you got mail"
+
+      ) 200>/tmp/email-notify.lock
+    '';
 in
 {
   imports = [
@@ -94,14 +107,16 @@ in
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
       }
     }
-  '' else "") + extra.private.tor.nginx;
+  '' else "") + extra.private.tor.nginx + ''
+    server {
+      listen ${extras.ztip};
+      server_name monad.jb55.com;
 
-  systemd.user.services.muchsync = {
-    description = "muchsync - notmuch email sync with charon";
-    path = with pkgs; [ notmuch openssh ];
-    wantedBy = [ "default.target" ];
-    serviceConfig.ExecStart = "${pkgs.muchsync}/bin/muchsync charon";
-  };
+      location /you-got-mail {
+        content_by_lua 'os.execute("${email-notify} &")';
+      }
+    }
+  '';
 
   systemd.user.timers.muchsync = {
     wantedBy = [ "timers.target" ];

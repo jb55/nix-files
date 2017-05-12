@@ -40,6 +40,12 @@ in {
   services.nginx = {
     enable = true;
 
+    package = pkgs.nginx.override {
+      modules = with pkgs.nginxModules; [ lua ];
+    };
+
+    user = "jb55";
+
     config = ''
       worker_processes 2;
 

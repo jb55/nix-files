@@ -4,6 +4,7 @@ let
   chromecastIP = "192.168.86.190";
   iptables = "iptables -A nixos-fw";
   ipr = "${pkgs.iproute}/bin/ip";
+  writeBash = extra.util.writeBash;
   vpn = {
     name = "pia";
     table = "300";
@@ -32,10 +33,6 @@ let
 
   piaConfig = pkgs.writeText "pia-openvpn.conf" config.services.openvpn.servers.pia.config;
 
-  writeBash = fname: body: pkgs.writeScript fname ''
-    #! ${pkgs.bash}/bin/bash
-    ${body}
-  '';
 in
 {
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
