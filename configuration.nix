@@ -12,6 +12,9 @@ let machine = "charon";
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = "";
     };
+    caches = if machine == "archer"
+               then []
+               else [ "http://cache.nixos.org" "http://cache.monad.jb55.com" ];
     extra = {
       inherit private;
       ztip = "172.24.206.82";
@@ -68,10 +71,15 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
+
+  nix.binaryCaches = caches;
+  nix.trustedBinaryCaches = caches;
+  nix.requireSignedBinaryCaches = false;
 
   users.extraUsers.jb55 = user;
-  users.extraGroups.docker.members = [ "jb55" ];
+  #users.extraGroups.docker.members = [ "jb55" ];
+  users.extraGroups.vmail.members = [ "jb55" ];
 
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
