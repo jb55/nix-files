@@ -285,6 +285,7 @@ in
           ${mailbox "Lists.bitcoin"}
           ${mailbox "Lists.elm"}
           ${mailbox "Lists.emacs"}
+          ${mailbox "Lists.guix"}
           ${mailbox "Lists.haskell"}
           ${mailbox "Lists.nix"}
           ${mailbox "Lists.nixpkgs"}
@@ -304,7 +305,7 @@ in
         }
 
         plugin {
-          push_notification_driver = ox:url=http://jb55:nope@monad.jb55.com:80/you-got-mail user_from_metadata
+          push_notification_driver = ox:url=http://monad.jb55.com/you-got-mail user_from_metadata
         }
       '';
     };

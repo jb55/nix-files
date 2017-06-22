@@ -25,8 +25,12 @@ if header :contains "list-id" "lobsters-izs7WbyfQp@lobste.rs" {
   fileinto "Lists.lobsters";
 }
 
-if header :contains "list-id" "emacs-devel@gnu.org" {
+if header :contains "list-id" "emacs-devel.gnu.org" {
   fileinto "Lists.emacs";
+}
+
+if header :contains "list-id" "guix-devel.gnu.org" {
+  fileinto "Lists.guix";
 }
 
 if header :contains "to" "cryptography@metzdowd.com" {
@@ -155,12 +159,12 @@ if header :contains "list-id" "ndn-interest.lists.cs.ucla.edu" {
 }
 
 # rule:[ats]
-if allof (header :contains "list-id" "ats-lang-users@googlegroups.com") {
+if allof (header :contains "list-id" "ats-lang-users.googlegroups.com") {
 	fileinto "Lists.ats";
 }
 
 # rule:[shen]
-if allof (header :contains "list-id" "qilang@googlegroups.com") {
+if allof (header :contains "list-id" "qilang.googlegroups.com") {
 	fileinto "Lists.shen";
 }
 
@@ -174,5 +178,4 @@ if allof (header :contains "from" "reply.craigslist.org") {
 if allof (header :contains "from" "noreply@md.getsentry.com") {
 	fileinto "Alerts";
 }
-
 
