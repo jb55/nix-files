@@ -4,8 +4,8 @@ let port = "1080";
     sname = "sheetzen.com";
     sheetzen = (import (pkgs.fetchgit {
       url    = "http://git.zero.jb55.com/socialtracker";
-      rev    = "cb98961832bf02c3bd489c9a7014cf5ae1b2998a";
-      sha256 = "0j3zppz755flb7rm57fl0bmkrhpzbh4vfba00c617i7gvs39d6m8";
+      rev    = "3fe106486298a3339d5bd418f01899b62b90646a";
+      sha256 = "00rha983ym6p0bsiz0wsxv750ppgcalvpas6wx790jp9awn5zxlb";
     }) {});
 in
 {
