@@ -59,8 +59,8 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      80 default_server;
-        server_name _;
+        listen      ${extra.ztip}:80;
+        server_name archer.zero.monster.cat;
 
         root /www/public;
         index index.html index.htm;
