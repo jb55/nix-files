@@ -15,6 +15,7 @@ let machine = "archer";
     extra = {
       inherit private;
       git-server = import ./misc/git-server.nix;
+      util       = import ./misc/util.nix { inherit pkgs; };
     };
     caches = if machine == "archer"
                then []
@@ -22,9 +23,14 @@ let machine = "archer";
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
-    theme = {
+    isDark = false;
+    theme = if isDark then {
       package = pkgs.theme-vertex;
       name = "Vertex-Dark";
+    }
+    else {
+      package = pkgs.arc-theme;
+      name = "Arc";
     };
     icon-theme = {
       package = pkgs.numix-icon-theme;
@@ -35,7 +41,7 @@ let machine = "archer";
         name = "jb55";
         group = "users";
         uid = 1000;
-        extraGroups = [ "wheel" ];
+        extraGroups = [ "wheel" "dialout" ];
         createHome = true;
         openssh.authorizedKeys.keys = [
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAvMdnEEAd/ZQM+pYp6ZYG/1NPE/HSwIKoec0/QgGy4UlO0EvpWWhxPaV0HlNUFfwiHE0I2TwHc+KOKcG9jcbLAjCk5rvqU7K8UeZ0v/J83bQh78dr4le09WLyhczamJN0EkNddpCyUqIbH0q3ISGPmTiW4oQniejtkdJPn2bBwb3Za8jLzlh2UZ/ZJXhKvcGjQ/M1+fBmFUwCp5Lpvg0XYXrmp9mxAaO+fxY32EGItXcjYM41xr/gAcpmzL5rNQ9a9YBYFn2VzlpL+H7319tgdZa4L57S49FPQ748paTPDDqUzHtQD5FEZXe7DZZPZViRsPc370km/5yIgsEhMPKr jb55"
@@ -58,11 +64,16 @@ in {
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
       (import ./timers/sync-ical2org.nix home)
-      (import ./services/desktop { inherit userConfig theme icon-theme; })
+      (import ./services/desktop (with extra; { inherit util userConfig theme icon-theme; }))
     ] else []);
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
+
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+    DefaultTimeoutStartSec=20s
+  '';
 
   programs.ssh.startAgent = true;
 
@@ -71,6 +82,7 @@ in {
   nixpkgs.config = nixpkgsConfig;
 
   nix.binaryCaches = caches;
+  nix.useSandbox = true;
   nix.trustedBinaryCaches = caches;
 
   virtualisation.docker.enable = false;

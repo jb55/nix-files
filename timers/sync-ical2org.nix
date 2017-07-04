@@ -23,6 +23,9 @@ in {
           ical = urlopen(link).read()
           fname = os.path.join(caldir, name + ".org")
           org = open(fname, "wb")
+          icalfd = open(os.path.join(caldir, name + ".ical"), "wb")
+          icalfd.write(ical)
+          icalfd.close()
           proc = subprocess.Popen("${pkgs.ical2org}/bin/ical2org",
                                   close_fds=True,
                                   stdin=subprocess.PIPE,

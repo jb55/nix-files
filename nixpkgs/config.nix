@@ -1,6 +1,7 @@
 { pkgs }:
 let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
+    jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
     callPackage = pkgs.callPackage;
     regularFiles = builtins.filterSource (f: type: type == "symlink"
                                                 || type == "directory"
@@ -17,19 +18,34 @@ in {
   };
 
   chromium = {
-    enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+    enablePepperFlash = false; # Chromium's non-NSAPI alternative to Adobe Flash
     enablePepperPDF = false;
   };
 
   packageOverrides = super: rec {
+    # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
+    emacs = super.emacsWithPackages (ep: with ep; [
+      notmuch
+      pkgs.urweb
+    ]);
+
     bluez = pkgs.bluez5;
+
+    # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
 
     haskellPackages = super.haskellPackages.override {
       overrides = haskellOverrides pkgs;
     };
 
     pidgin-with-plugins = super.pidgin-with-plugins.override {
-      plugins = (with super; [ purple-hangouts pidginotr pidginwindowmerge pidgin-skypeweb pidgin-opensteamworks ]);
+      plugins = (with super; [
+        purple-hangouts
+        pidginotr
+        pidginwindowmerge
+        pidgin-skypeweb
+        pidgin-opensteamworks
+        pidgin-carbons
+      ]);
     };
 
     jb55-dotfiles = regularFiles <dotfiles>;
@@ -50,9 +66,76 @@ in {
       withHoogle = false;
     };
 
-    haskellToolsEnv = super.buildEnv {
-      name = "haskellTools";
+    haskell-tools-env = super.buildEnv {
+      name = "haskell-tools";
       paths = haskellTools haskellPackages;
+    };
+
+    jb55-tools-env = pkgs.buildEnv {
+      name = "jb55-tools";
+      paths = with jb55pkgs; [
+        csv-delim
+        csv-scripts
+        dbopen
+        extname
+        mandown
+        snap
+        sharefile
+        samp
+      ];
+    };
+ 
+    jvm-tools-env = pkgs.buildEnv {
+      name = "jvm-tools";
+      paths = with pkgs; [
+        gradle
+        maven
+        oraclejdk
+      ];
+    };
+
+    mk-rust-env = name: rustVer: pkgs.buildEnv {
+      name = "rust-dev-${name}";
+      paths = with pkgs; with rustVer; [
+        clang
+        rustracer
+        rustracerd
+        rust
+        cargo-edit
+        rustfmt
+        rust-bindgen
+      ];
+    };
+
+    rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustChannels.nightly;
+    rust-dev-env-beta = mk-rust-env "beta" pkgs.rustChannels.beta;
+
+    gaming-env = pkgs.buildEnv {
+      name = "gaming";
+      paths = with pkgs; [
+        steam
+      ];
+    };
+
+    git-tools-env = pkgs.buildEnv {
+      name = "git-tools";
+      paths = with pkgs; [
+        diffstat
+        diffutils
+        gist
+        # git-lfs
+        gitAndTools.diff-so-fancy
+        gitAndTools.git-imerge
+        gitAndTools.git-extras
+        gitAndTools.gitFull
+        gitAndTools.hub
+        gitAndTools.tig
+        #haskPkgs.git-all
+        #haskPkgs.git-monitor
+        github-release
+        patch
+        patchutils
+      ];
     };
 
     haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
@@ -72,7 +155,7 @@ in {
     haskellTools = hp: with hp; [
       #ghc-mod
       #hdevtools
-      #binary-serialise-cbor
+      # binary-serialise-cbor
       alex
       cabal-install
       cabal2nix
@@ -88,16 +171,9 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      Boolean
-      HTTP
-      HUnit
-      MissingH
-      QuickCheck
-      SafeSemaphore
-      Spock
       aeson
-      aeson-qq
       # aeson-applicative
+      aeson-qq
       amazonka
       amazonka-s3
       async
@@ -114,6 +190,7 @@ in {
       blaze-html
       blaze-markup
       blaze-textual
+      Boolean
       # bound
       bson-lens
       cased
@@ -123,16 +200,20 @@ in {
       comonad-transformers
       compact-string-fix
       directory
+      diagrams
+      colour
       dlist
       dlist-instances
       doctest
       either
+      elm-export
       # envy
       exceptions
       failure
       filepath
       fingertree
       foldl
+      formatting
       free
       generics-sop
       gogol
@@ -146,9 +227,11 @@ in {
       hspec
       hspec-expectations
       html
+      HTTP
       http-client
       http-date
       http-types
+      HUnit
       io-memoize
       keys
       # language-bash
@@ -168,14 +251,15 @@ in {
       logict
       mime-mail
       mime-types
+      MissingH
       mmorph
       monad-control
       monad-coroutine
+      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
-      monadloc
       mongoDB
       monoid-extras
       # monstercat-backend
@@ -188,7 +272,7 @@ in {
       parsers
       pcg-random
       persistent
-      persistent-mongoDB
+      #persistent-mongoDB
       persistent-postgresql
       persistent-template
       pipes
@@ -210,11 +294,12 @@ in {
       pipes-text
       pipes-wai
       posix-paths
-      postgresql-simple
       postgresql-binary
+      postgresql-simple
       # postgresql-simple-sop
       pretty-show
       profunctors
+      QuickCheck
       random
       reducers
       reflection
@@ -228,6 +313,7 @@ in {
       retry
       rex
       safe
+      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -236,6 +322,7 @@ in {
       servant-cassava
       servant-client
       servant-docs
+      # servant-elm
       servant-lucid
       servant-server
       # servant-swagger
@@ -245,6 +332,7 @@ in {
       simple-reflect
       speculation
       split
+      Spock
       spoon
       stm
       stm-chans
@@ -273,7 +361,6 @@ in {
       test-framework-hunit
       text
       text-format
-      formatting
       time
       # time-patterns
       time-units

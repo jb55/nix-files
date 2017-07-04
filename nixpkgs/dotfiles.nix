@@ -9,7 +9,7 @@ let
   dotfiles = pkgs.jb55-dotfiles;
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
-    md5 = "04d86f9b50e42d46d566bded9a91ee2c";
+    sha256 = "e08d82e184f34e6a6596faa2932ea9699da9b9a4fbbd7356c344e9fb90473482";
   };
   impureSessionCommands = ''
     #!${pkgs.bash}/bin/bash
@@ -25,6 +25,13 @@ let
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
     ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+    ${pkgs.twmn}/bin/twmnd &
+
+    gpg-connect-agent /bye
+    GPG_TTY=$(tty)
+    export GPG_TTY
+    unset SSH_AGENT_PID
+    export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
   '' + "\n" + impureSessionCommands;
   xinitrc = writeScript "xinitrc" sessionCommands;
   xinitrc-refresh = writeScript "xinitrc-refresh" impureSessionCommands;

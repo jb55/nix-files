@@ -9,7 +9,15 @@ let sites = [ ];
       };
       host = "git.zero.jb55.com";
     };
+    razornetExtra = {
+      ztip = "172.29.172.226";
+      git = {
+        projectroot = "/var/razorgit";
+      };
+      host = "git.razor.jb55.com";
+    };
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
+    razornetGit = extra.git-server { inherit config pkgs; extra = extra // razornetExtra; };
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -31,6 +39,12 @@ in {
 
   services.nginx = {
     enable = true;
+
+    package = pkgs.nginx.override {
+      modules = with pkgs.nginxModules; [ lua ];
+    };
+
+    user = "jb55";
 
     config = ''
       worker_processes 2;
@@ -78,6 +92,8 @@ in {
       }
 
       ${gitCfg}
+
+      ${razornetGit}
     '';
   };
 }
