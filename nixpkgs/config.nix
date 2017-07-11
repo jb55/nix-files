@@ -340,6 +340,7 @@ in {
       streaming
       streaming-bytestring
       streaming-wai
+      streaming-utils
       strict
       stringsearch
       strptime
