@@ -1,5 +1,10 @@
 extra:
 { config, lib, pkgs, ... }:
+let pubkey = pkgs.fetchurl {
+               url = "https://jb55.com/pgp.txt";
+               sha256 = "012910961fb58b886fc44a8ebedba394240be4e17604703f3b094eef86d5aca5";
+             };
+in
 {
   systemd.services.wiki-backup = {
     description = "Wiki backups";
