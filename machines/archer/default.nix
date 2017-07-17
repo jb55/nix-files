@@ -26,23 +26,6 @@ in {
     (import <nixpkgs/nixos/modules/services/misc/gitit.nix>)
   ];
 
-  # systemd.services.postgrest = {
-  #   enable = false;
-  #   description = "PostgREST";
-
-  #   wantedBy = [ "multi-user.target" ];
-  #   after =    [ "postgresql.service" ];
-
-  #   serviceConfig.Type = "simple";
-  #   serviceConfig.ExecStart = ''
-  #     ${pkgs.haskellPackages.postgrest}/bin/postgrest \
-  #       'postgres://pg-dev-zero.monstercat.com/Monstercat' \
-  #       -a jb55 \
-  #       +RTS -N -I2
-  #   '';
-  # };
-
-
   services.printing.drivers = [ pkgs.samsung-unified-linux-driver_4_01_17 ];
   services.mongodb.enable = true;
   services.redis = {
