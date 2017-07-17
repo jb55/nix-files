@@ -11,7 +11,7 @@ let
 in
 {
   # sync ical to org
-  systemd.services.sync-ical2org.enable = true;
+  systemd.services.sync-ical2org.enable = false;
   services.hoogle = {
     enable = true;
     packages = pkgs.myHaskellPackages;

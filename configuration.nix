@@ -63,7 +63,7 @@ in {
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
-      (import ./timers/sync-ical2org.nix home)
+      # (import ./timers/sync-ical2org.nix home)
       (import ./services/desktop (with extra; { inherit util userConfig theme icon-theme; }))
     ] else []);
 
