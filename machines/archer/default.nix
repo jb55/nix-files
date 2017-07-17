@@ -113,6 +113,27 @@ in {
     setSendmail = false;
   };
 
+  systemd.user.services.gmail-notifier = {
+    enable = true;
+    description = "gmail notifier";
+
+    path = [ pkgs.twmn ];
+
+    serviceConfig.Type = "simple";
+    serviceConfig.Restart = "always";
+    serviceConfig.ExecStart =
+      let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
+                     owner = "jb55";
+                     repo = "imap-notify";
+                     rev = "4c75b31a7731417b7fa9b5a41764b0a2f083d564";
+                     sha256 = "0y5jnm2lhn74if04ib0km25w3s189jfddw1vggcxxc949dpx75wq";
+                   }) {};
+          cmd = util.writeBash "notify-cmd" ''
+            twmnc -i new_email -s 32 --pos top_left
+          '';
+      in "${notify}/bin/imap-notify ${private.gmail-user} ${private.gmail-pass} ${cmd}";
+  };
+
   systemd.user.services.mbsync = {
     description = "gmail sync";
 
