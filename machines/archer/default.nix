@@ -117,7 +117,7 @@ in {
     enable = true;
     description = "gmail notifier";
 
-    path = [ pkgs.twmn ];
+    path = with pkgs; [ twmn eject isync notmuch ];
 
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";
@@ -125,26 +125,19 @@ in {
       let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
                      owner = "jb55";
                      repo = "imap-notify";
-                     rev = "4c75b31a7731417b7fa9b5a41764b0a2f083d564";
-                     sha256 = "0y5jnm2lhn74if04ib0km25w3s189jfddw1vggcxxc949dpx75wq";
+                     rev = "34f9b5e611e7f36caf44a6c5db23c707d716e999";
+                     sha256 = "0v4smrzmy9h7wk5kj5n8iqry5xisyvhw7h4ll4lhgazga2mvyj2p";
                    }) {};
           cmd = util.writeBash "notify-cmd" ''
-            twmnc -i new_email -s 32 --pos top_left
+            export HOME=/home/jb55
+            (
+              flock -x -w 100 200 || exit 1
+              mbsync gmail
+              notmuch new
+              twmnc -i new_email -s 32 --pos top_left
+            ) 200>/tmp/email-notify.lock
           '';
       in "${notify}/bin/imap-notify ${private.gmail-user} ${private.gmail-pass} ${cmd}";
-  };
-
-  systemd.user.services.mbsync = {
-    description = "gmail sync";
-
-    path = with pkgs; [ isync notmuch bash ];
-
-    serviceConfig.ExecStart = util.writeBash "gmail-sync" ''
-      mbsync gmail
-      notmuch new
-    '';
-
-    startAt = "*:0/10";
   };
 
   systemd.services.postgresql.after = [ "zerotierone.service" ];
