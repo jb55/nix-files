@@ -119,17 +119,22 @@ in {
 
     path = with pkgs; [ twmn eject isync notmuch ];
 
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";
     serviceConfig.ExecStart =
       let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
                      owner = "jb55";
                      repo = "imap-notify";
-                     rev = "34f9b5e611e7f36caf44a6c5db23c707d716e999";
-                     sha256 = "0v4smrzmy9h7wk5kj5n8iqry5xisyvhw7h4ll4lhgazga2mvyj2p";
+                     rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
+                     sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
                    }) {};
           cmd = util.writeBash "notify-cmd" ''
+            set -e
             export HOME=/home/jb55
+            export DATABASEDIR=$HOME/mail
             (
               flock -x -w 100 200 || exit 1
               mbsync gmail
