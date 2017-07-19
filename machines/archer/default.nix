@@ -6,7 +6,7 @@ let util = extra.util;
                     ztip-internal = "10.144.14.20";
                     nix-serve = {
                       port = 10845;
-                      bindAddress = ztip;
+                      bindAddress = ztip-internal;
                     };
                     import-scripts = (import <monstercatpkgs> { }).import-scripts;
                  }) // extra;
@@ -66,6 +66,21 @@ in {
   users.extraGroups.gitit.members = [ "jb55" ];
 
   services.nginx.httpConfig = ''
+    server {
+      listen 80;
+      server_name nixcache.monstercat.com;
+
+      location / {
+        proxy_pass  http://${extras.nix-serve.bindAddress}:${toString extras.nix-serve.port};
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+
     server {
       listen 80;
       server_name wiki.monstercat.com wiki.monster.cat;

@@ -90,7 +90,6 @@ in {
 
       ${gitCfg}
       ${hoogle}
-      ${nixserve}
     '';
   };
 }
