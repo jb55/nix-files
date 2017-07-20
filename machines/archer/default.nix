@@ -132,7 +132,7 @@ in {
     enable = true;
     description = "gmail notifier";
 
-    path = with pkgs; [ twmn eject isync notmuch ];
+    path = with pkgs; [ twmn eject isync notmuch bash ];
 
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
