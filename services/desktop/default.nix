@@ -11,9 +11,8 @@ let
 in
 {
   # sync ical to org
-  systemd.services.sync-ical2org.enable = true;
   services.hoogle = {
-    enable = true;
+    enable = false;
     packages = pkgs.myHaskellPackages;
     haskellPackages = pkgs.haskellPackages;
   };
@@ -33,47 +32,6 @@ in
     longitude="-123.109353";
   };
 
-  services.autofs = {
-   enable = true;
-    autoMaster =
-      let
-        mapConf = pkgs.writeText "auto" ''
-          kindle    -fstype=vfat,gid=100,noatime,rw,umask=002,user,utf8         :/dev/kindle
-        '';
-      in ''
-        /media file:${mapConf}
-      '';
-  };
-
-  systemd.services.kindle-sync = {
-    enable = true;
-    description = "sync kindle";
-    after    = [ "media-kindle.mount" ];
-    requires = [ "media-kindle.mount" ];
-    wantedBy = [ "media-kindle.mount" ];
-    serviceConfig = {
-      ExecStart = util.writeBash "kindle-sync" ''
-        export PATH=${lib.makeBinPath (with pkgs; [ coreutils eject perl dos2unix git ])}:$PATH
-        cp /media/kindle/documents/My\ Clippings.txt /tmp/clippings.txt
-
-        </tmp/clippings.txt dos2unix | ${clippings-pl} > /tmp/clippings.yml
-      '';
-    };
-  };
-
-  services.mpd = {
-    enable = false;
-    dataDir = "/home/jb55/mpd";
-    user = "jb55";
-    group = "users";
-    extraConfig = ''
-      audio_output {
-        type     "pulse"
-        name     "Local MPD"
-        server   "127.0.0.1"
-      }
-    '';
-  };
 
   services.udev.extraRules = ''
     # yubikey neo
@@ -84,7 +42,6 @@ in
 
     # kindle
     ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0004", SYMLINK+="kindle"
-
   '';
 
   services.xserver = {
@@ -94,6 +51,18 @@ in
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:rwin";
 
     wacom.enable = true;
+
+    synaptics.additionalOptions = ''
+      Option "VertScrollDelta" "-100"
+      Option "HorizScrollDelta" "-100"
+    '';
+    synaptics.buttonsMap = [ 1 3 2 ];
+    synaptics.enable = true;
+    synaptics.fingersMap = [ 1 3 2 ];
+    synaptics.palmDetect = true;
+    synaptics.tapButtons = false;
+    synaptics.twoFingerScroll = true;
+    synaptics.vertEdgeScroll = false;
 
     desktopManager = {
       default = "none";
@@ -115,10 +84,8 @@ in
       };
     };
 
-    videoDrivers = [ "nvidia" ];
-
     screenSection = ''
-      Option "metamodes" "1920x1080_144 +0+0 { ForceCompositionPipeline = On }"
+      Option "metamodes" "1920x1080 +0+0"
       Option "dpi" "96 x 96"
     '';
 

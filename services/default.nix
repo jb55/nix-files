@@ -2,7 +2,6 @@ extra:
 { config, lib, pkgs, ... }:
 {
   imports = [
-    (import ./pokemongo-map extra)
     ./footswitch
   ];
 

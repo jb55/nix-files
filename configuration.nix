@@ -4,8 +4,8 @@
 
 { config, pkgs, ... }:
 
-let machine = "monad";
-    isDesktop = machine != "charon";
+let machine = "quiver";
+    isDesktop = true;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
@@ -13,17 +13,16 @@ let machine = "monad";
       machineSessionCommands = machineConfig.sessionCommands;
     };
     extra = {
-      inherit private;
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
     };
     caches = if machine == "archer"
                then []
-               else [ "http://cache.nixos.org" "http://cache.zero.monster.cat" ];
+               else [ "http://cache.nixos.org" "http://nixcache.monstercat.com" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
-    isDark = true;
+    isDark = false;
     theme = if isDark then {
       package = pkgs.theme-vertex;
       name = "Vertex-Dark";
@@ -36,7 +35,6 @@ let machine = "monad";
       package = pkgs.numix-icon-theme;
       name = "Numix";
     };
-    private = import ./private.nix;
     user = {
         name = "jb55";
         group = "users";
@@ -63,7 +61,6 @@ in {
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
-      (import ./timers/sync-ical2org.nix home)
       (import ./services/desktop (with extra; { inherit util userConfig theme icon-theme; }))
     ] else []);
 
