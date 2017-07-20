@@ -57,7 +57,6 @@ in {
       (import ./networking machine)
       (import (machinePath "") extra)
     ] ++ (if isDesktop then [
-      # ./services/hoogle
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
@@ -81,7 +80,6 @@ in {
   nix.binaryCaches = caches;
   nix.useSandbox = true;
   nix.trustedBinaryCaches = caches;
-  nix.requireSignedBinaryCaches = false;
 
   virtualisation.docker.enable = false;
 

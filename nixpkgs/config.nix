@@ -220,7 +220,7 @@ in {
       gogol-core
       gogol-sheets
       gogol-youtube
-      gtk
+      gogol-youtube-reporting
       hamlet
       hashable
       heroku
@@ -340,6 +340,7 @@ in {
       streaming
       streaming-bytestring
       streaming-wai
+      streaming-utils
       strict
       stringsearch
       strptime
@@ -371,6 +372,7 @@ in {
       uniplate
       unix-compat
       unordered-containers
+      probability
       uuid
       vector
       void

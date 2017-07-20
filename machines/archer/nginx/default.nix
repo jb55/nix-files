@@ -46,6 +46,8 @@ in {
       tcp_nodelay on;
       keepalive_timeout 65;
       types_hash_max_size 2048;
+      client_max_body_size 6G;
+
       # server_tokens off;
       proxy_buffering off;
       proxy_read_timeout 300s;
@@ -59,8 +61,8 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      80 default_server;
-        server_name _;
+        listen      ${extra.ztip}:80;
+        server_name archer.zero.monster.cat;
 
         root /www/public;
         index index.html index.htm;
@@ -88,7 +90,6 @@ in {
 
       ${gitCfg}
       ${hoogle}
-      ${nixserve}
     '';
   };
 }
