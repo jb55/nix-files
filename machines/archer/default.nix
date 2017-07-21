@@ -33,8 +33,6 @@ in {
     enable = true;
     bind = extras.ztip;
   };
-  services.gitlab.enable = false;
-  services.gitlab.databasePassword = "gitlab";
 
   services.gitit = rec {
     enable = true;
@@ -101,12 +99,6 @@ in {
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
 
-  services.footswitch = {
-    enable = true;
-    enable-led = true;
-    led = "input3::scrolllock";
-  };
-
   networking.firewall.trustedInterfaces = ["zt0" "zt1"];
   networking.firewall.allowedTCPPorts = [ 22 143 80 ];
 
@@ -123,42 +115,37 @@ in {
 
   services.fcgiwrap.enable = true;
 
-  services.postfix = {
-    enable = false;
-    setSendmail = false;
-  };
+  # systemd.user.services.gmail-notifier = {
+  #   enable = true;
+  #   description = "gmail notifier";
 
-  systemd.user.services.gmail-notifier = {
-    enable = true;
-    description = "gmail notifier";
+  #   path = with pkgs; [ twmn eject isync notmuch bash ];
 
-    path = with pkgs; [ twmn eject isync notmuch bash ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   after = [ "network.target" ];
 
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-
-    serviceConfig.Type = "simple";
-    serviceConfig.Restart = "always";
-    serviceConfig.ExecStart =
-      let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
-                     owner = "jb55";
-                     repo = "imap-notify";
-                     rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
-                     sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
-                   }) {};
-          cmd = util.writeBash "notify-cmd" ''
-            set -e
-            export HOME=/home/jb55
-            export DATABASEDIR=$HOME/mail
-            (
-              flock -x -w 100 200 || exit 1
-              mbsync gmail
-              notmuch new
-              twmnc -i new_email -s 32 --pos top_left
-            ) 200>/tmp/email-notify.lock
-          '';
-      in "${notify}/bin/imap-notify ${private.gmail-user} ${private.gmail-pass} ${cmd}";
-  };
+  #   serviceConfig.Type = "simple";
+  #   serviceConfig.Restart = "always";
+  #   serviceConfig.ExecStart =
+  #     let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
+  #                    owner = "jb55";
+  #                    repo = "imap-notify";
+  #                    rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
+  #                    sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
+  #                  }) {};
+  #         cmd = util.writeBash "notify-cmd" ''
+  #           set -e
+  #           export HOME=/home/jb55
+  #           export DATABASEDIR=$HOME/mail
+  #           (
+  #             flock -x -w 100 200 || exit 1
+  #             mbsync gmail
+  #             notmuch new
+  #             twmnc -i new_email -s 32 --pos top_left
+  #           ) 200>/tmp/email-notify.lock
+  #         '';
+  #     in "${notify}/bin/imap-notify ${private.gmail-user} ${private.gmail-pass} ${cmd}";
+  # };
 
   systemd.services.postgresql.after = [ "zerotierone.service" ];
 
