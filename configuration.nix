@@ -16,9 +16,9 @@ let machine = "quiver";
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
     };
-    caches = if machine == "archer"
-               then []
-               else [ "http://cache.nixos.org" "http://nixcache.monstercat.com" ];
+    # caches = if machine == "archer"
+    #            then []
+    #            else [ "http://cache.nixos.org" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
@@ -77,9 +77,9 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  nix.binaryCaches = caches;
+  #nix.binaryCaches = caches;
   nix.useSandbox = true;
-  nix.trustedBinaryCaches = caches;
+  # nix.trustedBinaryCaches = caches;
 
   virtualisation.docker.enable = false;
 

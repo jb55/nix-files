@@ -52,18 +52,6 @@ in
 
     wacom.enable = true;
 
-    synaptics.additionalOptions = ''
-      Option "VertScrollDelta" "-100"
-      Option "HorizScrollDelta" "-100"
-    '';
-    synaptics.buttonsMap = [ 1 3 2 ];
-    synaptics.enable = true;
-    synaptics.fingersMap = [ 1 3 2 ];
-    synaptics.palmDetect = true;
-    synaptics.tapButtons = false;
-    synaptics.twoFingerScroll = true;
-    synaptics.vertEdgeScroll = false;
-
     desktopManager = {
       default = "none";
       xterm.enable = false;
