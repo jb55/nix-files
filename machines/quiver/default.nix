@@ -3,6 +3,7 @@ extra:
 {
   imports = [
     ./hardware-configuration.nix
+    (import ./imap-notifier extra)
   ];
 
   services.mongodb.enable = true;
