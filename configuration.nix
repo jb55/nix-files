@@ -17,7 +17,7 @@ let machine = "quiver";
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
     };
-    caches = [ "http://nixcache.monstercat.com" "https://cache.nixos.org" ];
+    # caches = [ "https://cache.nixos.org" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
@@ -76,10 +76,10 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  nix.binaryCaches = caches;
+  # nix.binaryCaches = caches;
   nix.useSandbox = true;
-  nix.trustedBinaryCaches = caches;
-  nix.requireSignedBinaryCaches = false;
+  # nix.trustedBinaryCaches = caches;
+  # nix.requireSignedBinaryCaches = false;
 
   virtualisation.docker.enable = false;
 
