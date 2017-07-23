@@ -18,6 +18,13 @@ extra:
       Option         "ScrollButton" "8"
       Option         "AccelSpeed" "0"
     EndSection
+
+    Section "InputClass"
+      Identifier       "Disable TouchPad"
+      MatchIsTouchpad  "on"
+      Driver           "libinput"
+      Option           "Ignore" "true"
+    EndSection
   '';
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
