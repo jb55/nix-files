@@ -19,11 +19,9 @@ let
   sessionCommands = ''
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
-    ${pkgs.haskellPackages.taffybar}/bin/taffybar &
     ${pkgs.clipit}/bin/clipit &
-    ${pkgs.volumeicon}/bin/volumeicon &
     ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
-    ${pkgs.xbindkeys}/bin/xbindkeys -f ${dotfiles}/.xbindkeysrc
+    ${pkgs.xbindkeys}/bin/xbindkeys
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
     ${pkgs.twmn}/bin/twmnd &
 
@@ -44,7 +42,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     echo "user config at '$out'"
-    ln -s "${dotfiles}" $out/dotfiles
+    # ln -s "${dotfiles}" $out/dotfiles
     cp "${xinitrc}" $out/bin/xinitrc
     cp "${xinitrc-refresh}" $out/bin/xinitrc-refresh
     ln -s $out/bin/xinitrc $out/.xinitrc

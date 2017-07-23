@@ -15,6 +15,7 @@ let machine = "quiver";
     extra = {
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
+      private    = import ./private.nix;
     };
     caches = [ "http://nixcache.monstercat.com" "https://cache.nixos.org" ];
     zsh = "${pkgs.zsh}/bin/zsh";

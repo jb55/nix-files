@@ -32,12 +32,12 @@ in {
     icon-theme.package
 
     clipit
+    msmtp
     dragon-drop
     # dropbox-cli
     emacs
     gnome3.eog
     xfce.thunar
-    haskellPackages.taffybar
     pavucontrol
     pidgin-with-plugins
     rxvt_unicode-with-plugins

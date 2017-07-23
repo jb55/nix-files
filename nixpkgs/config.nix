@@ -66,7 +66,7 @@ in {
       withHoogle = false;
     };
 
-    haskell-tools-env = super.buildEnv {
+    haskell-tools = super.buildEnv {
       name = "haskell-tools";
       paths = haskellTools haskellPackages;
     };
@@ -84,7 +84,7 @@ in {
         samp
       ];
     };
- 
+
     jvm-tools-env = pkgs.buildEnv {
       name = "jvm-tools";
       paths = with pkgs; [
@@ -117,7 +117,58 @@ in {
       ];
     };
 
-    git-tools-env = pkgs.buildEnv {
+    file-tools = pkgs.buildEnv {
+      name = "file-tools";
+      paths = with pkgs; [
+        ripgrep
+        ranger
+      ];
+    };
+
+    network-tools = pkgs.buildEnv {
+      name = "network-tools";
+      paths = with pkgs; with xorg; [
+        nmap
+        dnsutils
+        nethogs
+      ];
+    };
+
+    system-tools = pkgs.buildEnv {
+      name = "system-tools";
+      paths = with pkgs; with xorg; [
+        xbacklight
+        autorandr
+        acpi
+      ];
+    };
+
+    desktop-tools = pkgs.buildEnv {
+      name = "desktop-tools";
+      paths = with pkgs; with xorg; [
+        twmn
+        libnotify
+      ];
+    };
+
+    syntax-tools = pkgs.buildEnv {
+      name = "syntax-tools";
+      paths = with pkgs; [
+        shellcheck
+      ];
+    };
+
+    mail-tools = pkgs.buildEnv {
+      name = "mail-tools";
+      paths = with pkgs; [
+        notmuch
+        msmtp
+        muchsync
+        isync
+      ];
+    };
+
+    git-tools = pkgs.buildEnv {
       name = "git-tools";
       paths = with pkgs; [
         diffstat
@@ -153,19 +204,14 @@ in {
       };
 
     haskellTools = hp: with hp; [
-      #ghc-mod
-      #hdevtools
-      # binary-serialise-cbor
       alex
       cabal-install
       cabal2nix
       ghc-core
-      ghc-mod
       happy
       hasktags
       hindent
       hlint
-      # pointfree
       structured-haskell-mode
       super.multi-ghc-travis
     ];

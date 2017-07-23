@@ -17,10 +17,12 @@ in
     haskellPackages = pkgs.haskellPackages;
   };
 
+  services.gnome3.gnome-keyring.enable = true;
+
   services.redshift = {
     enable = true;
     temperature.day = 5700;
-    temperature.night = 3700;
+    temperature.night = 4700;
     # gamma=0.8
 
     brightness = {
