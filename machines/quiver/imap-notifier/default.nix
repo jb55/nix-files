@@ -18,13 +18,13 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
 
       def start_work():
         print("starting work notifier")
-        os.system("systemctl stop  --user home-email-notifier")
-        os.system("systemctl start --user work-email-notifier")
+        os.system("systemctl stop    --user home-email-notifier")
+        os.system("systemctl restart --user work-email-notifier")
 
       def start_home():
         print("starting home notifier")
-        os.system("systemctl stop  --user work-email-notifier")
-        os.system("systemctl start --user home-email-notifier")
+        os.system("systemctl stop    --user work-email-notifier")
+        os.system("systemctl restart --user home-email-notifier")
 
       def check():
         now = datetime.datetime.now()
