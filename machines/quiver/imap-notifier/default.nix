@@ -1,5 +1,25 @@
 extra:
 { config, lib, pkgs, ... }:
+let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
+                      owner = "jb55";
+                      repo = "imap-notify";
+                      rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
+                      sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
+                    }) {};
+    notifier = user: pass: cmd: host: extra.util.writeBash "notifier" ''
+      set -e
+
+      arg="${host}"
+      host=''${arg:-8.8.8.8}
+
+      # wait for connectivity
+      until /var/run/wrappers/bin/ping -c1 $host &>/dev/null; do :; done
+
+      # run it once first in case we missed any from lost connectivity
+      ${cmd} no || :
+      ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
+    '';
+in
 with extra; {
   systemd.user.services.work-email-notifier = {
     enable = true;
@@ -10,13 +30,7 @@ with extra; {
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";
     serviceConfig.ExecStart =
-      let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
-                      owner = "jb55";
-                      repo = "imap-notify";
-                      rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
-                      sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
-                    }) {};
-          cmd = util.writeBash "notify-cmd" ''
+      let cmd = util.writeBash "notify-cmd"  ''
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/work
@@ -24,10 +38,11 @@ with extra; {
               flock -x -w 100 200 || exit 1
               mbsync gmail
               notmuch new
+              [ "$1" != "no" ] && \
               twmnc -i new_email -s 32 --pos top_left
             ) 200>/tmp/email-notify.lock
           '';
-      in "${notify}/bin/imap-notify ${private.work-email-user} ${private.work-email-pass} ${cmd}";
+      in notifier private.work-email-user private.work-email-pass cmd "";
   };
 
   systemd.user.services.home-email-notifier = {
@@ -43,23 +58,18 @@ with extra; {
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";
     serviceConfig.ExecStart =
-      let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
-                      owner = "jb55";
-                      repo = "imap-notify";
-                      rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
-                      sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
-                    }) {};
-          cmd = util.writeBash "notify-cmd" ''
+      let cmd = util.writeBash "notify-cmd" ''
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/personal
             (
               flock -x -w 100 200 || exit 1
               muchsync -C ~/.notmuch-config-personal notmuch
+              [ "$1" != "no" ] && \
               twmnc -i new_email -c p -s 32 --pos top_left
             ) 200>/tmp/email-notify.lock
           '';
-      in "${notify}/bin/imap-notify 'jb55@jb55.com' ${private.personal-email-pass} ${cmd} imap.jb55.com";
+      in notifier "jb55@jb55.com" private.personal-email-pass cmd "imap.jb55.com";
   };
 
   systemd.user.services.email-notify-switcher = {
@@ -68,26 +78,21 @@ with extra; {
 
     path = with pkgs; [ systemd ];
 
-    wantedBy = [ "default.target" "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
-    wants    = [ "network-online.target "];
-    after    = [ "default.target" "suspend.target" "hibernate.target" "hybrid-sleep.target" "network-online.target" ];
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target"
+                 "hibernate.target"
+                 "hybrid-sleep.target"
+                 "network-online.target"
+                 "suspend.target"
+               ];
 
     serviceConfig.ExecStart = util.writeBash "email-switcher" ''
-      set -e
-
-      wait_for_connectivity () {
-        host=''${1:-8.8.8.8}
-        until /var/run/wrappers/bin/ping -c1 $host &>/dev/null; do :; done
-      }
-
       start_work () {
-        wait_for_connectivity
         systemctl stop  --user home-email-notifier
         systemctl start --user work-email-notifier
       }
 
       start_home () {
-        wait_for_connectivity imap.jb55.com
         systemctl stop  --user work-email-notifier
         systemctl start --user home-email-notifier
       }
