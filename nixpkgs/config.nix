@@ -138,7 +138,6 @@ in {
       name = "system-tools";
       paths = with pkgs; with xorg; [
         xbacklight
-        autorandr
         acpi
       ];
     };
