@@ -6,6 +6,55 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
                       rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
                       sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
                     }) {};
+    penv = pkgs.python2.withPackages (ps: with ps; [ dbus-python pygobject2 ]);
+    email-switcher = pkgs.writeScript "email-switcher" ''
+      #!${penv}/bin/python2 -u
+
+      import dbus
+      import datetime
+      import gobject
+      import os
+      from dbus.mainloop.glib import DBusGMainLoop
+
+      def start_work():
+        print("starting work notifier")
+        os.system("systemctl stop  --user home-email-notifier")
+        os.system("systemctl start --user work-email-notifier")
+
+      def start_home():
+        print("starting home notifier")
+        os.system("systemctl stop  --user work-email-notifier")
+        os.system("systemctl start --user home-email-notifier")
+
+      def check():
+        now = datetime.datetime.now()
+        if now.isoweekday() > 5:
+          start_home()
+        else:
+          if now.hour > 17 or now.hour < 9:
+            start_home()
+          else:
+            start_work()
+
+      def handle_sleep_callback(sleeping):
+        if not sleeping:
+          # awoke from sleep
+          check()
+
+      DBusGMainLoop(set_as_default=True) # integrate into main loob
+      bus = dbus.SystemBus()             # connect to dbus system wide
+      bus.add_signal_receiver(           # defince the signal to listen to
+          handle_sleep_callback,            # name of callback function
+          'PrepareForSleep',                 # signal name
+          'org.freedesktop.login1.Manager',   # interface
+          'org.freedesktop.login1'            # bus name
+      )
+
+      loop = gobject.MainLoop()          # define mainloop
+      check()
+      loop.run()
+    '';
+
     notifier = user: pass: cmd: host: extra.util.writeBash "notifier" ''
       set -e
 
@@ -79,36 +128,9 @@ with extra; {
     path = with pkgs; [ systemd ];
 
     wantedBy = [ "default.target" ];
-    after    = [ "default.target"
-                 "hibernate.target"
-                 "hybrid-sleep.target"
-                 "network-online.target"
-                 "suspend.target"
-               ];
+    after    = [ "default.target" ];
 
-    serviceConfig.ExecStart = util.writeBash "email-switcher" ''
-      start_work () {
-        systemctl stop  --user home-email-notifier
-        systemctl start --user work-email-notifier
-      }
-
-      start_home () {
-        systemctl stop  --user work-email-notifier
-        systemctl start --user home-email-notifier
-      }
-
-      today=$(date +%u)
-      hour=$(date +%H)
-      if [ $today -gt 5 ]; then
-        start_home
-      else
-        if [ $hour -gt 17 || $hour -lt 9 ]; then
-          start_home
-        else
-          start_work
-        fi
-      fi
-    '';
+    serviceConfig.ExecStart = "${email-switcher}";
   };
 
 }
