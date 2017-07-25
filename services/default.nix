@@ -14,6 +14,8 @@ extra:
   services.openssh.passwordAuthentication = false;
   services.openssh.permitRootLogin = "no";
 
+  services.atd.enable = true;
+
   services.logrotate = {
     enable = true;
     config = ''
