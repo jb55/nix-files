@@ -10,13 +10,6 @@ let
   '';
 in
 {
-  # sync ical to org
-  services.hoogle = {
-    enable = false;
-    packages = pkgs.myHaskellPackages;
-    haskellPackages = pkgs.haskellPackages;
-  };
-
   services.gnome3.gnome-keyring.enable = true;
 
   services.redshift = {

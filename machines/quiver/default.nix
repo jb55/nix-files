@@ -3,9 +3,15 @@ extra:
 {
   imports = [
     ./hardware-configuration.nix
+    (import ./networking extra)
     (import ./imap-notifier extra)
   ];
 
+  services.hoogle = {
+    enable = true;
+    packages = pkgs.myHaskellPackages;
+    haskellPackages = pkgs.haskellPackages;
+  };
   services.mongodb.enable = true;
   services.redis.enable = true;
 
