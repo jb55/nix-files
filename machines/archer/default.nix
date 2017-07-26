@@ -2,11 +2,10 @@ extra:
 { config, lib, pkgs, ... }:
 let util = extra.util;
     private = extra.private;
-    extras = (rec { ztip = "10.243.14.20";
-                    ztip-internal = "10.144.14.20";
+    extras = (rec { ztip = "10.144.14.20";
                     nix-serve = {
                       port = 10845;
-                      bindAddress = ztip-internal;
+                      bindAddress = ztip;
                     };
                     import-scripts = (import <monstercatpkgs> { }).import-scripts;
                  }) // extra;
@@ -66,6 +65,15 @@ in {
   services.nginx.httpConfig = ''
     server {
       listen 80;
+      server_name pkgs.monster.cat;
+
+      location / {
+        return 301 https://github.com/monstercat/monstercatpkgs/archive/master.tar.gz;
+      }
+    }
+
+    server {
+      listen 80;
       server_name nixcache.monstercat.com;
 
       location / {
@@ -99,7 +107,7 @@ in {
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
 
-  networking.firewall.trustedInterfaces = ["zt0" "zt1"];
+  networking.firewall.trustedInterfaces = ["zt0" "zt2"];
   networking.firewall.allowedTCPPorts = [ 22 143 80 ];
 
   networking.defaultMailServer = {
@@ -115,38 +123,6 @@ in {
 
   services.fcgiwrap.enable = true;
 
-  # systemd.user.services.gmail-notifier = {
-  #   enable = true;
-  #   description = "gmail notifier";
-
-  #   path = with pkgs; [ twmn eject isync notmuch bash ];
-
-  #   wantedBy = [ "multi-user.target" ];
-  #   after = [ "network.target" ];
-
-  #   serviceConfig.Type = "simple";
-  #   serviceConfig.Restart = "always";
-  #   serviceConfig.ExecStart =
-  #     let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
-  #                    owner = "jb55";
-  #                    repo = "imap-notify";
-  #                    rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
-  #                    sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
-  #                  }) {};
-  #         cmd = util.writeBash "notify-cmd" ''
-  #           set -e
-  #           export HOME=/home/jb55
-  #           export DATABASEDIR=$HOME/mail
-  #           (
-  #             flock -x -w 100 200 || exit 1
-  #             mbsync gmail
-  #             notmuch new
-  #             twmnc -i new_email -s 32 --pos top_left
-  #           ) 200>/tmp/email-notify.lock
-  #         '';
-  #     in "${notify}/bin/imap-notify ${private.gmail-user} ${private.gmail-pass} ${cmd}";
-  # };
-
   systemd.services.postgresql.after = [ "zerotierone.service" ];
 
   services.postgresql = {
@@ -156,12 +132,12 @@ in {
     authentication = pkgs.lib.mkForce ''
       # type db  user address        method
       local  all all                 trust
-      host   all all  10.243.0.0/16  trust
+      host   all all  10.144.0.0/16  trust
       host   all all  192.168.1.0/16 trust
 
     '';
     extraConfig = ''
-      listen_addresses = '10.243.14.20,192.168.1.49'
+      listen_addresses = '10.144.14.20,192.168.1.49'
     '';
   };
 }
