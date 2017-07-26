@@ -67,7 +67,7 @@ in {
       listen 80;
       server_name pkgs.monster.cat;
 
-      location / {
+      location = / {
         return 301 https://github.com/monstercat/monstercatpkgs/archive/master.tar.gz;
       }
     }
