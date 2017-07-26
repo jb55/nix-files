@@ -61,7 +61,7 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      ${extra.ztip}:80;
+        listen      80;
         server_name archer.zero.monster.cat;
 
         root /www/public;
@@ -73,7 +73,7 @@ in {
       }
 
       server {
-        listen       ${extra.ztip}:80;
+        listen       80;
         server_name  siren.zero.monster.cat;
 
         location / {
