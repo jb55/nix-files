@@ -252,6 +252,7 @@ in {
       doctest
       either
       elm-export
+      elm-export-persistent
       # envy
       exceptions
       failure
@@ -366,10 +367,12 @@ in {
       servant
       servant-cassava
       servant-client
+      pwstore-fast
       servant-docs
-      # servant-elm
+      servant-elm
       servant-lucid
       servant-server
+      servant-auth-server
       # servant-swagger
       shake
       shakespeare
