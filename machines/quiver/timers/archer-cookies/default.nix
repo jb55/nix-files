@@ -15,7 +15,7 @@ in
       PTH=".config/chromium/Default/Cookies"
       scp $HOME/$PTH archer:$PTH
     '';
-    unitConfig.OnFailure = "notify-failed@%n.service";
+    unitConfig.OnFailure = "notify-failed-user@%n.service";
 
     # youtube bot is run on the 20th at 10:24:00
     startAt = "*-*-20 09:24:00";
@@ -25,7 +25,7 @@ in
     description = "reminder to login";
 
     serviceConfig.ExecStart = util.writeBash "cookie-reminder" ''
-      sendmail -f bill@monstercat.com <<EOF
+      /run/wrappers/bin/sendmail -f bill@monstercat.com <<EOF
       To: bill@monstercat.com
       From: THE COOKIE MONSTER <cookiemonster@quiver>
       Subject: reminder to log into YouTube cms
@@ -40,7 +40,7 @@ in
         THE COOKIE MONSTER
       EOF
     '';
-    unitConfig.OnFailure = "notify-failed@%n.service";
+    unitConfig.OnFailure = "notify-failed-user@%n.service";
 
     startAt = "*-*-19 10:24:00";
   };

@@ -9,7 +9,7 @@ in
     description = "cogs bot";
 
     serviceConfig.ExecStart = "${import-scripts}/bin/cogs-bot daily-check";
-    unitConfig.OnFailure = "notify-failed@%n.service";
+    unitConfig.OnFailure = "notify-failed-user@%n.service";
 
     # 20th is always before the earliest possible last wednesday (22nd)
     startAt = "*-*-* 5:30:00";
