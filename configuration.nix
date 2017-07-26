@@ -4,8 +4,8 @@
 
 { config, pkgs, ... }:
 
-let machine = "quiver";
-    isDesktop = true;
+let machine = "archer";
+    isDesktop = false;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
