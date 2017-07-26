@@ -7,6 +7,10 @@ extra:
     (import ./imap-notifier extra)
   ];
 
+  boot.extraModprobeConfig = ''
+    options thinkpad_acpi enabled=0
+  '';
+
   services.hoogle = {
     enable = true;
     packages = pkgs.myHaskellPackages;
