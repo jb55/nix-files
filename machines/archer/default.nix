@@ -107,7 +107,7 @@ in {
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
 
-  networking.firewall.trustedInterfaces = ["zt0" "zt1"];
+  networking.firewall.trustedInterfaces = ["zt0" "zt2"];
   networking.firewall.allowedTCPPorts = [ 22 143 80 ];
 
   networking.defaultMailServer = {
