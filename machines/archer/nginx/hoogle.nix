@@ -1,6 +1,6 @@
 ztip: ''
   server {
-    listen ${ztip}:80;
+    listen 80;
     server_name hoogle.zero.monster.cat;
 
     location / {

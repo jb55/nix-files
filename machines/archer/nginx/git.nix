@@ -18,7 +18,7 @@ let gitwebConf = pkgs.writeText "gitweb.conf" ''
 in
 if config.services.fcgiwrap.enable then ''
   server {
-      listen       ${extra.ztip}:80;
+      listen       80;
       server_name  git.zero.monster.cat;
 
       location = / {

@@ -9,7 +9,7 @@ in
 {
   services.nginx.httpConfig = lib.mkIf config.services.nginx.enable ''
     server {
-      listen ${extra.ztip}:80;
+      listen 80;
       server_name payments.zero.monster.cat;
       root ${payments-client}/share;
       index index.html;
