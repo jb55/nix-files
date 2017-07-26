@@ -8,7 +8,7 @@
 
       UNIT=$1
 
-      /var/setuid-wrappers/sendmail -t <<ERRMAIL
+      sendmail -f bill@monstercat.com -t <<ERRMAIL
       To: bill@monstercat.com
       From: systemd <root@$HOSTNAME>
       Subject: $UNIT Failed

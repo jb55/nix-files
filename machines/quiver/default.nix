@@ -3,8 +3,10 @@ extra:
 {
   imports = [
     ./hardware-configuration.nix
+    (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ./imap-notifier extra)
+    (import ./timers extra)
   ];
 
   boot.extraModprobeConfig = ''

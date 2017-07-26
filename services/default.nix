@@ -3,6 +3,7 @@ extra:
 {
   imports = [
     ./footswitch
+    ./fail-notifier
   ];
 
   services.zerotierone.enable = true;

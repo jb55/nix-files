@@ -12,7 +12,6 @@ let util = extra.util;
 in {
   imports = [
     ./hardware
-    ./fail-notifier
     (import ./backups extras)
     (import ./backups/git.nix extras)
     (import ./backups/wiki.nix extras)
