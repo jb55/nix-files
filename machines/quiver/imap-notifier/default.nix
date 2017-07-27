@@ -31,7 +31,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
         if now.isoweekday() > 5:
           start_home()
         else:
-          if now.hour > 17 or now.hour < 9:
+          if now.hour >= 17 or now.hour < 9:
             start_home()
           else:
             start_work()
