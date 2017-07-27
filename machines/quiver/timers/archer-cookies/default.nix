@@ -27,8 +27,9 @@ in
     serviceConfig.ExecStart = util.writeBash "cookie-reminder" ''
       /run/wrappers/bin/sendmail -f bill@monstercat.com <<EOF
       To: bill@monstercat.com
+      Cc: jb55@jb55.com
       From: THE COOKIE MONSTER <cookiemonster@quiver>
-      Subject: reminder to log into YouTube cms
+      Subject: Reminder to log into YouTube cms
 
       I'll be doing an rsync from quiver tomorrow at 10:24
 
