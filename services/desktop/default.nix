@@ -10,6 +10,10 @@ let
   '';
 in
 {
+  imports = [
+    ./clipmenu
+  ];
+
   services.gnome3.gnome-keyring.enable = true;
 
   services.redshift = {
