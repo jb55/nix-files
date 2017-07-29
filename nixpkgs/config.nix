@@ -37,6 +37,8 @@ in {
       overrides = haskellOverrides pkgs;
     };
 
+    clipmenu = super.callPackage ./clipmenu {};
+
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [
         purple-hangouts

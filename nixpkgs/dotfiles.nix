@@ -13,17 +13,12 @@ let
   };
   impureSessionCommands = ''
     #!${pkgs.bash}/bin/bash
-    ${pkgs.xlibs.xmodmap}/bin/xmodmap ${dotfiles}/.Xmodmap
     ${pkgs.xlibs.xset}/bin/xset r rate 200 50
   '' + "\n" + machineSessionCommands;
   sessionCommands = ''
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
-    ${pkgs.clipit}/bin/clipit &
-    ${pkgs.xautolock}/bin/xautolock -time 10 -locker slock &
-    ${pkgs.xbindkeys}/bin/xbindkeys
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
-    ${pkgs.twmn}/bin/twmnd &
 
     gpg-connect-agent /bye
     GPG_TTY=$(tty)

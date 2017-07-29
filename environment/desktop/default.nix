@@ -12,6 +12,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       }
       class "GtkMenuShell" binding "gtk-binding-menu"
     '';
+    clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
 in {
   environment.variables = {
     LC_TIME="en_DK.UTF-8";
@@ -31,7 +32,7 @@ in {
     theme.package
     icon-theme.package
 
-    clipit
+    clipmenu
     msmtp
     dragon-drop
     # dropbox-cli

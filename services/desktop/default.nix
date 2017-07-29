@@ -8,12 +8,9 @@ let
   clippings-pl = util.writeBash "clippings.pl" ''
     ${lib.getBin pkgs.perl}/bin/perl ${clippings-pl-file}
   '';
+  clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
 in
 {
-  imports = [
-    ./clipmenu
-  ];
-
   services.gnome3.gnome-keyring.enable = true;
 
   services.redshift = {
@@ -99,10 +96,48 @@ in
     enable = true;
     description = "RXVT-Unicode Daemon";
     wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
     path = [ pkgs.rxvt_unicode-with-plugins ];
     serviceConfig = {
       Restart = "always";
       ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
+    };
+  };
+
+  systemd.user.services.xautolock = {
+    enable      = true;
+    description = "X auto screen locker";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker slock";
+  };
+
+  systemd.user.services.clipmenu = {
+    enable      = true;
+    description = "clipmenu";
+    wantedBy = [ "graphical-session.target" ];
+    after    = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${clipmenu}/bin/clipmenud";
+  };
+
+  systemd.user.services.xbindkeys = {
+    enable      = true;
+    description = "X key bind helper";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
+  };
+
+  systemd.user.services.xinitrc = {
+    enable      = true;
+    description = "X session init commands";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${userConfig}/bin/xinitrc";
     };
   };
 
