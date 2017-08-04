@@ -52,6 +52,13 @@ in {
 
     jb55-dotfiles = regularFiles <dotfiles>;
 
+    dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
+      patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
+                                    sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+                                  })
+                ];
+    });
+
     ical2org = super.callPackage ./scripts/ical2org { };
 
     footswitch = super.callPackage ./scripts/footswitch { };
