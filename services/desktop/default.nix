@@ -122,12 +122,23 @@ in
     serviceConfig.ExecStart = "${clipmenu}/bin/clipmenud";
   };
 
+  # TODO: maybe doesn't have my package env
   systemd.user.services.xbindkeys = {
     enable      = true;
     description = "X key bind helper";
     wantedBy    = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
+  };
+
+  # TODO: maybe doesn't have my package env
+  systemd.user.services.twmnd = {
+    enable      = true;
+
+    description = "tiling window manager notifier";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.twmn}/bin/twmnd";
   };
 
   systemd.user.services.xinitrc = {
