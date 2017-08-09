@@ -37,7 +37,7 @@ in {
     wikiTitle = "Monstercat Wiki";
     requireAuthentication = "none";
     sessionTimeout = 43800;
-    math = "mathjax";
+    math = "mathml";
     mathJaxScript = "MathJax/MathJax.js";
     plugins = [];
     mailCommand = "/run/current-system/sw/bin/sendmail %s";
