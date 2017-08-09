@@ -9,6 +9,8 @@ extra:
     (import ./timers extra)
   ];
 
+  virtualisation.docker.enable = true;
+
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
   '';
