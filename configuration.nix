@@ -81,8 +81,6 @@ in {
   # nix.trustedBinaryCaches = caches;
   # nix.requireSignedBinaryCaches = false;
 
-  virtualisation.docker.enable = false;
-
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];
 
