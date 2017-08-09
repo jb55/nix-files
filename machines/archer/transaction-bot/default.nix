@@ -12,7 +12,7 @@ extra:
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-transaction-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
-    startAt = "Sat *-*-* 01:00:00";
+    startAt = "*-*-* 01:00:00";
   };
 }
 
