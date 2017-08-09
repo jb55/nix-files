@@ -33,9 +33,7 @@ in {
 
     # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
 
-    haskellPackages = super.haskellPackages.override {
-      overrides = haskellOverrides pkgs;
-    };
+    #haskellPackages = super.haskell.packages.ghc821;
 
     clipmenu = super.callPackage ./clipmenu {};
 
@@ -67,17 +65,19 @@ in {
 
     haskellEnvHoogle = haskellEnvFun {
       name = "haskellEnvHoogle";
+      #compiler = "ghc821";
       withHoogle = true;
     };
 
     haskellEnv = haskellEnvFun {
       name = "haskellEnv";
+      #compiler = "ghc821";
       withHoogle = false;
     };
 
     haskell-tools = super.buildEnv {
       name = "haskell-tools";
-      paths = haskellTools haskellPackages;
+      paths = haskellTools super.haskellPackages;
     };
 
     jb55-tools-env = pkgs.buildEnv {
@@ -200,7 +200,7 @@ in {
     haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
       let hp = if compiler != null
                  then super.haskell.packages.${compiler}
-                 else haskellPackages;
+                 else super.haskellPackages;
 
           ghcWith = if withHoogle
                       then hp.ghcWithHoogle
@@ -221,7 +221,7 @@ in {
       hindent
       hlint
       structured-haskell-mode
-      super.multi-ghc-travis
+      #multi-ghc-travis
     ];
 
     myHaskellPackages = hp: with hp; [
@@ -264,7 +264,7 @@ in {
       elm-export-persistent
       # envy
       exceptions
-      failure
+      #failure
       filepath
       fingertree
       foldl
@@ -398,6 +398,7 @@ in {
       streaming-bytestring
       streaming-wai
       streaming-utils
+      streaming-postgresql-simple
       strict
       stringsearch
       strptime
