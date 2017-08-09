@@ -148,6 +148,7 @@ in {
       paths = with pkgs; with xorg; [
         xbacklight
         acpi
+        psmisc
       ];
     };
 
