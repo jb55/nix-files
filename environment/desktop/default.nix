@@ -33,6 +33,7 @@ in {
     icon-theme.package
 
     clipmenu
+    dynamic-colors
     msmtp
     dragon-drop
     # dropbox-cli
