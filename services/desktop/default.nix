@@ -13,6 +13,8 @@ in
 {
   services.gnome3.gnome-keyring.enable = true;
 
+  services.trezord.enable = true;
+
   services.redshift = {
     enable = true;
     temperature.day = 5700;
