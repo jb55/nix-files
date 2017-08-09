@@ -11,11 +11,11 @@ extra:
       AWS_SECRET_ACCESS_KEY = extra.private.aws_secret_key;
     };
 
-    serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-sales-bot";
+    serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-sales-bot daily-check";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
     # every saturday
-    startAt = "Sat *-*-* 13:20:00";
+    startAt = "*-*-* 4:20:00";
   };
 }
 
