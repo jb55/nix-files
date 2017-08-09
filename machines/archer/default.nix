@@ -38,6 +38,7 @@ in {
     requireAuthentication = "none";
     sessionTimeout = 43800;
     math = "mathjax";
+    mathJaxScript = "/js/mathjax.js";
     plugins = [];
     mailCommand = "/run/current-system/sw/bin/sendmail %s";
     accessQuestion = "Enter 'monstercat' here";
