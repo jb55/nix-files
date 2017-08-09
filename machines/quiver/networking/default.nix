@@ -1,8 +1,12 @@
 extra:
 { config, lib, pkgs, ... }:
 let
-  chromecastIP = "192.168.86.190";
+  chromecastIPs = [ "192.168.86.190" "192.168.1.67" "192.168.1.29" ];
   iptables = "iptables -A nixos-fw";
+  openChromecast = ip: ''
+    ${iptables} -p udp -s ${ip} -j nixos-fw-accept
+    ${iptables} -p tcp -s ${ip} -j nixos-fw-accept
+  '';
   ipr = "${pkgs.iproute}/bin/ip";
   writeBash = extra.util.writeBash;
   vpn = {
@@ -38,11 +42,7 @@ in
   # networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   networking.firewall.extraCommands = ''
-    ${openTCP "zt2" 80}
-    ${openTCP "zt1" 80}
-    ${iptables} -s 192.168.86.0/24 -p tcp --dport 80 -j nixos-fw-accept
-    ${iptables} -p udp -s ${chromecastIP} -j nixos-fw-accept
-    ${iptables} -p tcp -s ${chromecastIP} -j nixos-fw-accept
+    ${lib.concatStringsSep "\n\n" (map openChromecast chromecastIPs)}
   ''
   # openvpn-pia stuff, we only want to do this once
   + (if config.services.openvpn.servers.pia != null then ''
