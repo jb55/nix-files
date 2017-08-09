@@ -1,4 +1,4 @@
-{ util, userConfig, theme, icon-theme }:
+{ util, composeKey, userConfig, theme, icon-theme }:
 { config, lib, pkgs, ... }:
 let
   clippings-pl-file = pkgs.fetchurl {
@@ -44,7 +44,7 @@ in
     enable = true;
     layout = "us";
 
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:rwin";
+    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:${composeKey}";
 
     wacom.enable = true;
 
