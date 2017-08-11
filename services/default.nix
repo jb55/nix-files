@@ -4,6 +4,7 @@ extra:
   imports = [
     ./footswitch
     ./fail-notifier
+    ./mailz
   ];
 
   services.zerotierone.enable = true;

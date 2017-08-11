@@ -13,11 +13,7 @@ let machine = "charon";
       machineSessionCommands = "";
     };
     extra = {
-      inherit private;
       ztip = "172.24.206.82";
-      git-server = import ./misc/git-server.nix;
-    };
-    extra = {
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
