@@ -303,10 +303,6 @@ in
         protocol imap {
           imap_metadata = yes
         }
-
-        plugin {
-          push_notification_driver = ox:url=http://monad.jb55.com/you-got-mail user_from_metadata
-        }
       '';
     };
 
