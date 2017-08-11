@@ -1,18 +1,21 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  imports = [ ./systemd-failure-emailer ./mailz ];
+  imports = [
+    ./footswitch
+    ./fail-notifier
+  ];
 
   services.zerotierone.enable = true;
 
   #services.mongodb.enable = true;
   #services.redis.enable = true;
 
-  services.systemd-failure-emailer.enable = true;
-
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
   services.openssh.permitRootLogin = "no";
+
+  services.atd.enable = true;
 
   services.logrotate = {
     enable = true;

@@ -32,15 +32,6 @@ in {
   services.nginx = {
     enable = true;
 
-    config = ''
-      worker_processes 2;
-
-      events {
-      	worker_connections 768;
-        # multi_accept on;
-      }
-    '';
-
     httpConfig = ''
       port_in_redirect off;
       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -55,6 +46,8 @@ in {
       tcp_nodelay on;
       keepalive_timeout 65;
       types_hash_max_size 2048;
+      client_max_body_size 6G;
+
       # server_tokens off;
       proxy_buffering off;
       proxy_read_timeout 300s;
@@ -68,8 +61,8 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      80 default_server;
-        server_name _;
+        listen      80;
+        server_name archer.zero.monster.cat;
 
         root /www/public;
         index index.html index.htm;
@@ -80,7 +73,7 @@ in {
       }
 
       server {
-        listen       ${extra.ztip}:80;
+        listen       80;
         server_name  siren.zero.monster.cat;
 
         location / {
@@ -97,7 +90,6 @@ in {
 
       ${gitCfg}
       ${hoogle}
-      ${nixserve}
     '';
   };
 }

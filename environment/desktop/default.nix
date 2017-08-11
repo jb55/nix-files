@@ -12,8 +12,10 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       }
       class "GtkMenuShell" binding "gtk-binding-menu"
     '';
+    clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
 in {
   environment.variables = {
+    LC_TIME="en_DK.UTF-8";
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
     GTK_DATA_PREFIX = "${theme.package}";
@@ -30,20 +32,20 @@ in {
     theme.package
     icon-theme.package
 
-    chromium
-    clipit
+    clipmenu
+    dynamic-colors
+    msmtp
     dragon-drop
-    dropbox-cli
+    # dropbox-cli
     emacs
     gnome3.eog
-    gnome3.nautilus
-    haskellPackages.taffybar
+    xfce.thunar
     pavucontrol
     pidgin-with-plugins
-    rxvt_unicode
+    rxvt_unicode-with-plugins
     scrot
     slock
-    spotify
+    # spotify
     userConfig
     vlc
     weechat
@@ -56,5 +58,7 @@ in {
     zathura
   ];
 
-  security.setuidPrograms = [ "slock" ];
+  security.wrappers = {
+    slock.source = "${pkgs.slock}/bin/slock";
+  };
 }

@@ -15,18 +15,19 @@ let gitwebConf = pkgs.writeText "gitweb.conf" ''
       rev    = "4305b3551551c470339c24a6567b1ac9e642ae54";
       sha256 = "0gagy0jvqb3mc587b6yy8l9g5j5wqr2xlz128v6f01364cb7whmv";
     };
+    giturl = "git.monster.cat";
 in
 if config.services.fcgiwrap.enable then ''
   server {
-      listen       ${extra.ztip}:80;
-      server_name  git.zero.monster.cat;
+      listen       80;
+      server_name  ${giturl};
 
       location = / {
-        return 301 http://git.zero.monster.cat/repos/;
+        return 301 http://${giturl}/repos/;
       }
 
       location = /repos {
-        return 301 http://git.zero.monster.cat/repos/;
+        return 301 http://${giturl}/repos/;
       }
 
       location / {

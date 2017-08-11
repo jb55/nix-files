@@ -5,38 +5,45 @@
 { config, pkgs, ... }:
 
 let machine = "charon";
-    isDesktop = machine != "charon";
+    isDesktop = false;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
     userConfig = pkgs.callPackage ./nixpkgs/dotfiles.nix {
       machineSessionCommands = "";
     };
-    caches = if machine == "archer"
-               then []
-               else [ "http://cache.nixos.org" "http://cache.monad.jb55.com" ];
     extra = {
       inherit private;
       ztip = "172.24.206.82";
       git-server = import ./misc/git-server.nix;
     };
+    extra = {
+      git-server = import ./misc/git-server.nix;
+      util       = import ./misc/util.nix { inherit pkgs; };
+      private    = import ./private.nix;
+    };
     zsh = "${pkgs.zsh}/bin/zsh";
+    composeKey = if machine == "quiver" then "ralt" else "rwin";
     nixpkgsConfig = import ./nixpkgs/config.nix;
     home = "/home/jb55";
-    theme = {
+    isDark = false;
+    theme = if isDark then {
       package = pkgs.theme-vertex;
       name = "Vertex-Dark";
+    }
+    else {
+      package = pkgs.arc-theme;
+      name = "Arc";
     };
     icon-theme = {
       package = pkgs.numix-icon-theme;
       name = "Numix";
     };
-    private = import ./private.nix;
     user = {
         name = "jb55";
         group = "users";
         uid = 1000;
-        extraGroups = [ "wheel" ];
+        extraGroups = [ "wheel" "dialout" ];
         createHome = true;
         openssh.authorizedKeys.keys = [
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAvMdnEEAd/ZQM+pYp6ZYG/1NPE/HSwIKoec0/QgGy4UlO0EvpWWhxPaV0HlNUFfwiHE0I2TwHc+KOKcG9jcbLAjCk5rvqU7K8UeZ0v/J83bQh78dr4le09WLyhczamJN0EkNddpCyUqIbH0q3ISGPmTiW4oQniejtkdJPn2bBwb3Za8jLzlh2UZ/ZJXhKvcGjQ/M1+fBmFUwCp5Lpvg0XYXrmp9mxAaO+fxY32EGItXcjYM41xr/gAcpmzL5rNQ9a9YBYFn2VzlpL+H7319tgdZa4L57S49FPQ748paTPDDqUzHtQD5FEZXe7DZZPZViRsPc370km/5yIgsEhMPKr jb55"
@@ -54,28 +61,27 @@ in {
       (import ./networking machine)
       (import (machinePath "") extra)
     ] ++ (if isDesktop then [
-      # ./services/hoogle
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
-      (import ./timers/sync-ical2org.nix home)
-      (import ./services/desktop { inherit userConfig theme icon-theme; })
+      (import ./services/desktop (with extra; { inherit composeKey util userConfig theme icon-theme; }))
     ] else []);
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
 
-  programs.ssh.startAgent = !isDesktop;
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+    DefaultTimeoutStartSec=20s
+  '';
+
+  programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
 
   nixpkgs.config = nixpkgsConfig;
 
-  virtualisation.docker.enable = false;
-
-  nix.binaryCaches = caches;
-  nix.trustedBinaryCaches = caches;
-  nix.requireSignedBinaryCaches = false;
+  nix.useSandbox = true;
 
   users.extraUsers.jb55 = user;
   #users.extraGroups.docker.members = [ "jb55" ];
@@ -83,6 +89,8 @@ in {
 
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
+
+  i18n.consoleUseXkbConfig = true;
 
   programs.zsh.enable = true;
 }
