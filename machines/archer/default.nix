@@ -21,6 +21,7 @@ in {
     (import ./tunecore-sales-bot extras)
     (import ./bandcamp-sales-bot extras)
     (import ./youtube-sales-bot extras)
+    (import ./shopify-sales-bot extras)
     (import ./cogs-bot extras)
     (import <nixpkgs/nixos/modules/services/misc/gitit.nix>)
   ];
