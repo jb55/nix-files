@@ -101,6 +101,7 @@ with extra; {
 
     environment = {
       IMAP_ALLOW_UNAUTHORIZED = "1";
+      IMAP_NOTIFY_PORT = "12788";
     };
 
     path = with pkgs; [ twmn eject muchsync notmuch bash openssh ];
@@ -120,7 +121,7 @@ with extra; {
                 twmnc -i new_email -c p -s 32 --pos top_left
             ) 200>/tmp/email-notify.lock
           '';
-      in notifier "jb55@jb55.com" private.personal-email-pass cmd "imap.jb55.com";
+      in notifier "jb55@jb55.com" private.personal-email-pass cmd "mumble.jb55.com";
   };
 
   systemd.user.services.email-notify-switcher = {
