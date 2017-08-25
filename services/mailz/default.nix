@@ -231,6 +231,13 @@ in
           }
         }
 
+        service imap-login {
+          inet_listener imaps {
+            port = 12788
+            ssl = yes
+          }
+        }
+
         userdb {
           driver = passwd-file
           args = username_format=%n ${files.users}
