@@ -197,7 +197,7 @@ in
         table aliases file:${files.aliases}
 
         listen on 0.0.0.0 port 25 hostname ${cfg.domain} filter in tls pki ${cfg.domain}
-        listen on 0.0.0.0 port 587 hostname ${cfg.domain} filter out tls-require pki ${cfg.domain} auth <credentials>
+        listen on 0.0.0.0 port 12566 hostname ${cfg.domain} filter out tls-require pki ${cfg.domain} auth <credentials>
 
         accept from any for domain "${cfg.domain}" recipient <recipients> alias <aliases> deliver to lmtp localhost:24
         accept from local for any relay
