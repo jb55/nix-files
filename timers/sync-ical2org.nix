@@ -26,13 +26,14 @@ in {
           icalfd = open(os.path.join(caldir, name + ".ical"), "wb")
           icalfd.write(ical)
           icalfd.close()
-          proc = subprocess.Popen("${pkgs.ical2org}/bin/ical2org",
-                                  close_fds=True,
-                                  stdin=subprocess.PIPE,
-                                  stdout=subprocess.PIPE)
-          out, err = proc.communicate(ical)
-          org.write(out.replace(cat("google"), cat(category)))
-          org.close()
+          # just download for now
+          #proc = subprocess.Popen("${pkgs.ical2org}/bin/ical2org",
+          #                        close_fds=True,
+          #                        stdin=subprocess.PIPE,
+          #                        stdout=subprocess.PIPE)
+          #out, err = proc.communicate(ical)
+          #org.write(out.replace(cat("google"), cat(category)))
+          #org.close()
       ''; in "${script} ${calendarArgs}";
 
     };
