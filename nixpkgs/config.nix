@@ -327,6 +327,7 @@ in {
       numbers
       options
       optparse-applicative
+      optparse-generic
       parsec
       parsers
       pcg-random
@@ -407,6 +408,7 @@ in {
       stringsearch
       strptime
       syb
+      shqq
       system-fileio
       system-filepath
       tagged
@@ -425,7 +427,8 @@ in {
       text
       text-format
       time
-      time-patterns
+      thyme
+      # time-patterns
       time-units
       tinytemplate
       transformers
