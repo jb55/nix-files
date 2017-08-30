@@ -8,10 +8,13 @@ in
   systemd.user.services.cogs-bot = {
     description = "cogs bot";
 
+    environment = {
+      COGS_SHEET_ID="1lIluimJqBlGK1yRTmsekwUmk0_Wk0wD9VErUE8z6_dY"
+    };
+
     serviceConfig.ExecStart = "${import-scripts}/bin/cogs-bot daily-check";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
-    # 20th is always before the earliest possible last wednesday (22nd)
     startAt = "*-*-* 5:30:00";
   };
 }
