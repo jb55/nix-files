@@ -127,6 +127,7 @@ if header :contains "list-id"
      [ "nix.NixOS.github.com"
      , "hydra.NixOS.github.com"
      , "nix-dev.lists.science.uu.nl"
+     , "nix-devel.googlegroups.com"
      ]
 {
 	fileinto "Lists.nix";
