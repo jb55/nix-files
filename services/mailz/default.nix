@@ -186,7 +186,7 @@ in
         filter filter-regex regex "${files.regex}"
         filter filter-spamassassin spamassassin "-s accept"
         filter filter-dkim-signer dkim-signer "-d ${cfg.domain}" "-p${cfg.dkimDirectory}/${cfg.domain}/default.private"
-        filter in chain filter-pause filter-regex filter-spamassassin
+        filter in chain filter-regex filter-spamassassin
         filter out chain filter-dkim-signer
 
         pki ${cfg.domain} certificate "${config.security.acme.directory}/${cfg.domain}/fullchain.pem"
