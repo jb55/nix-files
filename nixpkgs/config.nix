@@ -307,6 +307,7 @@ in {
       list-t
       logict
       mime-mail
+      miso
       mime-types
       MissingH
       mmorph
