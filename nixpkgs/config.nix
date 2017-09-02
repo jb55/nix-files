@@ -139,6 +139,7 @@ in {
       paths = with pkgs; with xorg; [
         nmap
         dnsutils
+        whois
         nethogs
       ];
     };
