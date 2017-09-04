@@ -250,6 +250,7 @@ in {
       # bound
       bson-lens
       cased
+      clientsession
       cassava
       cereal
       comonad
