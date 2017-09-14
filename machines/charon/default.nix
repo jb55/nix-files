@@ -170,6 +170,7 @@ in
 
   security.setuidPrograms = [ "sendmail" ];
 
+  services.fcgiwrap.enable = true;
   services.nginx.httpConfig = ''
     ${gitCfg}
   '';
