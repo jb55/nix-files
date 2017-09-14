@@ -3,8 +3,8 @@ extra:
 let port = "1080";
     sname = "sheetzen.com";
     sheetzen = (import (pkgs.fetchurl {
-      url    = "https://jb55.com/s/5da7d1eea4212b4c.tgz";
-      sha256 = "7341a223bb9fa40c22f24055983f4af9b8dd82a1b2dcfd2c770441d1b73d003b";
+      url    = "https://jb55.com/s/2d3e137102241acb.tgz";
+      sha256 = "d31339b4116b52ad40939a6f9d884f4cf25e82960aae6e4446e3a8d3989dbb77";
     }) {});
 in
 {
