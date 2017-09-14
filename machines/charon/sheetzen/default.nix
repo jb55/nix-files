@@ -2,9 +2,9 @@ extra:
 { config, lib, pkgs, ... }:
 let port = "1080";
     sname = "sheetzen.com";
-    sheetzen = (import (pkgs.fetchurl {
+    sheetzen = (import (pkgs.fetchzip {
       url    = "https://jb55.com/s/2d3e137102241acb.tgz";
-      sha256 = "d31339b4116b52ad40939a6f9d884f4cf25e82960aae6e4446e3a8d3989dbb77";
+      sha256 = "00rha983ym6p0bsiz0wsxv750ppgcalvpas6wx790jp9awn5zxlb";
     }) {});
 in
 {
