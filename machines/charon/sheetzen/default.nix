@@ -2,10 +2,9 @@ extra:
 { config, lib, pkgs, ... }:
 let port = "1080";
     sname = "sheetzen.com";
-    sheetzen = (import (pkgs.fetchgit {
-      url    = "http://git.zero.jb55.com/socialtracker";
-      rev    = "3fe106486298a3339d5bd418f01899b62b90646a";
-      sha256 = "00rha983ym6p0bsiz0wsxv750ppgcalvpas6wx790jp9awn5zxlb";
+    sheetzen = (import (pkgs.fetchurl {
+      url    = "https://jb55.com/s/5da7d1eea4212b4c.tgz";
+      sha256 = "7341a223bb9fa40c22f24055983f4af9b8dd82a1b2dcfd2c770441d1b73d003b";
     }) {});
 in
 {
