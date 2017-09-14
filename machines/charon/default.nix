@@ -8,12 +8,19 @@ let adblock-hosts = pkgs.fetchurl {
       url = "https://jb55.com/s/dnsmasq-ad-sources.txt";
       sha256 = "3b34e565fb240c4ac1d261cb223bdc2d992fa755b5f6e981144e5b18f96f260d";
     };
+    gitExtra = {
+      git = {
+        projectroot = "/var/git";
+      };
+      host = "git.zero.jb55.com";
+    };
     npmrepo = (import (pkgs.fetchFromGitHub {
       owner  = "jb55";
       repo   = "npm-repo-proxy";
       rev    = "81182f25cb783a986d7b7ee4a63f0ca6ca9c8989";
       sha256 = "0zj7ys0383fs3hykax5bd6q5wrhzcipy8j3div83mba2n7c13f8l";
     }) {}).package;
+    gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
     myemail = "jb55@jb55.com";
 in
@@ -163,7 +170,8 @@ in
 
   security.setuidPrograms = [ "sendmail" ];
 
-  networking.firewall.allowedTCPPorts = [ 22 443 80 ];
-  networking.firewall.allowedUDPPorts = [ ];
-  networking.firewall.trustedInterfaces = ["zt0"];
+  services.nginx.httpConfig = ''
+    ${gitCfg}
+  '';
+
 }
