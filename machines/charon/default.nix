@@ -9,9 +9,7 @@ let adblock-hosts = pkgs.fetchurl {
       sha256 = "3b34e565fb240c4ac1d261cb223bdc2d992fa755b5f6e981144e5b18f96f260d";
     };
     gitExtra = {
-      git = {
-        projectroot = "/var/git";
-      };
+      git = {projectroot = "/var/git";};
       host = "git.zero.jb55.com";
     };
     npmrepo = (import (pkgs.fetchFromGitHub {
@@ -35,7 +33,17 @@ in
 
   users.extraGroups.jb55cert.members = [ "prosody" ];
 
+  services.gitDaemon.basePath = "/var/git-public/repos";
+  services.gitDaemon.enable = true;
+
   security.acme.certs."jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
+    email = myemail;
+  };
+
+  security.acme.certs."git.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
     allowKeysForGroup = true;
@@ -173,6 +181,31 @@ in
   services.fcgiwrap.enable = true;
   services.nginx.httpConfig = ''
     ${gitCfg}
+
+    server {
+      listen 80;
+      server_name git.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+
+      location / {
+        return 301 https://git.jb55.com$request_uri;
+      }
+    }
+
+    server {
+      listen       443 ssl;
+      server_name  git.jb55.com;
+
+      root /var/git-public/stagit;
+      index index.html index.htm;
+
+      ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
+    }
+
   '';
 
 }
