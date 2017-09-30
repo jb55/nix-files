@@ -25,7 +25,6 @@ in {
   packageOverrides = super: rec {
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     emacs = super.emacsWithPackages (ep: with ep; [
-      notmuch
       pkgs.urweb
     ]);
 
@@ -49,6 +48,15 @@ in {
     };
 
     jb55-dotfiles = regularFiles <dotfiles>;
+
+    notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
+      src = pkgs.fetchFromGitHub {
+        owner  = "jb55";
+        repo   = "notmuch";
+        rev    = "0c1299bbcda41b0f28e1ac522e440914aa51bf58";
+        sha256 = "01950zy1w10gg4034i44kph4gxgwyn5h89067lp5rg7d3r6h243l";
+      };
+    });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
       patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
@@ -139,6 +147,7 @@ in {
       paths = with pkgs; with xorg; [
         nmap
         dnsutils
+        whois
         nethogs
       ];
     };
@@ -250,8 +259,10 @@ in {
       bson-lens
       bytestring-show
       cased
+      clientsession
       cassava
       cereal
+      clientsession
       comonad
       comonad-transformers
       compact-string-fix
@@ -292,6 +303,7 @@ in {
       http-types
       HUnit
       io-memoize
+      io-storage
       keys
       # language-bash
       language-c
@@ -309,6 +321,7 @@ in {
       list-t
       logict
       mime-mail
+      miso
       mime-types
       MissingH
       mmorph
@@ -324,6 +337,7 @@ in {
       # monstercat-backend
       network
       newtype
+      neat-interpolation
       numbers
       options
       optparse-applicative
@@ -386,7 +400,7 @@ in {
       servant-elm
       servant-lucid
       servant-server
-      servant-auth-server
+      #servant-auth-server
       # servant-swagger
       shake
       shakespeare

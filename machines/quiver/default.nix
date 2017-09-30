@@ -31,7 +31,7 @@ extra:
       Driver         "libinput"
       Option         "ScrollMethod" "button"
       Option         "ScrollButton" "8"
-      Option         "AccelSpeed" "0"
+      Option         "AccelSpeed" "1"
     EndSection
 
     Section "InputClass"
@@ -50,4 +50,23 @@ extra:
   powerManagement.enable = false;
 
   networking.wireless.enable = true;
+
+  programs.gnupg.trezor-agent = {
+    enable = true;
+    configPath = "/home/jb55/.gnupg/trezor";
+  };
+
+  services.postgresql = {
+    dataDir = "/var/db/postgresql/9.6/";
+    enable = true;
+    # extraPlugins = with pkgs; [ pgmp ];
+    authentication = pkgs.lib.mkForce ''
+      # type db  user address            method
+      local  all all                     trust
+    '';
+    # extraConfig = ''
+    #   listen_addresses = '172.24.172.226,127.0.0.1'
+    # '';
+  };
+
 }

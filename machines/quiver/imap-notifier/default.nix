@@ -18,12 +18,10 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
 
       def start_work():
         print("starting work notifier")
-        os.system("systemctl stop    --user home-email-notifier")
         os.system("systemctl restart --user work-email-notifier")
 
       def start_home():
         print("starting home notifier")
-        os.system("systemctl stop    --user work-email-notifier")
         os.system("systemctl restart --user home-email-notifier")
 
       def check():
@@ -86,7 +84,7 @@ with extra; {
             (
               flock -x -w 100 200 || exit 1
               mbsync gmail
-              notmuch new
+              notmuch --config /home/jb55/.notmuch-config-work new
               [ "$1" == "no" ] && \
                 twmnc -i new_email -c "lets get to work" -s 32 --pos top_left || \
                 twmnc -i new_email -c w -s 32 --pos top_left
