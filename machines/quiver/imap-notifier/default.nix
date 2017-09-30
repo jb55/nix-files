@@ -84,7 +84,7 @@ with extra; {
             (
               flock -x -w 100 200 || exit 1
               mbsync gmail
-              notmuch new
+              notmuch --config /home/jb55/.notmuch-config-work new
               [ "$1" == "no" ] && \
                 twmnc -i new_email -c "lets get to work" -s 32 --pos top_left || \
                 twmnc -i new_email -c w -s 32 --pos top_left
