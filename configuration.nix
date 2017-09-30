@@ -77,7 +77,7 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  nix.useSandbox = true;
+  nix.useSandbox = machine != "charon";
 
   users.extraUsers.jb55 = user;
   #users.extraGroups.docker.members = [ "jb55" ];
