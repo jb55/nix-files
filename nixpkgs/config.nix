@@ -261,6 +261,7 @@ in {
       clientsession
       cassava
       cereal
+      clientsession
       comonad
       comonad-transformers
       compact-string-fix
@@ -299,6 +300,7 @@ in {
       http-types
       HUnit
       io-memoize
+      io-storage
       keys
       # language-bash
       language-c
@@ -332,6 +334,7 @@ in {
       # monstercat-backend
       network
       newtype
+      neat-interpolation
       numbers
       options
       optparse-applicative
@@ -394,7 +397,7 @@ in {
       servant-elm
       servant-lucid
       servant-server
-      servant-auth-server
+      #servant-auth-server
       # servant-swagger
       shake
       shakespeare
