@@ -82,13 +82,18 @@ with extra; {
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/work
+
+            notify() {
+              [ -f ~/var/notify/work ] && \
+                twmnc -i new_email -c w -s 32 --pos top_left
+            }
+
             (
               flock -x -w 100 200 || exit 1
               mbsync gmail
               notmuch --config /home/jb55/.notmuch-config-work new
               [ "$1" == "no" ] && \
-                twmnc -i new_email -c "lets get to work" -s 32 --pos top_left || \
-                twmnc -i new_email -c w -s 32 --pos top_left
+                twmnc -i new_email -c "lets get to work" -s 32 --pos top_left || notify
             ) 200>/tmp/email-notify.lock
           '';
       in notifier private.work-email-user private.work-email-pass cmd "";
@@ -112,12 +117,17 @@ with extra; {
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/personal
+
+            notify() {
+              [ -f ~/var/notify/home ] && \
+                twmnc -i new_email -c h -s 32 --pos top_left
+            }
+
             (
               flock -x -w 100 200 || exit 1
               muchsync -C ~/.notmuch-config-personal notmuch
               [ "$1" == "no" ] && \
-                twmnc -i new_email -c "welcome home" -s 32 --pos top_left || \
-                twmnc -i new_email -c p -s 32 --pos top_left
+                twmnc -i new_email -c "welcome home" -s 32 --pos top_left || notify
             ) 200>/tmp/email-notify.lock
           '';
       in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";
