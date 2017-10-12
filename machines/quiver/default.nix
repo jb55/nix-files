@@ -94,7 +94,7 @@ extra:
 
   programs.gnupg.trezor-agent = {
     enable = true;
-    configPath = "/home/jb55/.gnupg/trezor";
+    configPath = "/home/jb55/.gnupg";
   };
 
   services.postgresql = {
