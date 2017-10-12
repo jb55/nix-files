@@ -133,16 +133,16 @@ with extra; {
       in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";
   };
 
-  systemd.user.services.email-notify-switcher = {
-    enable = true;
-    description = "switches email notifier based on time";
+  # systemd.user.services.email-notify-switcher = {
+  #   enable = true;
+  #   description = "switches email notifier based on time";
 
-    path = with pkgs; [ systemd ];
+  #   path = with pkgs; [ systemd ];
 
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
+  #   wantedBy = [ "default.target" ];
+  #   after    = [ "default.target" ];
 
-    serviceConfig.ExecStart = "${email-switcher}";
-  };
+  #   serviceConfig.ExecStart = "${email-switcher}";
+  # };
 
 }
