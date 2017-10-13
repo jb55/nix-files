@@ -64,7 +64,6 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       until /var/run/wrappers/bin/ping -c1 $host &>/dev/null; do :; done
 
       # run it once first in case we missed any from lost connectivity
-      ${cmd} no || :
       ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
     '';
 in
@@ -92,8 +91,7 @@ with extra; {
               flock -x -w 100 200 || exit 1
               mbsync gmail
               notmuch --config /home/jb55/.notmuch-config-work new
-              [ "$1" == "no" ] && \
-                twmnc -i new_email -c "lets get to work" -s 32 --pos top_left || notify
+              notify
             ) 200>/tmp/email-notify.lock
           '';
       in notifier private.work-email-user private.work-email-pass cmd "";
@@ -126,8 +124,7 @@ with extra; {
             (
               flock -x -w 100 200 || exit 1
               muchsync -C ~/.notmuch-config-personal notmuch
-              [ "$1" == "no" ] && \
-                twmnc -i new_email -c "welcome home" -s 32 --pos top_left || notify
+              notify
             ) 200>/tmp/email-notify.lock
           '';
       in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";
