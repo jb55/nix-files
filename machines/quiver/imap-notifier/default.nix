@@ -64,6 +64,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       until /var/run/wrappers/bin/ping -c1 $host &>/dev/null; do :; done
 
       # run it once first in case we missed any from lost connectivity
+      ${cmd} || :
       ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
     '';
 in
@@ -130,16 +131,16 @@ with extra; {
       in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";
   };
 
-  # systemd.user.services.email-notify-switcher = {
-  #   enable = true;
-  #   description = "switches email notifier based on time";
+  systemd.user.services.email-notify-switcher = {
+    enable = true;
+    description = "switches email notifier based on time";
 
-  #   path = with pkgs; [ systemd ];
+    path = with pkgs; [ systemd ];
 
-  #   wantedBy = [ "default.target" ];
-  #   after    = [ "default.target" ];
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
-  #   serviceConfig.ExecStart = "${email-switcher}";
-  # };
+    serviceConfig.ExecStart = "${email-switcher}";
+  };
 
 }
