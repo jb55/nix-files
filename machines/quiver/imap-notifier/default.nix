@@ -84,8 +84,10 @@ with extra; {
             export DATABASEDIR=$HOME/mail/work
 
             notify() {
-              [ -f ~/var/notify/work ] && \
+              c=$(notmuch --config /home/jb55/.notmuch-config-work count 'tag:inbox and not tag:filed and not tag:noise')
+              if [ -f ~/var/notify/work ] && [ "$c" -gt 0 ]; then
                 twmnc -i new_email -c w -s 32 --pos top_left
+              fi
             }
 
             (
@@ -118,8 +120,10 @@ with extra; {
             export DATABASEDIR=$HOME/mail/personal
 
             notify() {
-              [ -f ~/var/notify/home ] && \
-                twmnc -i new_email -c h -s 32 --pos top_left
+              c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
+              if [ -f ~/var/notify/home ] && [ "$c" -gt 0 ]; then
+                twmnc -i new_email -c p -s 32 --pos top_left
+              fi
             }
 
             (
