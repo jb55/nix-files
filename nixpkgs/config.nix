@@ -259,6 +259,7 @@ in {
       HUnit
       MissingH
       QuickCheck
+      quickcheck-instances
       SafeSemaphore
       Spock
       aeson
@@ -279,6 +280,7 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
+      cryptohash
       cased
       cassava
       cereal
