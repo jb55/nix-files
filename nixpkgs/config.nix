@@ -25,7 +25,6 @@ in {
   packageOverrides = super: rec {
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     emacs = super.emacsWithPackages (ep: with ep; [
-      notmuch
       pkgs.urweb
     ]);
 
@@ -49,6 +48,17 @@ in {
     };
 
     jb55-dotfiles = regularFiles <dotfiles>;
+
+    notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
+      src = pkgs.fetchFromGitHub {
+        owner  = "jb55";
+        repo   = "notmuch";
+        rev    = "cae2d57dbc1fd94d7f3c7935da6e15765d60da70";
+        sha256 = "0lngrnzlaz17y9ngcjzj63br59f8zz5npbx26nrwmmk81zvbwl5m";
+      };
+
+      doCheck = false;
+    });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
       patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
@@ -139,6 +149,7 @@ in {
       paths = with pkgs; with xorg; [
         nmap
         dnsutils
+        whois
         nethogs
       ];
     };
@@ -226,8 +237,32 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      aeson
       # aeson-applicative
+      # blaze-builder-enumerator
+      # bound
+      # envy
+      # language-bash
+      # monstercat-backend
+      # pipes-async
+      # pipes-binary
+      # pipes-shell
+      # postgresql-simple-sop
+      # regular
+      # servant-swagger
+      # time-patterns
+      #failure
+      #persistent-mongoDB
+      #servant-auth-server
+      Boolean
+      Decimal
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      quickcheck-instances
+      SafeSemaphore
+      Spock
+      aeson
       aeson-qq
       amazonka
       amazonka-s3
@@ -241,31 +276,29 @@ in {
       bitcoin-tx
       blaze-builder
       blaze-builder-conduit
-      # blaze-builder-enumerator
       blaze-html
       blaze-markup
       blaze-textual
-      Boolean
-      # bound
       bson-lens
+      cryptohash
       cased
       cassava
       cereal
+      clientsession
+      clientsession
+      colour
       comonad
       comonad-transformers
       compact-string-fix
-      directory
       diagrams
-      colour
+      directory
       dlist
       dlist-instances
       doctest
       either
       elm-export
       elm-export-persistent
-      # envy
       exceptions
-      #failure
       filepath
       fingertree
       foldl
@@ -279,18 +312,17 @@ in {
       gogol-youtube-reporting
       hamlet
       hashable
+      hashids
       heroku
       hspec
       hspec-expectations
       html
-      HTTP
       http-client
       http-date
       http-types
-      HUnit
       io-memoize
+      io-storage
       keys
-      # language-bash
       language-c
       language-javascript
       lens
@@ -307,34 +339,32 @@ in {
       logict
       mime-mail
       mime-types
-      MissingH
+      miso
       mmorph
       monad-control
       monad-coroutine
-      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
+      monadloc
       mongoDB
       monoid-extras
-      # monstercat-backend
+      neat-interpolation
       network
       newtype
       numbers
       options
       optparse-applicative
+      optparse-generic
       parsec
       parsers
       pcg-random
       persistent
-      #persistent-mongoDB
       persistent-postgresql
       persistent-template
       pipes
-      # pipes-async
       pipes-attoparsec
-      # pipes-binary
       pipes-bytestring
       pipes-concurrency
       pipes-csv
@@ -346,16 +376,15 @@ in {
       pipes-parse
       pipes-postgresql-simple
       pipes-safe
-      # pipes-shell
       pipes-text
       pipes-wai
       posix-paths
       postgresql-binary
       postgresql-simple
-      # postgresql-simple-sop
       pretty-show
+      probability
       profunctors
-      QuickCheck
+      pwstore-fast
       random
       reducers
       reflection
@@ -363,13 +392,12 @@ in {
       regex-base
       regex-compat
       regex-posix
-      # regular
       relational-record
       resourcet
       retry
       rex
+      s3-signer
       safe
-      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -377,29 +405,26 @@ in {
       servant
       servant-cassava
       servant-client
-      pwstore-fast
       servant-docs
       servant-elm
       servant-lucid
       servant-server
-      servant-auth-server
-      # servant-swagger
       shake
       shakespeare
       shelly
+      shqq
       simple-reflect
       speculation
       split
-      Spock
       spoon
       stm
       stm-chans
       stm-stats
       streaming
       streaming-bytestring
-      streaming-wai
-      streaming-utils
       streaming-postgresql-simple
+      streaming-utils
+      streaming-wai
       strict
       stringsearch
       strptime
@@ -421,8 +446,8 @@ in {
       test-framework-hunit
       text
       text-format
+      thyme
       time
-      # time-patterns
       time-units
       tinytemplate
       transformers
@@ -431,7 +456,6 @@ in {
       uniplate
       unix-compat
       unordered-containers
-      probability
       uuid
       vector
       void

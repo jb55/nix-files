@@ -18,12 +18,12 @@ in
   services.redshift = {
     enable = true;
     temperature.day = 5700;
-    temperature.night = 3700;
+    temperature.night = 3900;
     # gamma=0.8
 
     brightness = {
       day = "1.0";
-      night = "0.5";
+      night = "0.6";
     };
 
     latitude="49.270186";
@@ -45,6 +45,10 @@ in
   services.xserver = {
     enable = true;
     layout = "us";
+
+    # xset r rate 200 50
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 50;
 
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:${composeKey}";
 
