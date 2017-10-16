@@ -9,8 +9,8 @@ in
     description = "beatport sales bot";
 
     environment = {
-      SHOPIFY_USER = extra.private.beatport-user;
-      SHOPIFY_PASS = extra.private.beatport-pass;
+      BEATPORT_USER = extra.private.beatport-user;
+      BEATPORT_PASS = extra.private.beatport-pass;
     };
 
     serviceConfig.ExecStart = "${import-scripts}/bin/beatport-sales-bot";
