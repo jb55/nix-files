@@ -5,7 +5,7 @@ let cfg = extra.private;
     import-scripts = extra.import-scripts;
 in
 {
-  systemd.user.services.shopify-sales-bot = {
+  systemd.user.services.beatport-sales-bot = {
     description = "beatport sales bot";
 
     environment = {
@@ -13,10 +13,10 @@ in
       SHOPIFY_PASS = extra.private.beatport-pass;
     };
 
-    serviceConfig.ExecStart = "${import-scripts}/bin/beaport-sales-bot";
+    serviceConfig.ExecStart = "${import-scripts}/bin/beatport-sales-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
     # 20th is always before the earliest possible last wednesday (22nd)
-    startAt = "*-*-20 7:30:00";
+    startAt = "*-*-05 7:30:00";
   };
 }
