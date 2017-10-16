@@ -15,7 +15,7 @@ extra:
     unitConfig.OnFailure = "notify-failed@%n.service";
 
     # every saturday
-    startAt = "*-*-* 4:20:00";
+    startAt = "*-*-05 4:20:00";
   };
 }
 
