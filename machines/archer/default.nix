@@ -17,6 +17,7 @@ in {
     (import ./backups/wiki.nix extras)
     (import ./nginx extras)
     (import ./trendbot extras)
+    (import ./beatport-sales-bot extras)
     (import ./transaction-bot extras)
     (import ./tunecore-sales-bot extras)
     (import ./bandcamp-sales-bot extras)
