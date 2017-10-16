@@ -53,9 +53,11 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "0c1299bbcda41b0f28e1ac522e440914aa51bf58";
-        sha256 = "01950zy1w10gg4034i44kph4gxgwyn5h89067lp5rg7d3r6h243l";
+        rev    = "cae2d57dbc1fd94d7f3c7935da6e15765d60da70";
+        sha256 = "0lngrnzlaz17y9ngcjzj63br59f8zz5npbx26nrwmmk81zvbwl5m";
       };
+
+      doCheck = false;
     });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
