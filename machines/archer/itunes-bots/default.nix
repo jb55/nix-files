@@ -29,5 +29,5 @@ in
 
     # First tuesday of every month @1530
     startAt = "Tue *-*-1..7 15:30:00";
-  }
+  };
 }
