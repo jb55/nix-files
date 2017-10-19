@@ -17,8 +17,10 @@ in
     '';
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
-    # youtube bot is run on the 20th at 10:24:00
-    startAt = "*-*-20 09:24:00";
+    startAt = [
+      "*-*-20 09:24:00"       # youtube bot is run on the 20th at 10:24:00
+      "Tue *-*-1..7 15:00:00" # cookies for itunes bot on the first tuesday
+    ];
   };
 
   systemd.user.services.cookie-bot-reminder = {
