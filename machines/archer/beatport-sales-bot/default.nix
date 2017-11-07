@@ -16,7 +16,7 @@ in
     serviceConfig.ExecStart = "${import-scripts}/bin/beatport-sales-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
-    # 20th is always before the earliest possible last wednesday (22nd)
-    startAt = "*-*-05 7:30:00";
+    # still no statements on the 5th (or event 7th, try two weeks)
+    startAt = "*-*-15 7:30:00";
   };
 }
