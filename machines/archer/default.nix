@@ -80,6 +80,21 @@ in {
 
     server {
       listen 80;
+      server_name matrix.monster.cat;
+
+      location / {
+        proxy_pass  https://localhost:8448;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+
+    server {
+      listen 80;
       server_name nixcache.monstercat.com;
 
       location / {
@@ -112,6 +127,15 @@ in {
   services.nix-serve.enable = true;
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
+
+  services.matrix-synapse.enable = true;
+  services.matrix-synapse.database_type = "psycopg2";
+  services.matrix-synapse.enable_registration = true;
+  services.matrix-synapse.database_args = {
+    user = "jb55";
+    dbname = "matrix";
+  };
+  services.matrix-synapse.server_name = "matrix.monster.cat";
 
   networking.firewall.trustedInterfaces = ["zt0" "zt2"];
   networking.firewall.allowedTCPPorts = [ 22 143 80 ];
@@ -147,3 +171,4 @@ in {
     '';
   };
 }
+
