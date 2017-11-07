@@ -20,7 +20,7 @@
   };
 
   fileSystems."/shares/turtlerock" = {
-    device = "//192.168.1.66/Confidential\\040Share";
+    device = "//192.168.2.111/Confidential\\040Share";
     fsType = "cifs";
     options = ["x-systemd.automount" "x-systemd.idle-timeout=1min" "username=bill" "password=connect123" "uid=1000" "gid=1000" "workgroup=WORKGROUP" "rw"];
   };
