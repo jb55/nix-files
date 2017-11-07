@@ -12,22 +12,22 @@ let util = extra.util;
 in {
   imports = [
     ./hardware
+    #(import ./youtube-pub-sales-bot extras)
+    #(import ./youtube-red-sales-bot extras)
     (import ./backups extras)
     (import ./backups/git.nix extras)
     (import ./backups/wiki.nix extras)
-    (import ./nginx extras)
-    (import ./trendbot extras)
-    (import ./beatport-sales-bot extras)
-    (import ./transaction-bot extras)
-    (import ./tunecore-sales-bot extras)
     (import ./bandcamp-sales-bot extras)
-    (import ./youtube-sales-bot extras)
-    #(import ./youtube-pub-sales-bot extras)
-    #(import ./youtube-red-sales-bot extras)
-    (import ./tunecore-gaming-sales-bot extras)
-    (import ./shopify-sales-bot extras)
-    (import ./itunes-bots extras)
+    (import ./beatport-sales-bot extras)
     (import ./cogs-bot extras)
+    (import ./itunes-bots extras)
+    (import ./nginx extras)
+    (import ./shopify-sales-bot extras)
+    (import ./transaction-bot extras)
+    (import ./trendbot extras)
+    (import ./tunecore-gaming-sales-bot extras)
+    (import ./tunecore-sales-bot extras)
+    (import ./youtube-sales-bot extras)
     (import <nixpkgs/nixos/modules/services/misc/gitit.nix>)
   ];
 
