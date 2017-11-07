@@ -31,9 +31,8 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
         else:
           if now.hour >= 17 or now.hour < 9:
             start_home()
-          # don't start @ work, notifications are annoying
-          # else:
-          #   start_work()
+          else:
+            start_work()
 
       def handle_sleep_callback(sleeping):
         if not sleeping:

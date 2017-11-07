@@ -120,4 +120,5 @@ in
 
   networking.firewall.checkReversePath = false;
   networking.firewall.logReversePathDrops = true;
+  networking.firewall.allowedTCPPorts = [ 8333 ];
 }

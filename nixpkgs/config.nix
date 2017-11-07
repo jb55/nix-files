@@ -418,6 +418,7 @@ in {
       split
       spoon
       stm
+      store
       stm-chans
       stm-stats
       streaming
