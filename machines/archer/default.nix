@@ -23,7 +23,7 @@ in {
     (import ./bandcamp-sales-bot extras)
     (import ./youtube-sales-bot extras)
     #(import ./youtube-pub-sales-bot extras)
-    (import ./youtube-red-sales-bot extras)
+    #(import ./youtube-red-sales-bot extras)
     (import ./tunecore-gaming-sales-bot extras)
     (import ./shopify-sales-bot extras)
     (import ./itunes-bots extras)
