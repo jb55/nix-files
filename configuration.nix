@@ -17,7 +17,7 @@ let machine = "quiver";
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
     };
-    # caches = [ "https://cache.nixos.org" ];
+    caches = [ "http://nixcache.monstercat.com" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     composeKey = if machine == "quiver" then "ralt" else "rwin";
     nixpkgsConfig = import ./nixpkgs/config.nix;
@@ -77,10 +77,13 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  # nix.binaryCaches = caches;
+  nix.binaryCaches = caches;
   nix.useSandbox = true;
-  # nix.trustedBinaryCaches = caches;
-  # nix.requireSignedBinaryCaches = false;
+  nix.binaryCachePublicKeys = [
+    "nixcache.monstercat.com-1:NgYZV5X3IoQ0D2HH+GrsI8a6H5TtmkHpfPx2wZN3Oz4=%"
+  ];
+  nix.trustedBinaryCaches = [ "nixcache.monstercat.com" ];
+  nix.requireSignedBinaryCaches = true;
 
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];
