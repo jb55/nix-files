@@ -67,6 +67,7 @@ extra:
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
+  services.printing.drivers = [ pkgs.samsung-unified-linux-driver_4_01_17 ];
 
   services.autorandr.enable = true;
   services.acpid.enable = false;
