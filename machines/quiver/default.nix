@@ -27,7 +27,7 @@ extra:
   services.xserver.config = ''
     Section "InputClass"
       Identifier     "Enable libinput for TrackPoint"
-      MatchProduct   "PS/2 Generic Mouse"
+      MatchProduct   "TPPS/2 IBM TrackPoint"
       Driver         "libinput"
       Option         "ScrollMethod" "button"
       Option         "ScrollButton" "8"
