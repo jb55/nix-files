@@ -53,8 +53,8 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "cae2d57dbc1fd94d7f3c7935da6e15765d60da70";
-        sha256 = "0lngrnzlaz17y9ngcjzj63br59f8zz5npbx26nrwmmk81zvbwl5m";
+        rev    = "9bd509f28bd42dda253c483fd05486caf3878793";
+        sha256 = "02v7m5nq41mmmkkfhms7qw2x4d1miw9j7pbv3bsx5qkv6acckqli";
       };
 
       doCheck = false;
