@@ -48,40 +48,22 @@ extra:
     openFirewall = true;
   };
 
-  services.nginx.enable = false;
+  services.nginx.enable = true;
+  services.nginx.group = "www-data";
 
-  services.nginx.httpConfig = lib.mkIf config.services.plex.enable ''
+  services.nginx.httpConfig = ''
     server {
       listen 80;
 
-      # server names for this server.
-      # any requests that come in that match any these names will use the proxy.
-      server_name plex.jb55.com;
+      root /var/www/share;
 
-      # this is where everything cool happens (you probably don't need to change anything here):
       location / {
-        # if a request to / comes in, 301 redirect to the main plex page.
-        # but only if it doesn't contain the X-Plex-Device-Name header
-        # this fixes a bug where you get permission issues when accessing the web dashboard
-
-        if ($http_x_plex_device_name = \'\') {
-          rewrite ^/$ http://$http_host/web/index.html;
-        }
-
-        # set some headers and proxy stuff.
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_redirect off;
-
-        # include Host header
-        proxy_set_header Host $http_host;
-
-        # proxy request to plex server
-        proxy_pass http://127.0.0.1:32400;
+        autoindex on;
       }
     }
   '';
 
+  users.extraGroups.www-data.members = [ "jb55" ];
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
