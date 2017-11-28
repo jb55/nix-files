@@ -12,6 +12,9 @@ in
     description = "itunes sales bot";
 
     environment = {
+      PGDATABASE = extra.private.pgdatabase;
+      PGHOST = extra.private.pghost;
+      PGUSER = extra.private.pguser;
       ISO_3166_COUNTRIES = countries;
     };
 
@@ -24,6 +27,12 @@ in
 
   systemd.user.services.itunes-transaction-bot = {
     description = "itunes transaction bot";
+
+    environment = {
+      PGDATABASE = extra.private.pgdatabase;
+      PGHOST = extra.private.pghost;
+      PGUSER = extra.private.pguser;
+    };
 
     serviceConfig.ExecStart = "${import-scripts}/bin/itunes-transaction-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
