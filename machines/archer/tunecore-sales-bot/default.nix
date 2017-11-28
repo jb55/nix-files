@@ -1,8 +1,11 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  systemd.services.tunecore-sales-bot = {
+  systemd.user.services.tunecore-sales-bot = {
     description = "tc sales bot";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     environment = {
       TUNECORE_USER = extra.private.tc-user;
