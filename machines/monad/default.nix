@@ -32,7 +32,7 @@ in
   users.extraGroups.tor.members = [ "jb55" ];
   users.extraGroups.nginx.members = [ "jb55" ];
 
-  programs.mosh.enable = false;
+  programs.mosh.enable = true;
   services.trezord.enable = false;
   services.redis.enable = false;
 
