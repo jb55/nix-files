@@ -4,6 +4,9 @@ extra:
   systemd.user.services.tunecore-sales-bot = {
     description = "tunecore sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       TUNECORE_USER = extra.private.tc-user;
       TUNECORE_PASS = extra.private.tc-pass;

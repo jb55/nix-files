@@ -11,6 +11,9 @@ in
   systemd.user.services.itunes-sales-bot = {
     description = "itunes sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       PGDATABASE = extra.private.pgdatabase;
       PGHOST = extra.private.pghost;
@@ -27,6 +30,9 @@ in
 
   systemd.user.services.itunes-transaction-bot = {
     description = "itunes transaction bot";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     environment = {
       PGDATABASE = extra.private.pgdatabase;
