@@ -110,7 +110,7 @@ in {
 
     server {
       listen 80;
-      server_name wiki.monstercat.com wiki.monster.cat;
+      server_name wiki wiki.monstercat.com wiki.monster.cat;
 
       location / {
         proxy_pass  http://localhost:${toString config.services.gitit.port};
