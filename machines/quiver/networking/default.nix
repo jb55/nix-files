@@ -1,7 +1,7 @@
 extra:
 { config, lib, pkgs, ... }:
 let
-  chromecastIPs = [ "192.168.86.190" "192.168.1.67" "192.168.1.29" ];
+  chromecastIPs = [ "192.168.86.190" ];
   iptables = "iptables -A nixos-fw";
   openChromecast = ip: ''
     ${iptables} -p udp -s ${ip} -j nixos-fw-accept
@@ -41,8 +41,12 @@ in
 {
   # networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
+  networking.firewall.enable = true;
   networking.firewall.extraCommands = ''
     ${lib.concatStringsSep "\n\n" (map openChromecast chromecastIPs)}
+
+    # home network nginx
+    iptables -A nixos-fw -p tcp -s 192.168.86.0/24 -d 192.168.86.0/24 --dport 80 -j nixos-fw-accept
   ''
   # openvpn-pia stuff, we only want to do this once
   + (if config.services.openvpn.servers.pia != null then ''
@@ -52,11 +56,15 @@ in
     # NAT packets in cgroup through VPN tun interface
     iptables -t nat -A POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE
 
+    ${ipr} rule delete fwmark 11 table ${vpn.table} || :
+    ${ipr} route delete blackhole default metric 2 table ${vpn.table} || :
+
     # create separate routing table
     ${ipr} rule add fwmark 11 table ${vpn.table}
 
     # add fallback route that blocks traffic, should the VPN go down
     ${ipr} route add blackhole default metric 2 table ${vpn.table}
+
   '' else "");
 
   users.extraGroups.vpn-pia.members = [ "jb55" "transmission" ];
