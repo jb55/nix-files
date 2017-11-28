@@ -31,7 +31,7 @@ extra:
       Driver         "libinput"
       Option         "ScrollMethod" "button"
       Option         "ScrollButton" "8"
-      Option         "AccelSpeed" "1"
+      Option         "AccelSpeed" "0"
     EndSection
 
     Section "InputClass"
