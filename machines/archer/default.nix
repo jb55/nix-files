@@ -38,6 +38,8 @@ in {
     bind = extras.ztip;
   };
 
+  services.unifi.enable = true;
+
   services.gitit = rec {
     enable = true;
     wikiTitle = "Monstercat Wiki";
@@ -76,6 +78,31 @@ in {
       location = / {
         return 301 https://github.com/monstercat/monstercatpkgs/archive/master.tar.gz;
       }
+    }
+
+    server {
+      listen 443 ssl;
+      server_name unifi.monster.cat;
+
+      ssl_certificate     /home/jb55/var/certs/unifi-cert.pem;
+      ssl_certificate_key /home/jb55/var/certs/unifi-key.pem;
+
+      location / {
+        proxy_pass  https://localhost:8443;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+
+    server {
+      listen 80;
+      server_name unifi.monster.cat;
+
+      return 301 https://$host$request_uri;
     }
 
     server {
@@ -138,7 +165,7 @@ in {
   services.matrix-synapse.server_name = "matrix.monster.cat";
 
   networking.firewall.trustedInterfaces = ["zt0" "zt2"];
-  networking.firewall.allowedTCPPorts = [ 22 143 80 ];
+  networking.firewall.allowedTCPPorts = [ 22 143 443 80 ];
 
   networking.defaultMailServer = {
     directDelivery = private.gmail-user != null || private.gmail-pass != null;
