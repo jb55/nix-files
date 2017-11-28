@@ -11,6 +11,9 @@ in
   systemd.user.services.itunes-sales-bot = {
     description = "itunes sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       ISO_3166_COUNTRIES = countries;
     };
@@ -24,6 +27,9 @@ in
 
   systemd.user.services.itunes-transaction-bot = {
     description = "itunes transaction bot";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     serviceConfig.ExecStart = "${import-scripts}/bin/itunes-transaction-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
