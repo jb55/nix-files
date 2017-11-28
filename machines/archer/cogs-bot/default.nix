@@ -8,6 +8,9 @@ in
   systemd.user.services.cogs-bot = {
     description = "cogs bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       COGS_SHEET_ID="1lIluimJqBlGK1yRTmsekwUmk0_Wk0wD9VErUE8z6_dY";
     };
