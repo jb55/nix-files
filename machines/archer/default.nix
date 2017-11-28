@@ -154,6 +154,7 @@ in {
   services.nix-serve.enable = true;
   services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
   services.nix-serve.port = extras.nix-serve.port;
+  services.nix-serve.secretKeyFile = "/var/nix/nix-serve.sec";
 
   services.matrix-synapse.enable = true;
   services.matrix-synapse.database_type = "psycopg2";
