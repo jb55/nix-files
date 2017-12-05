@@ -17,8 +17,8 @@ extra:
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-sales-bot daily-check";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
-    # every saturday
-    startAt = "*-*-* 4:20:00";
+    # monthly, first tuesday
+    startAt = "Tue *-*-1..7 10:30:00";
   };
 }
 
