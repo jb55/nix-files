@@ -6,6 +6,9 @@ in
   systemd.user.services.youtube-sales-bot = {
     description = "youtube sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/youtube-sales-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 

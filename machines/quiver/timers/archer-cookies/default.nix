@@ -8,12 +8,15 @@ in
   systemd.user.services.cookie-bot = {
     description = "copy cookies to archer";
 
-    path = with pkgs; [ openssh ];
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ openssh rsync ];
 
     serviceConfig.ExecStart = util.writeBash "cp-cookies" ''
       export HOME=/home/jb55
       PTH=".config/chromium/Default/Cookies"
-      scp $HOME/$PTH archer:$PTH
+      rsync -av $HOME/$PTH archer:$PTH
     '';
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
@@ -25,6 +28,9 @@ in
 
   systemd.user.services.cookie-bot-reminder = {
     description = "reminder to login";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     serviceConfig.ExecStart = util.writeBash "cookie-reminder" ''
       /run/wrappers/bin/sendmail -f bill@monstercat.com <<EOF

@@ -4,6 +4,9 @@ extra:
   systemd.user.services.tunecore-sales-bot = {
     description = "tunecore sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       TUNECORE_USER = extra.private.tc-user;
       TUNECORE_PASS = extra.private.tc-pass;
@@ -17,8 +20,8 @@ extra:
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/tunecore-sales-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
-    # every saturday
-    startAt = "Tue *-*-1..7 6:30:00";
+    # monthly, first tuesday
+    startAt = "Tue *-*-1..7 10:30:00";
   };
 }
 

@@ -8,6 +8,9 @@ in
   systemd.user.services.beatport-sales-bot = {
     description = "beatport sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       BEATPORT_USER = extra.private.beatport-user;
       BEATPORT_PASS = extra.private.beatport-pass;

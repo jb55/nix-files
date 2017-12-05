@@ -11,6 +11,9 @@ in
   systemd.user.services.itunes-sales-bot = {
     description = "itunes sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       PGDATABASE = extra.private.pgdatabase;
       PGHOST = extra.private.pghost;
@@ -22,7 +25,7 @@ in
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
     # First tuesday of every month @ 1600
-    startAt = "Tue *-*-1..7 16:00:00";
+    startAt = "Tue *-*-1..7 11:30:00";
   };
 
   systemd.user.services.itunes-transaction-bot = {
@@ -34,10 +37,13 @@ in
       PGUSER = extra.private.pguser;
     };
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     serviceConfig.ExecStart = "${import-scripts}/bin/itunes-transaction-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
-    # First tuesday of every month @1530
-    startAt = "Tue *-*-1..7 15:30:00";
+    # First tuesday of every month @11
+    startAt = "Tue *-*-1..7 11:00:00";
   };
 }

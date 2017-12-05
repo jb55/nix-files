@@ -83,7 +83,7 @@ with extra; {
             export DATABASEDIR=$HOME/mail/work
 
             notify() {
-              c=$(notmuch --config /home/jb55/.notmuch-config-work count 'tag:inbox and not tag:filed and not tag:noise')
+              c=$(notmuch --config /home/jb55/.notmuch-config-work count 'tag:flagged and tag:inbox and date:today')
               if [ -f ~/var/notify/work ] && [ "$c" -gt 0 ]; then
                 twmnc -i new_email -c w -s 32 --pos top_left
               fi

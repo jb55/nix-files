@@ -16,7 +16,7 @@ in
     serviceConfig.ExecStart = "${extra.import-scripts}/bin/bandcamp-sales-bot";
     unitConfig.OnFailure = "notify-failed@%n.service";
 
-    # monthly
-    startAt = "*-*-01 04:20:00";
+    # 3rd day of each month
+    startAt = "*-*-03 8:30:00";
   };
 }
