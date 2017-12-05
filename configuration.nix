@@ -17,7 +17,7 @@ let machine = "quiver";
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
     };
-    caches = [ "http://nixcache.monstercat.com" ];
+    caches = [ "https://cache.nixos.org" "http://nixcache.monstercat.com" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     composeKey = if machine == "quiver" then "ralt" else "rwin";
     nixpkgsConfig = import ./nixpkgs/config.nix;
