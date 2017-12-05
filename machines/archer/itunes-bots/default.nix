@@ -31,14 +31,14 @@ in
   systemd.user.services.itunes-transaction-bot = {
     description = "itunes transaction bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       PGDATABASE = extra.private.pgdatabase;
       PGHOST = extra.private.pghost;
       PGUSER = extra.private.pguser;
     };
-
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
 
     serviceConfig.ExecStart = "${import-scripts}/bin/itunes-transaction-bot";
     unitConfig.OnFailure = "notify-failed-user@%n.service";
