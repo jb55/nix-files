@@ -60,6 +60,19 @@ in {
       doCheck = false;
     });
 
+    wirelesstools =
+      let
+        patch = super.fetchurl {
+                  url    = "https://jb55.com/s/iwlist-print-scanning-info-allocation-failed.patch";
+                  sha256 = "31c97c6abf3f0073666f9f94f233fae2fcb8990aae5e7af1030af980745a8efc";
+                };
+      in
+        pkgs.lib.overrideDerivation super.wirelesstools (attrs: {
+          prePatch = ''
+            patch -p0 < ${patch}
+          '';
+        });
+
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
       patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
                                     sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
