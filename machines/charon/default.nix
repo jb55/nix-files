@@ -1,11 +1,104 @@
 extra:
 { config, lib, pkgs, ... }:
+let adblock-hosts = pkgs.fetchurl {
+      url    = "https://jb55.com/s/ad-sources.txt";
+      sha256 = "d9e6ae17ecc41eb7021c0552548a1c8da97efbb61e3a750fb023674d01d81134";
+    };
+    dnsmasq-adblock = pkgs.fetchurl {
+      url = "https://jb55.com/s/dnsmasq-ad-sources.txt";
+      sha256 = "3b34e565fb240c4ac1d261cb223bdc2d992fa755b5f6e981144e5b18f96f260d";
+    };
+    gitExtra = {
+      git = {projectroot = "/var/git";};
+      host = "git.zero.jb55.com";
+    };
+    npmrepo = (import (pkgs.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "npm-repo-proxy";
+      rev    = "81182f25cb783a986d7b7ee4a63f0ca6ca9c8989";
+      sha256 = "0zj7ys0383fs3hykax5bd6q5wrhzcipy8j3div83mba2n7c13f8l";
+    }) {}).package;
+    gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
+    hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
+    myemail = "jb55@jb55.com";
+in
 {
   imports = [
     ./networking
     ./hardware
     (import ./nginx extra)
+    (import ./sheetzen extra)
+    #(import ./vidstats extra)
   ];
+
+  users.extraGroups.jb55cert.members = [ "prosody" ];
+
+  services.gitDaemon.basePath = "/var/git-public/repos";
+  services.gitDaemon.enable = true;
+
+  security.acme.certs."jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
+    email = myemail;
+  };
+
+  security.acme.certs."git.jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
+    email = myemail;
+  };
+
+  security.acme.certs."sheetzen.com" = {
+    webroot = "/var/www/challenges";
+    email = myemail;
+  };
+
+  security.acme.certs."hearpress.com" = {
+    webroot = "/var/www/challenges";
+    email = myemail;
+  };
+
+  services.mailz = {
+    enable = true;
+    domain = "jb55.com";
+
+    users = {
+      jb55 = {
+        password = "$6$KHmFLeDBaXBE1Jkg$eEN8HM3LpZ4muDK/JWC25qW9xSZq0AqsF4tlzEan7yctROJ9A/lSqz6gN1b1GtwE7efroXGHtDi2FEJ2ujDAl0";
+        aliases = [ "postmaster" "bill" "will" "william" "me" "jb" ];
+      };
+    };
+
+    sieves = builtins.readFile ./dovecot/filters.sieve;
+  };
+
+  services.prosody.enable = true;
+  services.prosody.admins = [ "jb55@jb55.com" ];
+  services.prosody.allowRegistration = false;
+  services.prosody.extraModules = [
+    "cloud_notify"
+    "smacks"
+    "carbons"
+    "http_upload"
+  ];
+  services.prosody.extraConfig = ''
+    c2s_require_encryption = true
+    http_upload_path = "/www/jb55/xmpp-upload"
+  '';
+  services.prosody.ssl = {
+    cert = "${config.security.acme.directory}/jb55.com/fullchain.pem";
+    key = "${config.security.acme.directory}/jb55.com/key.pem";
+  };
+  services.prosody.virtualHosts.jb55 = {
+    enabled = true;
+    domain = "jb55.com";
+    ssl = {
+      cert = "${config.security.acme.directory}/jb55.com/fullchain.pem";
+      key = "${config.security.acme.directory}/jb55.com/key.pem";
+    };
+  };
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5/";
@@ -13,72 +106,68 @@ extra:
     authentication = ''
       # type db  user address        method
       local  all all                 trust
-      host   all all  127.0.0.1/32   trust
       host   all all  172.24.0.0/16  trust
     '';
     extraConfig = ''
-      listen_addresses = '0.0.0.0'
+      listen_addresses = '${extra.ztip}'
     '';
   };
 
-  systemd.services.postgrest = {
-    description = "PostgREST";
+  systemd.services.npmrepo = {
+    description = "npmrepo.com";
 
     wantedBy = [ "multi-user.target" ];
-    after    = [ "postgresql.target" ];
 
     serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = ''
-      ${pkgs.haskellPackages.postgrest}/bin/postgrest \
-        'postgres://localhost/wineparty' \
-        -a jb55
+    serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
+  };
+
+  systemd.user.services.rss2email = {
+    description = "run rss2email";
+    path = with pkgs; [ rss2email ];
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.rss2email}/bin/r2e run";
+  };
+
+  systemd.user.services.backup-rss2email = {
+    description = "backup rss2email";
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = pkgs.writeScript "backup-rss2email" ''
+      #!${pkgs.bash}/bin/bash
+      BACKUP_DIR=/home/jb55/backups/rss2email
+      cp /home/jb55/.config/rss2email.cfg $BACKUP_DIR
+      cp /home/jb55/.local/share/rss2email.json $BACKUP_DIR
+      cd $BACKUP_DIR
+      ${pkgs.git}/bin/git add -u
+      ${pkgs.git}/bin/git commit -m "bump"
+      ${pkgs.git}/bin/git push
     '';
   };
 
-  systemd.services.weechat = {
-    description = "Weechat relay server";
-
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = "yes";
-    serviceConfig.ExecStart = pkgs.writeScript "weechat-service" ''
-#!${pkgs.bash}/bin/bash
-      set -e
-      ${pkgs.rsync}/bin/rsync -rlD ${pkgs.jb55-dotfiles}/.weechat/ /tmp/weechat/
-      ${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat new-session -d -s weechat -n 'weechat' '${pkgs.weechat}/bin/weechat-curses -d /tmp/weechat'
-    '';
-    serviceConfig.ExecStop = "${pkgs.tmux.bin}/bin/tmux -S /run/tmux-weechat kill-session -t weechat";
-
+  systemd.user.timers.backup-rss2email = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "daily";
   };
 
-  systemd.services.dnsmonitor = {
-    description = "DNS monitor";
-    
+  systemd.user.timers.rss2email = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "hourly";
+  };
+
+  systemd.services.hearpress = {
+    description = "Hearpress server";
     wantedBy = [ "multi-user.target" ];
-    after    = [ "postgresql.target" "dnsmasq.target" ];
+    after = [ "postgresql.service" ];
+
+    environment = {
+      PG_CS = "postgresql://jb55@localhost/hearpress";
+      AWS_ACCESS_KEY_ID = extra.private.aws.access_key;
+      AWS_SECRET_ACCESS_KEY = extra.private.aws.secret_key;
+    };
 
     serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = pkgs.writeScript "dnsmonitor" ''
-#!${pkgs.bash}/bin/bash
-      ${pkgs.coreutils}/bin/stdbuf -o 0 \
-        ${pkgs.wireshark}/bin/tshark \
-          -l -i enp0s4 -n -T fields \
-          -e "ip.src" \
-          -e "dns.qry.name" \
-          -e "dns.a" -Y "dns.flags.response eq 1" \
-			| ${pkgs.coreutils}/bin/stdbuf -o 0 ${pkgs.gnused}/bin/sed 's#\([0-9\.]\{8,\}\)#"\1"#g' \
-			| ${pkgs.coreutils}/bin/stdbuf -o 0 ${pkgs.gawk}/bin/gawk -F '\t' '{printf "insert into req (src_ip, name, ip) values ('"'"'{%s}'"'"', '"'"'%s'"'"', '"'"'{%s}'"'"');\n", $1, $2, $3}' \
-			| ${pkgs.postgresql}/bin/psql -d dns >/dev/null
-    '';
+    serviceConfig.ExecStart = "${hearpress}/bin/hearpressd";
   };
-
-  systemd.services.weechat.enable = false;
-  systemd.services.postgrest.enable = true;
-  systemd.services.dnsmonitor.enable = false;
-
-  services.pogom-pokemap.enable = true;
-  services.pogom-gqpogo.enable = true;
 
   services.dnsmasq.enable = false;
   services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4"];
@@ -87,7 +176,36 @@ extra:
     conf-file=${dnsmasq-adblock}
   '';
 
-  networking.firewall.allowedTCPPorts = [ 22 443 80 5432 53 ];
-  networking.firewall.allowedUDPPorts = [ 53 ];
-  networking.firewall.trustedInterfaces = ["zt0"];
+  security.setuidPrograms = [ "sendmail" ];
+
+  services.fcgiwrap.enable = true;
+  services.nginx.httpConfig = ''
+    ${gitCfg}
+
+    server {
+      listen 80;
+      server_name git.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+
+      location / {
+        return 301 https://git.jb55.com$request_uri;
+      }
+    }
+
+    server {
+      listen       443 ssl;
+      server_name  git.jb55.com;
+
+      root /var/git-public/stagit;
+      index index.html index.htm;
+
+      ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
+    }
+
+  '';
+
 }
