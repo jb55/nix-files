@@ -25,14 +25,10 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
         os.system("systemctl restart --user home-email-notifier")
 
       def check():
-        now = datetime.datetime.now()
-        if now.isoweekday() > 5:
-          start_home()
-        else:
-          if now.hour >= 17 or now.hour < 9:
-            start_home()
-          else:
-            start_work()
+         # since we changed the notifier services to simply be fetching services,
+         # always restart home and work email fetchers
+         start_home()
+         start_work()
 
       def handle_sleep_callback(sleeping):
         if not sleeping:
