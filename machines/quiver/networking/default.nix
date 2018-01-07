@@ -47,6 +47,8 @@ in
 
     # home network nginx
     iptables -A nixos-fw -p tcp -s 192.168.86.0/24 -d 192.168.86.0/24 --dport 80 -j nixos-fw-accept
+
+    ${openTCP "zt1" "9735"}
   ''
   # openvpn-pia stuff, we only want to do this once
   + (if config.services.openvpn.servers.pia != null then ''
