@@ -28,7 +28,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
          # since we changed the notifier services to simply be fetching services,
          # always restart home and work email fetchers
          start_home()
-         start_work()
+         #start_work()
 
       def handle_sleep_callback(sleeping):
         if not sleeping:
@@ -65,7 +65,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
 in
 with extra; {
   systemd.user.services.work-email-notifier = {
-    enable = true;
+    enable = false;
     description = "work notifier";
 
     path = with pkgs; [ twmn eject isync notmuch bash ];

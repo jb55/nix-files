@@ -9,7 +9,8 @@ extra:
     (import ./timers extra)
   ];
 
-  virtualisation.docker.enable = false;
+  virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
 
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
@@ -20,8 +21,9 @@ extra:
     packages = pkgs.myHaskellPackages;
     haskellPackages = pkgs.haskellPackages;
   };
-  services.mongodb.enable = true;
-  services.redis.enable = true;
+
+  services.mongodb.enable = false;
+  services.redis.enable = false;
 
   services.xserver.libinput.enable = true;
   services.xserver.config = ''
