@@ -11,6 +11,7 @@ extra:
 
   virtualisation.docker.enable = true;
   virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "jb55" ];
 
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
