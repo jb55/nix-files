@@ -39,7 +39,10 @@ let
 
 in
 {
-  # networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  networking.nameservers = ["8.8.8.8" "8.8.4.4"];
+  networking.extraHosts = ''
+    10.0.9.1   secure.datavalet.io
+  '';
 
   networking.firewall.enable = true;
   networking.firewall.extraCommands = ''
