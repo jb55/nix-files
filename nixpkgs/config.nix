@@ -36,6 +36,13 @@ in {
 
     clipmenu = super.callPackage ./clipmenu {};
 
+    phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "phonectl";
+      sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
+      rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
+    })) {};
+
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [
         purple-hangouts

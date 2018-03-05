@@ -1,4 +1,4 @@
-{ util, composeKey, userConfig, theme, icon-theme }:
+{ util, composeKey, userConfig, theme, icon-theme, extra }:
 { config, lib, pkgs, ... }:
 let
   clippings-pl-file = pkgs.fetchurl {
@@ -9,6 +9,7 @@ let
     ${lib.getBin pkgs.perl}/bin/perl ${clippings-pl-file}
   '';
   clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
+  secrets = extra.private;
 in
 {
   services.gnome3.gnome-keyring.enable = true;
@@ -124,6 +125,20 @@ in
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${clipmenu}/bin/clipmenud";
+  };
+
+  systemd.user.services.phonectl = {
+    enable      = true;
+    description = "phonectl";
+    wantedBy = [ "graphical-session.target" ];
+    after    = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
+
+    environment = with secrets.phonectl; {
+      PHONECTLUSER=user;
+      PHONECTLPASS=pass;
+      PHONECTLPHONE=phone;
+    };
   };
 
   # TODO: maybe doesn't have my package env
