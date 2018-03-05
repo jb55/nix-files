@@ -23,6 +23,10 @@ extra:
     haskellPackages = pkgs.haskellPackages;
   };
 
+
+  # telepathy is a garbage fire
+  services.telepathy.enable = false;
+  services.zerotierone.enable = true;
   services.mongodb.enable = false;
   services.redis.enable = false;
 

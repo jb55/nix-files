@@ -6,8 +6,6 @@ extra:
     ./fail-notifier
   ];
 
-  services.zerotierone.enable = true;
-
   #services.mongodb.enable = true;
   #services.redis.enable = true;
 
