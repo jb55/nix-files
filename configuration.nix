@@ -4,8 +4,8 @@
 
 { config, pkgs, ... }:
 
-let machine = "quiver";
-    isDesktop = true;
+let machine = "razorcx";
+    isDesktop = false;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
@@ -43,6 +43,8 @@ let machine = "quiver";
         createHome = true;
         openssh.authorizedKeys.keys = [
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAvMdnEEAd/ZQM+pYp6ZYG/1NPE/HSwIKoec0/QgGy4UlO0EvpWWhxPaV0HlNUFfwiHE0I2TwHc+KOKcG9jcbLAjCk5rvqU7K8UeZ0v/J83bQh78dr4le09WLyhczamJN0EkNddpCyUqIbH0q3ISGPmTiW4oQniejtkdJPn2bBwb3Za8jLzlh2UZ/ZJXhKvcGjQ/M1+fBmFUwCp5Lpvg0XYXrmp9mxAaO+fxY32EGItXcjYM41xr/gAcpmzL5rNQ9a9YBYFn2VzlpL+H7319tgdZa4L57S49FPQ748paTPDDqUzHtQD5FEZXe7DZZPZViRsPc370km/5yIgsEhMPKr jb55"
+
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKMkKFzVDAXG+0sz1UjXgJHmh1+EE7dJ9WUJF14uAfFRv1SGUsohddvguxjrfbo1isen6sptDioJkeffcBCnYC88xvVWt/DRL4L8QV2NUUgv0SFCDCYOAaQ92pAv1J0WbSbI5hD0MZG5GQAA9dX8lLaxBX6nnByvrUFbvXusMrrywSNbm0nHXZD/y49WiZn5Hh9bMbviNLVNXMlUxzjQmY6rf+cxunAEQrXv3kD8aHb4p4+qGYCTpI17+tKogYet5Rg/VW4yg6LonpEfOlwTG50uIYoBE/peCs5xKUShQCs8UQGE/NEYjqaR9wt+tM74xoKECLLweyP8jxhrK+VTHn jb55@quiver"
         ];
         home = home;
         shell = zsh;
@@ -79,11 +81,6 @@ in {
 
   nix.binaryCaches = caches;
   nix.useSandbox = true;
-  nix.binaryCachePublicKeys = [
-    "nixcache.monstercat.com-1:NgYZV5X3IoQ0D2HH+GrsI8a6H5TtmkHpfPx2wZN3Oz4=%"
-  ];
-  nix.trustedBinaryCaches = [ "nixcache.monstercat.com" ];
-  nix.requireSignedBinaryCaches = true;
 
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];
