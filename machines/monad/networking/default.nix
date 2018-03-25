@@ -155,10 +155,11 @@ in
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {
       listen 80;
+      listen ${extra.ztip}:80;
 
       # server names for this server.
       # any requests that come in that match any these names will use the proxy.
-      server_name plex.jb55.com;
+      server_name plex.jb55.com plez.jb55.com;
 
       # this is where everything cool happens (you probably don't need to change anything here):
       location / {
@@ -185,7 +186,8 @@ in
 
     server {
       listen 80;
-      server_name torrents.jb55.com;
+      listen ${extra.ztip}:80;
+      server_name torrents.jb55.com torrentz.jb55.com;
 
       location / {
         proxy_read_timeout 300;

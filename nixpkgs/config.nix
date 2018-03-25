@@ -208,6 +208,17 @@ in {
       ];
     };
 
+    photo-env = pkgs.buildEnv {
+      name = "photo-tools";
+      paths = with pkgs; [
+        gimp
+        darktable
+        rawtherapee
+        ufraw
+        dcraw
+      ];
+    };
+
     git-tools = pkgs.buildEnv {
       name = "git-tools";
       paths = with pkgs; [

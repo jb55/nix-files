@@ -1,12 +1,6 @@
 extra:
 { config, lib, pkgs, ... }:
-let extras = (rec { ztip = "172.24.172.226";
-                    nix-serve = {
-                      port = 10845;
-                      bindAddress = ztip;
-                    };
-                }) // extra;
-    util = extra.util;
+let util = extra.util;
     email-notify = util.writeBash "email-notify-user" ''
       export HOME=/home/jb55
       export PATH=${lib.makeBinPath (with pkgs; [ eject libnotify muchsync notmuch openssh ])}:$PATH
@@ -38,20 +32,20 @@ in
 
   services.mongodb.enable = true;
   services.tor.enable = true;
-  services.tor.extraConfig = extras.private.tor.extraConfig;
+  services.tor.extraConfig = extra.private.tor.extraConfig;
   services.fcgiwrap.enable = true;
 
   services.nix-serve.enable = true;
-  services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
-  services.nix-serve.port = extras.nix-serve.port;
+  services.nix-serve.bindAddress = extra.nix-serve.bindAddress;
+  services.nix-serve.port = extra.nix-serve.port;
 
   services.nginx.httpConfig = (if (config.services.nginx.enable && config.services.nix-serve.enable) then ''
     server {
-      listen ${extras.nix-serve.bindAddress}:80;
+      listen ${extra.nix-serve.bindAddress}:80;
       server_name cache.monad.jb55.com;
 
       location / {
-        proxy_pass  http://${extras.nix-serve.bindAddress}:${toString extras.nix-serve.port};
+        proxy_pass  http://${extra.nix-serve.bindAddress}:${toString extra.nix-serve.port};
         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
         proxy_redirect off;
         proxy_buffering off;
@@ -69,18 +63,28 @@ in
   };
 
   services.postgresql = {
-    dataDir = "/var/db/postgresql/9.5/";
-    enable = false;
+    dataDir = "/var/db/postgresql/100/";
+    enable = true;
+    package = pkgs.postgresql100;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
       local  all all                     trust
-      host   all all  172.24.172.226/16  trust
-      host   all all  127.0.0.1/16       trust
+      host   all all  127.0.0.1/32       trust
     '';
-    extraConfig = ''
-      listen_addresses = '172.24.172.226,127.0.0.1'
-    '';
+    # extraConfig = ''
+    #   listen_addresses = '172.24.172.226,127.0.0.1'
+    # '';
   };
+
+  # security.pam.u2f = {
+  #   enable = true;
+  #   interactive = true;
+  #   cue = true;
+  #   control = "sufficient";
+  #   authfile = "${pkgs.writeText "pam-u2f-config" ''
+  #     jb55:vMXUgYb1ytYmOVgqFDwVOxJmvVI9F3gdSJVbvsi1A1VA-3mftTUhgARo4Kmm_8SAH6IJJ8p3LSXPSbtTSXMIpQ,04d8c1542a7391ee83112a577db968b84351f0090a9abe7c75bedcd94777cf15727c68ce4ac8858ff2812ded3c86d978efc5893b25cf906032632019fe792d3ec4
+  #   ''}";
+  # };
 
 }

@@ -18,19 +18,68 @@ in
 
   services.redshift = {
     enable = true;
-    temperature.day = 5700;
-    temperature.night = 3900;
-    # gamma=0.8
+    # temperature.day = 5700;
+    # temperature.night = 3700;
 
     brightness = {
       day = "1.0";
-      night = "0.6";
+      night = "0.4";
     };
 
     latitude="49.270186";
     longitude="-123.109353";
   };
 
+  systemd.user.services.udiskie =  {
+    enable = true;
+    description = "userspace removable drive automounter";
+    after    = [ "multi-user.target" ];
+    wants    = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${lib.getBin pkgs.udiskie}/bin/udiskie";
+    };
+  };
+
+  systemd.user.services.kindle-sync3 = {
+    enable = true;
+    description = "sync kindle";
+    after    = [ "media-kindle.mount" ];
+    requires = [ "media-kindle.mount" ];
+    wantedBy = [ "media-kindle.mount" ];
+    serviceConfig = {
+      ExecStart = util.writeBash "kindle-sync" ''
+        export PATH=${lib.makeBinPath (with pkgs; [ coreutils eject perl dos2unix git ])}:$PATH
+        NOTES=/home/jb55/doc/notes/kindle
+        mkdir -p $NOTES
+        </media/kindle/documents/My\ Clippings.txt dos2unix | \
+          ${clippings-pl} > $NOTES/clippings.yml
+        cd $NOTES
+        if [ ! -d ".git" ]; then
+          git init .
+          git remote add origin gh:jb55/my-clippings
+        fi
+        git add clippings.yml
+        git commit -m "update"
+        git push -u origin master
+      '';
+    };
+  };
+
+  services.mpd = {
+    enable = false;
+    dataDir = "/home/jb55/mpd";
+    user = "jb55";
+    group = "users";
+    extraConfig = ''
+      audio_output {
+        type     "pulse"
+        name     "Local MPD"
+        server   "127.0.0.1"
+      }
+    '';
+  };
 
   services.udev.extraRules = ''
     # yubikey neo
@@ -41,6 +90,8 @@ in
 
     # kindle
     ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0004", SYMLINK+="kindle"
+    ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0003", SYMLINK+="kindledx"
+
   '';
 
   services.xserver = {
@@ -76,7 +127,7 @@ in
     };
 
     screenSection = ''
-      Option "metamodes" "1920x1080 +0+0"
+      Option "metamodes" "1920x1080_144 +0+0"
       Option "dpi" "96 x 96"
     '';
 

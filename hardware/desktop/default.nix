@@ -1,4 +1,7 @@
 { config, lib, pkgs, ... }:
+let
+  kindle-opts = ["noatime" "user" "gid=100" "uid=1000" "utf8" "x-systemd.automount"];
+in
 {
   boot.supportedFilesystems = ["ntfs" "exfat"];
 
@@ -37,17 +40,29 @@
       Option "AccelSpeed" "-1"
     EndSection
 
-    Section "InputClass"
-      Identifier "Razer Razer DeathAdder 2013"
-      MatchIsPointer "yes"
-      Option "AccelerationProfile" "-1"
-      Option "ConstantDeceleration" "5"
-      Option "AccelerationScheme" "none"
-      Option "AccelSpeed" "-1"
-    EndSection
-  '';
+ '';
+  #   Section "InputClass"
+  #     Identifier "Razer Razer DeathAdder 2013"
+  #     MatchIsPointer "yes"
+  #     Option "AccelerationProfile" "-1"
+  #     Option "ConstantDeceleration" "5"
+  #     Option "AccelerationScheme" "none"
+  #     Option "AccelSpeed" "-1"
+  #   EndSection
+  # '';
 
   boot.blacklistedKernelModules = ["dvb_usb_rtl28xxu"];
+  fileSystems."/media/kindle" =
+    { device = "/dev/kindle";
+      fsType = "vfat";
+      options = kindle-opts;
+    };
+
+  fileSystems."/media/kindledx" =
+    { device = "/dev/kindledx";
+      fsType = "vfat";
+      options = kindle-opts;
+    };
 
   hardware = {
     bluetooth.enable = true;
