@@ -1,6 +1,7 @@
 extra:
 { config, lib, pkgs, ... }:
 let util = extra.util;
+    nix-serve = extra.machine.nix-serve;
     email-notify = util.writeBash "email-notify-user" ''
       export HOME=/home/jb55
       export PATH=${lib.makeBinPath (with pkgs; [ eject libnotify muchsync notmuch openssh ])}:$PATH
@@ -22,12 +23,13 @@ in
   ];
 
   virtualisation.virtualbox.host.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
   users.extraGroups.vboxusers.members = [ "jb55" ];
   users.extraGroups.tor.members = [ "jb55" ];
   users.extraGroups.nginx.members = [ "jb55" ];
 
   programs.mosh.enable = true;
-  services.trezord.enable = false;
+  # services.trezord.enable = false;
   services.redis.enable = false;
 
   services.mongodb.enable = true;
@@ -36,16 +38,16 @@ in
   services.fcgiwrap.enable = true;
 
   services.nix-serve.enable = true;
-  services.nix-serve.bindAddress = extra.nix-serve.bindAddress;
-  services.nix-serve.port = extra.nix-serve.port;
+  services.nix-serve.bindAddress = nix-serve.bindAddress;
+  services.nix-serve.port = nix-serve.port;
 
-  services.nginx.httpConfig = (if (config.services.nginx.enable && config.services.nix-serve.enable) then ''
+  services.nginx.httpConfig = if (config.services.nginx.enable && config.services.nix-serve.enable) then ''
     server {
-      listen ${extra.nix-serve.bindAddress}:80;
+      listen ${nix-serve.bindAddress}:80;
       server_name cache.monad.jb55.com;
 
       location / {
-        proxy_pass  http://${extra.nix-serve.bindAddress}:${toString extra.nix-serve.port};
+        proxy_pass  http://${nix-serve.bindAddress}:${toString nix-serve.port};
         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
         proxy_redirect off;
         proxy_buffering off;
@@ -54,7 +56,7 @@ in
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
       }
     }
-  '';
+  '' else "";
 
   services.footswitch = {
     enable = true;

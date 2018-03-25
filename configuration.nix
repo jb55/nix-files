@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 
-let machine = "quiver";
+let machine = "monad";
     isDesktop = true;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
@@ -16,7 +16,9 @@ let machine = "quiver";
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
+      machine    = machineConfig;
     };
+    util = extra.util;
     caches = [ "https://cache.nixos.org" ];
     zsh = "${pkgs.zsh}/bin/zsh";
     composeKey = if machine == "quiver" then "ralt" else "rwin";
@@ -60,7 +62,7 @@ in {
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
-      (import ./services/desktop (with extra; { inherit composeKey util userConfig theme icon-theme; }))
+      (import ./services/desktop { inherit extra util composeKey userConfig theme icon-theme; })
     ] else []);
 
   # Use the GRUB 2 boot loader.

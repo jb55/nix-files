@@ -1,4 +1,4 @@
-{ util, composeKey, userConfig, theme, icon-theme, extra }:
+{ composeKey, util, userConfig, theme, icon-theme, extra }:
 { config, lib, pkgs, ... }:
 let
   clippings-pl-file = pkgs.fetchurl {
@@ -9,6 +9,7 @@ let
     ${lib.getBin pkgs.perl}/bin/perl ${clippings-pl-file}
   '';
   clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
+
   secrets = extra.private;
 in
 {

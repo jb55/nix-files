@@ -27,7 +27,7 @@ in
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     fonts = with pkgs; [
       aldrich
-      corefonts
+      #corefonts
       inconsolata
       ubuntu_font_family
       emojione

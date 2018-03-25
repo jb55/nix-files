@@ -35,6 +35,8 @@ let
 
 in
 {
+  networking.hostId = extra.machine.hostId;
+
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   networking.firewall.extraCommands = ''
@@ -155,7 +157,7 @@ in
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {
       listen 80;
-      listen ${extra.ztip}:80;
+      listen ${extra.machine.ztip}:80;
 
       # server names for this server.
       # any requests that come in that match any these names will use the proxy.
@@ -186,7 +188,7 @@ in
 
     server {
       listen 80;
-      listen ${extra.ztip}:80;
+      listen ${extra.machine.ztip}:80;
       server_name torrents.jb55.com torrentz.jb55.com;
 
       location / {
