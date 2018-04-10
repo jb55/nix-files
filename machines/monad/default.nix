@@ -2,6 +2,12 @@ extra:
 { config, lib, pkgs, ... }:
 let util = extra.util;
     nix-serve = extra.machine.nix-serve;
+    zenstates = pkgs.fetchFromGitHub {
+      owner  = "r4m0n";
+      repo   = "ZenStates-Linux";
+      rev    = "0bc27f4740e382f2a2896dc1dabfec1d0ac96818";
+      sha256 = "1h1h2n50d2cwcyw3zp4lamfvrdjy1gjghffvl3qrp6arfsfa615y";
+    };
     email-notify = util.writeBash "email-notify-user" ''
       export HOME=/home/jb55
       export PATH=${lib.makeBinPath (with pkgs; [ eject libnotify muchsync notmuch openssh ])}:$PATH
@@ -62,6 +68,18 @@ in
     enable = true;
     enable-led = true;
     led = "input5::numlock";
+  };
+
+  systemd.services.disable-c6 = {
+    description = "Ryzen Disable C6 State";
+
+    wantedBy = [ "basic.target" ];
+    after = [ "sysinit.target" "local-fs.target" ];
+
+    serviceConfig.Type = "oneshot";
+    serviceConfig.ExecStart = util.writeBash "disable-c6-state" ''
+      ${pkgs.python2}/bin/python ${zenstates}/zenstates.py --c6-disable --list
+    '';
   };
 
   services.postgresql = {
