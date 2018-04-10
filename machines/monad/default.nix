@@ -24,26 +24,32 @@ in
 {
   imports = [
     ./hardware
+    (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ./nginx extra)
+    (import ../../misc/imap-notifier extra)
   ];
 
+
   virtualisation.virtualbox.host.enable = true;
+  virtualization.virtualbox.host.enableHardening = false;
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
+
   services.xserver.videoDrivers = [ "nvidia" ];
-  users.extraGroups.vboxusers.members = [ "jb55" ];
   users.extraGroups.tor.members = [ "jb55" ];
   users.extraGroups.nginx.members = [ "jb55" ];
 
   programs.mosh.enable = true;
-  # services.trezord.enable = false;
+  services.trezord.enable = true;
   services.redis.enable = false;
+  services.zerotierone.enable = true;
+  services.mongodb.enable = false;
 
-  services.mongodb.enable = true;
-  services.tor.enable = true;
+  services.tor.enable = false;
   services.tor.extraConfig = extra.private.tor.extraConfig;
   services.fcgiwrap.enable = true;
 
-  services.nix-serve.enable = true;
+  services.nix-serve.enable = false;
   services.nix-serve.bindAddress = nix-serve.bindAddress;
   services.nix-serve.port = nix-serve.port;
 

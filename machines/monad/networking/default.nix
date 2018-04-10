@@ -37,7 +37,7 @@ in
 {
   networking.hostId = extra.machine.hostId;
 
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
   networking.firewall.extraCommands = ''
     ${openTCP "zt2" 80}
@@ -148,11 +148,11 @@ in
     ''
   );
 
-  services.plex = {
-    enable = true;
-    group = "transmission";
-    openFirewall = true;
-  };
+  # services.plex = {
+  #   enable = false;
+  #   group = "transmission";
+  #   openFirewall = true;
+  # };
 
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {
@@ -209,15 +209,5 @@ in
       }
     }
   '';
-
-
-  networking.defaultMailServer = {
-    directDelivery = true;
-    hostName = "smtp.jb55.com:587";
-    domain = "jb55.com";
-    useSTARTTLS = true;
-    authUser = "jb55@jb55.com";
-    authPass = extra.private.mailpass;
-  };
 
 }
