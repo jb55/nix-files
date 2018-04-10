@@ -84,6 +84,7 @@ in
 
     serviceConfig.Type = "oneshot";
     serviceConfig.ExecStart = util.writeBash "disable-c6-state" ''
+      ${pkgs.kmod}/bin/modprobe msr
       ${pkgs.python2}/bin/python ${zenstates}/zenstates.py --c6-disable --list
     '';
   };
