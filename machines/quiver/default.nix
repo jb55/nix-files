@@ -75,11 +75,6 @@ extra:
 
   networking.wireless.enable = true;
 
-  programs.gnupg.trezor-agent = {
-    enable = true;
-    configPath = "/home/jb55/.gnupg";
-  };
-
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.6/";
     enable = true;
