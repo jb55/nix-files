@@ -17,12 +17,6 @@ extra:
     options thinkpad_acpi enabled=0
   '';
 
-  services.hoogle = {
-    enable = true;
-    packages = pkgs.myHaskellPackages;
-    haskellPackages = pkgs.haskellPackages;
-  };
-
 
   # telepathy is a garbage fire
   services.telepathy.enable = false;

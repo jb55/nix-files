@@ -5,6 +5,12 @@ in
 {
   boot.supportedFilesystems = ["ntfs" "exfat"];
 
+  services.hoogle = {
+    enable = true;
+    packages = pkgs.myHaskellPackages;
+    haskellPackages = pkgs.haskellPackages;
+  };
+
   services.udev.extraRules = ''
     # ds4
     KERNEL=="uinput", MODE="0666"
