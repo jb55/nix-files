@@ -56,6 +56,8 @@ in
   #     Option "AccelSpeed" "-1"
   #   EndSection
   # '';
+  services.printing.drivers = [ pkgs.samsung-unified-linux-driver_4_01_17 ];
+
 
   boot.blacklistedKernelModules = ["dvb_usb_rtl28xxu"];
   fileSystems."/media/kindle" =
