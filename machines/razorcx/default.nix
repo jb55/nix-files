@@ -6,27 +6,28 @@ let gitExtra = {
     };
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     myemail = "will@razorcx.com";
+    backendHost = "backend.razorcx.com";
 in
 {
   imports = [
+    ./networking
     ./hardware
   ];
 
-  networking.domain = "backend.razorcx.com";
-  networking.search = [ "backend.razorcx.com" ];
+  networking.domain = backendHost;
+  networking.search = [ backendHost ];
   networking.extraHosts = ''
-    127.0.0.1 backend.razorcx.com
-    ::1 backend.razorcx.com
+    127.0.0.1 ${backendHost}
+    ::1 ${backendHost}
   '';
-  networking.firewall.allowedTCPPorts = [ 22 143 80 ];
+  networking.firewall.allowedTCPPorts = [ 22 443 80 ];
 
-  security.acme.certs."backend.razorcx.com" = {
+  security.acme.certs."${backendHost}" = {
     webroot = "/var/www/challenges";
-    group = "certs";
-    allowKeysForGroup = true;
     email = myemail;
   };
 
+  services.fcgiwrap.enable = true;
   services.postgresql = {
     dataDir = "/var/db/postgresql/10/";
     enable = true;
@@ -40,13 +41,6 @@ in
     #'';
   };
 
-  systemd.services.npmrepo = {
-    description = "npmrepo.com";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
-  };
-
   #systemd.user.services.node-processor = {
   #  description = "node-processor";
   #  #path = with pkgs; [ nodeprocessor ];
@@ -55,32 +49,37 @@ in
   #};
 
   # TODO: update to security programs
-  #security.setuidPrograms = [ "sendmail" ];
+  #security.wrappers = {
+  #  sendmail =
+  #}
+
+  services.nginx.enable = true;
+  services.zerotierone.enable = true;
 
   services.nginx.httpConfig = ''
     ${gitCfg}
 
     server {
       listen 80;
-      server_name backend.razorcx.com;
+      server_name ${backendHost};
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
       }
 
       location / {
-        return 301 https://backend.razorcx.com$request_uri;
+        return 301 https://${backendHost}$request_uri;
       }
     }
 
     server {
       listen       443 ssl;
-      server_name  backend.jb55.com;
+      server_name  ${backendHost};
 
       index index.html index.htm;
 
-      ssl_certificate /var/lib/acme/backend.razorcx.com/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/backend.razorcx.com/key.pem;
+      ssl_certificate /var/lib/acme/${backendHost}/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/${backendHost}/key.pem;
     }
 
   '';

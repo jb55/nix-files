@@ -17,7 +17,9 @@ let gitwebConf = pkgs.writeText "gitweb.conf" ''
 in
 if config.services.fcgiwrap.enable then ''
   server {
-      listen       80;
+      listen       ${extra.machine.zt.ip}:80;
+      listen       ${extra.machine.zt.ipv6}:80;
+      listen       127.0.0.1:80;
       server_name  ${extra.host};
 
       location = / {

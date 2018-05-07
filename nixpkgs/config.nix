@@ -36,6 +36,17 @@ in {
 
     clipmenu = super.callPackage ./clipmenu {};
 
+    fcgiwrap =
+      let
+        gcc7patch = pkgs.fetchurl {
+          url = https://jb55.com/s/f875097df9844c86.patch;
+          sha256 = "9b78e6d9265f6bf9cd148773e3de8444e97b24b44de47b68448f1b41a00a3082";
+        };
+      in
+        pkgs.lib.overrideDerivation super.fcgiwrap (attrs: {
+          patches = [ gcc7patch ];
+        });
+
     phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
       owner  = "jb55";
       repo   = "phonectl";
