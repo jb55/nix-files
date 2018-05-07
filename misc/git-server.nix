@@ -18,7 +18,7 @@ in
 if config.services.fcgiwrap.enable then ''
   server {
       listen       ${extra.machine.zt.ip}:80;
-      listen       ${extra.machine.zt.ipv6}:80;
+      listen       [${extra.machine.zt.ipv6}]:80;
       listen       127.0.0.1:80;
       server_name  ${extra.host};
 
@@ -27,10 +27,12 @@ if config.services.fcgiwrap.enable then ''
       }
 
       location = /repos {
-        return 301 http://${extra.host}/repos/;
+        return 301 http://${extra.host}/repos;
       }
 
       location / {
+        fastcgi_read_timeout         600;
+
         # fcgiwrap is set up to listen on this host:port
         fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
         include                       ${pkgs.nginx}/conf/fastcgi_params;
@@ -49,7 +51,7 @@ if config.services.fcgiwrap.enable then ''
         alias ${gitweb-theme};
       }
 
-      location /repos {
+      location /repos/ {
         include ${pkgs.nginx}/conf/fastcgi_params;
         gzip off;
 
