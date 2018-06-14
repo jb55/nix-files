@@ -31,14 +31,13 @@ in
     #(import ./vidstats extra)
   ];
 
-  users.extraGroups.jb55cert.members = [ "prosody" ];
+  users.extraGroups.jb55cert.members = [ "nginx" ];
 
   services.gitDaemon.basePath = "/var/git-public/repos";
   services.gitDaemon.enable = true;
 
   security.acme.certs."jb55.com" = {
     webroot = "/var/www/challenges";
-    group = "jb55cert";
     allowKeysForGroup = true;
     email = myemail;
   };

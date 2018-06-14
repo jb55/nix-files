@@ -41,7 +41,8 @@ in
 {
   networking.nameservers = ["8.8.8.8" "8.8.4.4"];
   networking.extraHosts = ''
-    10.0.9.1   secure.datavalet.io
+    10.0.9.1         secure.datavalet.io
+    24.244.54.234    wifisignon.shaw.ca
   '';
 
   networking.firewall.enable = true;
@@ -133,5 +134,5 @@ in
 
   networking.firewall.checkReversePath = false;
   networking.firewall.logReversePathDrops = true;
-  networking.firewall.allowedTCPPorts = [ 8333 ];
+  networking.firewall.allowedTCPPorts = [ 8333 9735 ];
 }

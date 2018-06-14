@@ -9,7 +9,7 @@ extra:
     (import ./timers extra)
   ];
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
@@ -82,18 +82,20 @@ extra:
 
   networking.wireless.enable = true;
 
-  programs.gnupg.trezor-agent = {
-    enable = true;
-    configPath = "/home/jb55/.gnupg";
-  };
+  # programs.gnupg.trezor-agent = {
+  #   enable = false;
+  #   configPath = "/home/jb55/.gnupg";
+  # };
 
   services.postgresql = {
-    dataDir = "/var/db/postgresql/9.6/";
+    dataDir = "/var/db/postgresql/10/";
     enable = true;
+    package = pkgs.postgresql100;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
       local  all all                     trust
+      host   all all  localhost          trust
     '';
     # extraConfig = ''
     #   listen_addresses = '172.24.172.226,127.0.0.1'

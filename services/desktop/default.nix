@@ -83,7 +83,7 @@ in
     windowManager = {
       xmonad = {
         enable = true;
-        enableContribAndExtras = true;
+        enableContribAndExtras = false;
         extraPackages = hp: [
           hp.taffybar
         ];

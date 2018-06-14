@@ -28,11 +28,14 @@ in {
       pkgs.urweb
     ]);
 
-    bluez = pkgs.bluez5;
+    wine = super.wine.override { wineBuild = "wineWow"; };
 
+    bluez = pkgs.bluez5;
     # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
 
-    #haskellPackages = super.haskell.packages.ghc821;
+    # haskellPackages = super.haskellPackages.override {
+    #   overrides = haskellOverrides pkgs;
+    # };
 
     clipmenu = super.callPackage ./clipmenu {};
 
@@ -140,8 +143,8 @@ in {
         rustracer
         rustracerd
         rust
-        cargo-edit
-        rustfmt
+        #cargo-edit
+        #rustfmt
         rust-bindgen
       ];
     };
@@ -247,6 +250,8 @@ in {
       alex
       cabal-install
       cabal2nix
+      stack2nix
+      hpack
       ghc-core
       happy
       hasktags
@@ -281,11 +286,11 @@ in {
       QuickCheck
       quickcheck-instances
       SafeSemaphore
-      Spock
+      #Spock
       aeson
       aeson-qq
-      amazonka
-      amazonka-s3
+      #amazonka
+      #amazonka-s3
       async
       attoparsec
       bifunctors
@@ -310,7 +315,7 @@ in {
       comonad
       comonad-transformers
       compact-string-fix
-      diagrams
+      #diagrams
       directory
       dlist
       dlist-instances
@@ -325,15 +330,16 @@ in {
       formatting
       free
       generics-sop
-      gogol
-      gogol-core
-      gogol-sheets
-      gogol-youtube
-      gogol-youtube-reporting
+      #gogol
+      #gogol-core
+      #gogol-sheets
+      #gogol-youtube
+      #gogol-youtube-reporting
       hamlet
       hashable
       hashids
       heroku
+      hedgehog
       hspec
       hspec-expectations
       html
@@ -383,23 +389,23 @@ in {
       persistent
       persistent-postgresql
       persistent-template
-      pipes
-      pipes-attoparsec
-      pipes-bytestring
-      pipes-concurrency
-      pipes-csv
-      pipes-extras
-      pipes-group
-      pipes-http
-      pipes-mongodb
-      pipes-network
-      pipes-parse
-      pipes-postgresql-simple
-      pipes-safe
-      pipes-text
-      pipes-wai
+      #pipes
+      #pipes-attoparsec
+      #pipes-bytestring
+      #pipes-concurrency
+      #pipes-csv
+      #pipes-extras
+      #pipes-group
+      #pipes-http
+      #pipes-mongodb
+      #pipes-network
+      #pipes-parse
+      #pipes-postgresql-simple
+      #pipes-safe
+      #pipes-text
+      #pipes-wai
       posix-paths
-      postgresql-binary
+      #postgresql-binary
       postgresql-simple
       pretty-show
       probability
@@ -426,12 +432,12 @@ in {
       servant-cassava
       servant-client
       servant-docs
-      servant-elm
+      #servant-elm
       servant-lucid
       servant-server
       shake
       shakespeare
-      shelly
+      #shelly
       shqq
       simple-reflect
       speculation
@@ -443,8 +449,8 @@ in {
       stm-stats
       streaming
       streaming-bytestring
-      streaming-postgresql-simple
-      streaming-utils
+      #streaming-postgresql-simple
+      #streaming-utils
       streaming-wai
       strict
       stringsearch
