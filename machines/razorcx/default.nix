@@ -103,7 +103,7 @@ in
       host   all all ${extra.machine.zt.ip}/8  trust
     '';
     extraConfig = ''
-      listen_addresses = '127.0.0.1,${extra.machine.zt.ip}'
+      listen_addresses = '127.0.0.1,${extra.machine.zt.ip},${extra.machine.zt.ipv6}'
     '';
   };
 
