@@ -262,6 +262,24 @@ in
     }
 
     server {
+      listen       80;
+      server_name  clientstaging.razorcx.com;
+
+      location / {
+        return 301 https://${endpoints.bostaging.host}$request_uri;
+      }
+    }
+
+    server {
+      listen       443 ssl;
+      server_name  clientstaging.razorcx.com;
+
+      location / {
+        return 301 https://${endpoints.bostaging.host}$request_uri;
+      }
+    }
+
+    server {
       listen       443 ssl;
       server_name  ${endpoints.bostaging.host};
 
