@@ -77,12 +77,12 @@ in
     email = myemail;
   };
 
-  security.acme.certs."${endpoints.assets.host}" = {
-    webroot = "/var/www/challenges";
-    allowKeysForGroup = true;
-    group = "certs";
-    email = myemail;
-  };
+  #security.acme.certs."${endpoints.assets.host}" = {
+  #  webroot = "/var/www/challenges";
+  #  allowKeysForGroup = true;
+  #  group = "certs";
+  #  email = myemail;
+  #};
 
   security.acme.certs."${endpoints.bostaging.host}" = {
     webroot = "/var/www/challenges";
