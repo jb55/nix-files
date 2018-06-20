@@ -290,6 +290,8 @@ in
 
       location / {
         root ${endpoints.bostaging.pkg}/bin;
+
+        try_files \'\' /index.html =404;
       }
 
       ssl_certificate /var/lib/acme/${endpoints.bostaging.host}/fullchain.pem;
