@@ -27,15 +27,6 @@ let gitExtra = {
         { host = "assets.razorcx.com";
         };
 
-      bostaging = rec
-        { host = "bostaging.razorcx.com";
-          repo = pkgs.fetchgit {
-            url = "http://git.razorcx.com/backoffice";
-            rev = "9e218c66bd436dd2ad5b0d35316968ae977b2dd6";
-            sha256 = "1xhyz11zk2xbkk0s6xgh0xy26pzvslmvryp45p387h9n77jbnvan";
-          };
-          pkg  = import "${repo}/release.nix";
-        };
     };
 
     razorcx-api-staging = (pkgs.callPackage /home/jb55/RazorCX { }).razorcx-api-staging;
@@ -98,20 +89,6 @@ in
   #  group = "certs";
   #  email = myemail;
   #};
-
-  security.acme.certs."${endpoints.bostaging.host}" = {
-    webroot = "/var/www/challenges";
-    allowKeysForGroup = true;
-    group = "certs";
-    email = myemail;
-  };
-
-  security.acme.certs."clientstaging.razorcx.com" = {
-    webroot = "/var/www/challenges";
-    allowKeysForGroup = true;
-    group = "certs";
-    email = myemail;
-  };
 
   services.fcgiwrap.enable = true;
   services.postgresql = {
@@ -226,19 +203,6 @@ in
 
     server {
       listen 80;
-      server_name ${endpoints.bostaging.host};
-
-      location /.well-known/acme-challenge {
-        root /var/www/challenges;
-      }
-
-      location / {
-        return 301 https://${endpoints.bostaging.host}$request_uri;
-      }
-    }
-
-    server {
-      listen 80;
       server_name ${endpoints.backend-staging.host};
 
       location /.well-known/acme-challenge {
@@ -323,41 +287,6 @@ in
       location / {
         return 301 https://clientstaging.razorcx.com$request_uri;
       }
-    }
-
-    server {
-      listen       443 ssl;
-      server_name  clientstaging.razorcx.com;
-
-      location / {
-        return 301 https://${endpoints.bostaging.host}$request_uri;
-      }
-
-      ssl_certificate /var/lib/acme/clientstaging.razorcx.com/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/clientstaging.razorcx.com/key.pem;
-    }
-
-    server {
-      listen       443 ssl;
-      server_name  ${endpoints.bostaging.host};
-
-      gzip on;
-      gzip_min_length 1000;
-      gzip_proxied no-cache no-store private expired auth;
-      gzip_types text/plain application/json;
-
-      location / {
-        root ${endpoints.bostaging.pkg}/bin;
-
-        try_files \'\' /index.html =404;
-      }
-
-      location ~ \..*$ {
-        root ${endpoints.bostaging.pkg}/bin;
-      }
-
-      ssl_certificate /var/lib/acme/${endpoints.bostaging.host}/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/${endpoints.bostaging.host}/key.pem;
     }
 
     server {
