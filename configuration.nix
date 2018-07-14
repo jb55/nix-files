@@ -80,7 +80,7 @@ in {
   nixpkgs.config = nixpkgsConfig;
 
   nix.binaryCaches = caches;
-  # nix.useSandbox = true;
+  nix.useSandbox = true;
   # nix.binaryCachePublicKeys = [
   #   "nixcache.monstercat.com-1:NgYZV5X3IoQ0D2HH+GrsI8a6H5TtmkHpfPx2wZN3Oz4=%"
   # ];
