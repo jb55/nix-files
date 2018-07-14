@@ -13,6 +13,10 @@ let
   secrets = extra.private;
 in
 {
+  imports = [
+    (import ./networking extra)
+  ];
+
   services.gnome3.gnome-keyring.enable = true;
 
   services.trezord.enable = true;
@@ -137,7 +141,7 @@ in
         enable = true;
         enableContribAndExtras = true;
         extraPackages = hp: [
-          hp.taffybar
+          # hp.taffybar
         ];
       };
       default = "xmonad";
@@ -171,13 +175,7 @@ in
     serviceConfig.ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker slock";
   };
 
-  systemd.user.services.clipmenu = {
-    enable      = true;
-    description = "clipmenu";
-    wantedBy = [ "graphical-session.target" ];
-    after    = [ "graphical-session.target" ];
-    serviceConfig.ExecStart = "${clipmenu}/bin/clipmenud";
-  };
+  services.clipmenu.enable = true;
 
   systemd.user.services.phonectl = {
     enable      = true;

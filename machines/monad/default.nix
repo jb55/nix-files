@@ -26,7 +26,6 @@ in
     ./hardware
     (import ../../misc/msmtp extra)
     (import ./networking extra)
-    (import ./nginx extra)
     (import ../../misc/imap-notifier extra)
   ];
 
@@ -36,42 +35,68 @@ in
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
   services.xserver.videoDrivers = [ "nvidia" ];
-  users.extraGroups.tor.members = [ "jb55" ];
+  users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
 
   programs.mosh.enable = true;
+
+  # services.bitcoin.enable = true;
+  # services.bitcoin.enableTestnet = true;
+
+  # services.bitcoin.config = ''
+  #   datadir=/zbig/bitcoin
+  #   txindex=1
+  # '';
+
+  # services.bitcoin.testnetConfig = ''
+  #   datadir=/zbig/bitcoin
+  # '';
+
   services.trezord.enable = true;
   services.redis.enable = false;
   services.zerotierone.enable = true;
   services.mongodb.enable = false;
 
-  services.tor.enable = false;
+  services.tor.enable = true;
+  services.tor.controlPort = 9051;
   services.tor.extraConfig = extra.private.tor.extraConfig;
+
   services.fcgiwrap.enable = true;
 
   services.nix-serve.enable = false;
   services.nix-serve.bindAddress = nix-serve.bindAddress;
   services.nix-serve.port = nix-serve.port;
 
-  services.nginx.httpConfig = if (config.services.nginx.enable && config.services.nix-serve.enable) then ''
-    server {
-      listen ${nix-serve.bindAddress}:80;
-      server_name cache.monad.jb55.com;
-
-      location / {
-        proxy_pass  http://${nix-serve.bindAddress}:${toString nix-serve.port};
-        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_set_header        Host            $host;
-        proxy_set_header        X-Real-IP       $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+  services.nginx.enable = true;
+  services.nginx.httpConfig = ''
+      server {
+        listen      80 default_server;
+        server_name _;
+        root /www/public;
+        index index.html index.htm;
+        location / {
+          try_files $uri $uri/ =404;
+        }
       }
-    }
-  '' else "";
+    '' + (if config.services.nix-serve.enable then ''
+      server {
+        listen ${nix-serve.bindAddress}:80;
+        server_name cache.monad.jb55.com;
+
+        location / {
+          proxy_pass  http://${nix-serve.bindAddress}:${toString nix-serve.port};
+          proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+          proxy_redirect off;
+          proxy_buffering off;
+          proxy_set_header        Host            $host;
+          proxy_set_header        X-Real-IP       $remote_addr;
+          proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+      }
+    '' else "") + (if config.services.tor.enable then extra.private.tor.nginx else "");
 
   services.footswitch = {
-    enable = true;
+    enable = false;
     enable-led = true;
     led = "input5::numlock";
   };
@@ -98,10 +123,11 @@ in
       # type db  user address            method
       local  all all                     trust
       host   all all  127.0.0.1/32       trust
+      host   all all  192.168.86.0/24    trust
     '';
-    # extraConfig = ''
-    #   listen_addresses = '172.24.172.226,127.0.0.1'
-    # '';
+    extraConfig = ''
+      listen_addresses = '0.0.0.0'
+    '';
   };
 
   # security.pam.u2f = {

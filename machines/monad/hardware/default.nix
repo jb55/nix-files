@@ -24,6 +24,16 @@
       fsType = "zfs";
     };
 
+  fileSystems."/zbig" =
+    { device = "zbig";
+      fsType = "zfs";
+    };
+
+  #fileSystems."/vr" =
+  # { device = "/dev/disk/by-uuid/E234A89834A87169";
+  #   fsType = "ntfs";
+  # };
+
   #fileSystems."/sand" =
   #  { device = "/dev/disk/by-uuid/2ee709b8-7e83-470f-91bc-d0b0ba59b945";
   #    fsType = "ext4";
