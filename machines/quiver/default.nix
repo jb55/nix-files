@@ -30,11 +30,10 @@ extra:
   services.xserver.config = ''
     Section "InputClass"
       Identifier     "Enable libinput for TrackPoint"
-      MatchProduct   "TPPS/2 IBM TrackPoint"
+      MatchProduct   "TPPS/2 Elan TrackPoint"
       Driver         "libinput"
-      Option         "ScrollMethod" "button"
-      Option         "ScrollButton" "8"
-      Option         "AccelSpeed" "0"
+      Option         "AccelSpeed" "1"
+      Option         "AccelProfile" "flat"
     EndSection
 
     Section "InputClass"
