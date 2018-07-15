@@ -30,6 +30,7 @@ in {
     chromium
     clipit
     clipmenu
+    dmenu2
     dragon-drop
     dynamic-colors
     emacs
@@ -45,7 +46,6 @@ in {
     notmuch
     pandoc
     pavucontrol
-    pidgin-with-plugins
     qalculate-gtk
     rxvt_unicode-with-plugins
     scrot
@@ -55,7 +55,6 @@ in {
     skypeforlinux
     slock
     spotify
-    steam
     texlive.combined.scheme-basic
     theme.package
     twmn

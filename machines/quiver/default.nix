@@ -9,7 +9,9 @@ extra:
     (import ./timers extra)
   ];
 
-  virtualisation.docker.enable = true;
+  environment.systemPackages = with pkgs; [ acpi ];
+
+  virtualisation.docker.enable = false;
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
@@ -28,11 +30,10 @@ extra:
   services.xserver.config = ''
     Section "InputClass"
       Identifier     "Enable libinput for TrackPoint"
-      MatchProduct   "TPPS/2 IBM TrackPoint"
+      MatchProduct   "TPPS/2 Elan TrackPoint"
       Driver         "libinput"
-      Option         "ScrollMethod" "button"
-      Option         "ScrollButton" "8"
-      Option         "AccelSpeed" "0"
+      Option         "AccelSpeed" "1"
+      Option         "AccelProfile" "flat"
     EndSection
 
     Section "InputClass"
@@ -75,13 +76,19 @@ extra:
 
   networking.wireless.enable = true;
 
+  # programs.gnupg.trezor-agent = {
+  #   enable = false;
+  #   configPath = "/home/jb55/.gnupg";
+
   services.postgresql = {
-    dataDir = "/var/db/postgresql/9.6/";
+    dataDir = "/var/db/postgresql/10/";
     enable = true;
+    package = pkgs.postgresql100;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
       local  all all                     trust
+      host   all all  localhost          trust
     '';
     # extraConfig = ''
     #   listen_addresses = '172.24.172.226,127.0.0.1'

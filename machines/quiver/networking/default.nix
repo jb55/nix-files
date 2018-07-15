@@ -16,7 +16,8 @@ let
 in
 {
   networking.extraHosts = ''
-    10.0.9.1   secure.datavalet.io
+    10.0.9.1         secure.datavalet.io
+    24.244.54.234    wifisignon.shaw.ca
   '';
 
   networking.firewall.enable = true;

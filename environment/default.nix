@@ -28,6 +28,7 @@ in {
     haskellPackages.una
     htop
     jq
+    libqalculate
     lsof
     nixops
     nix-repl

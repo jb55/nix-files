@@ -139,10 +139,7 @@ in
     windowManager = {
       xmonad = {
         enable = true;
-        enableContribAndExtras = true;
-        extraPackages = hp: [
-          # hp.taffybar
-        ];
+        enableContribAndExtras = false;
       };
       default = "xmonad";
     };
@@ -177,11 +174,13 @@ in
 
   services.clipmenu.enable = true;
 
+  environment.systemPackages = [pkgs.phonectl];
   systemd.user.services.phonectl = {
     enable      = true;
     description = "phonectl";
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
+
     serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
 
     environment = with secrets.phonectl; {
