@@ -9,6 +9,8 @@ extra:
     (import ./timers extra)
   ];
 
+  environment.systemPackages = with pkgs; [ acpi ];
+
   virtualisation.docker.enable = false;
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
