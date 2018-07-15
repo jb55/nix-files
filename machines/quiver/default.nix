@@ -5,7 +5,7 @@ extra:
     ./hardware-configuration.nix
     (import ../../misc/msmtp extra)
     (import ./networking extra)
-    (import ./imap-notifier extra)
+    (import ../../misc/imap-notifier extra)
     (import ./timers extra)
   ];
 
@@ -16,12 +16,6 @@ extra:
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
   '';
-
-  services.hoogle = {
-    enable = true;
-    packages = pkgs.myHaskellPackages;
-    haskellPackages = pkgs.haskellPackages;
-  };
 
 
   # telepathy is a garbage fire
@@ -74,7 +68,6 @@ extra:
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
-  services.printing.drivers = [ pkgs.samsung-unified-linux-driver_4_01_17 ];
 
   services.autorandr.enable = true;
   services.acpid.enable = false;

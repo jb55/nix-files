@@ -42,17 +42,18 @@ in
     fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     fonts = with pkgs; [
+      aldrich
       corefonts
-      inconsolata
-      ubuntu_font_family
       emojione
       fira-code
       fira-mono
+      inconsolata
+      ipafont
       kochi-substitute
       noto-fonts
       noto-fonts-emoji
       source-code-pro
-      ipafont
+      ubuntu_font_family
     ] ++ myfonts;
   };
 }

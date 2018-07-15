@@ -3,6 +3,8 @@ let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
     callPackage = pkgs.callPackage;
+    doJailbreak = pkgs.haskell.lib.doJailbreak;
+    dontCheck = pkgs.haskell.lib.dontCheck;
     regularFiles = builtins.filterSource (f: type: type == "symlink"
                                                 || type == "directory"
                                                 || type == "regular");
@@ -37,8 +39,6 @@ in {
     #   overrides = haskellOverrides pkgs;
     # };
 
-    clipmenu = super.callPackage ./clipmenu {};
-
     phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
       owner  = "jb55";
       repo   = "phonectl";
@@ -63,8 +63,8 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "9bd509f28bd42dda253c483fd05486caf3878793";
-        sha256 = "02v7m5nq41mmmkkfhms7qw2x4d1miw9j7pbv3bsx5qkv6acckqli";
+        rev    = "2ff159cb5397723cbb05bc7d05c7a55d54ba39da";
+        sha256 = "0r2zikshnby9g23hsriaxqq2bwn4lwhjb9ixyl8g48l17zdz3pqy";
       };
 
       doCheck = false;
@@ -211,6 +211,17 @@ in {
       ];
     };
 
+    photo-env = pkgs.buildEnv {
+      name = "photo-tools";
+      paths = with pkgs; [
+        gimp
+        darktable
+        rawtherapee
+        ufraw
+        dcraw
+      ];
+    };
+
     git-tools = pkgs.buildEnv {
       name = "git-tools";
       paths = with pkgs; [
@@ -262,35 +273,17 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      # aeson-applicative
-      # blaze-builder-enumerator
-      # bound
-      # envy
-      # language-bash
-      # monstercat-backend
-      # pipes-async
-      # pipes-binary
-      # pipes-shell
-      # postgresql-simple-sop
-      # regular
-      # servant-swagger
-      # time-patterns
-      #failure
-      #persistent-mongoDB
-      #servant-auth-server
+      (doJailbreak pandoc-lens)
+      (dontCheck (doJailbreak serialise))
       Boolean
       Decimal
       HTTP
       HUnit
       MissingH
       QuickCheck
-      quickcheck-instances
       SafeSemaphore
-      #Spock
       aeson
       aeson-qq
-      #amazonka
-      #amazonka-s3
       async
       attoparsec
       bifunctors
@@ -305,7 +298,6 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
-      cryptohash
       cased
       cassava
       cereal
@@ -315,7 +307,7 @@ in {
       comonad
       comonad-transformers
       compact-string-fix
-      #diagrams
+      cryptohash
       directory
       dlist
       dlist-instances
@@ -330,11 +322,6 @@ in {
       formatting
       free
       generics-sop
-      #gogol
-      #gogol-core
-      #gogol-sheets
-      #gogol-youtube
-      #gogol-youtube-reporting
       hamlet
       hashable
       hashids
@@ -346,6 +333,7 @@ in {
       http-client
       http-date
       http-types
+      inline-c
       io-memoize
       io-storage
       keys
@@ -363,6 +351,7 @@ in {
       list-extras
       list-t
       logict
+      mbox
       mime-mail
       mime-types
       miso
@@ -383,27 +372,13 @@ in {
       options
       optparse-applicative
       optparse-generic
+      pandoc
       parsec
       parsers
       pcg-random
       persistent
       persistent-postgresql
       persistent-template
-      #pipes
-      #pipes-attoparsec
-      #pipes-bytestring
-      #pipes-concurrency
-      #pipes-csv
-      #pipes-extras
-      #pipes-group
-      #pipes-http
-      #pipes-mongodb
-      #pipes-network
-      #pipes-parse
-      #pipes-postgresql-simple
-      #pipes-safe
-      #pipes-text
-      #pipes-wai
       posix-paths
       #postgresql-binary
       postgresql-simple
@@ -411,6 +386,7 @@ in {
       probability
       profunctors
       pwstore-fast
+      quickcheck-instances
       random
       reducers
       reflection
@@ -432,7 +408,6 @@ in {
       servant-cassava
       servant-client
       servant-docs
-      #servant-elm
       servant-lucid
       servant-server
       shake
@@ -444,13 +419,11 @@ in {
       split
       spoon
       stm
-      store
       stm-chans
       stm-stats
+      store
       streaming
       streaming-bytestring
-      #streaming-postgresql-simple
-      #streaming-utils
       streaming-wai
       strict
       stringsearch
@@ -473,6 +446,7 @@ in {
       test-framework-hunit
       text
       text-format
+      text-regex-replace
       thyme
       time
       time-units
