@@ -80,6 +80,7 @@ in {
   nixpkgs.config = nixpkgsConfig;
 
   nix.useSandbox = true;
+  nix.trustedUsers = [ "root" "jb55" ];
 
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];
