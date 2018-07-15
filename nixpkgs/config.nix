@@ -39,12 +39,12 @@ in {
     #   overrides = haskellOverrides pkgs;
     # };
 
-    phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
+    phonectl = super.python3Packages.callPackage (super.fetchFromGitHub {
       owner  = "jb55";
       repo   = "phonectl";
       sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
       rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
-    })) {};
+    }) {};
 
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [
@@ -86,6 +86,13 @@ in {
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
       patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
                                     sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+                                  })
+                ];
+    });
+
+    htop = pkgs.lib.overrideDerivation super.htop (attrs: {
+      patches = [ (super.fetchurl { url = "https://jb55.com/s/htop-vim.patch";
+                                    sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
                                   })
                 ];
     });

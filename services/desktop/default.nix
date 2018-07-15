@@ -175,11 +175,13 @@ in
 
   services.clipmenu.enable = true;
 
+  environment.systemPackages = [pkgs.phonectl];
   systemd.user.services.phonectl = {
     enable      = true;
     description = "phonectl";
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
+
     serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
 
     environment = with secrets.phonectl; {
