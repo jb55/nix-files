@@ -17,6 +17,7 @@ let machine = "charon";
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
+      machine    = machineConfig;
     };
     zsh = "${pkgs.zsh}/bin/zsh";
     composeKey = if machine == "quiver" then "ralt" else "rwin";
@@ -60,7 +61,7 @@ in {
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
-      (import ./services/desktop (with extra; { inherit composeKey util userConfig theme icon-theme; }))
+      (import ./services/desktop { inherit extra util composeKey userConfig theme icon-theme; })
     ] else []);
 
   # Use the GRUB 2 boot loader.
@@ -78,6 +79,7 @@ in {
   nixpkgs.config = nixpkgsConfig;
 
   nix.useSandbox = machine != "charon";
+  nix.trustedUsers = [ "root" "jb55" ];
 
   users.extraUsers.jb55 = user;
   #users.extraGroups.docker.members = [ "jb55" ];

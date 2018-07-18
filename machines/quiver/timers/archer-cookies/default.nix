@@ -8,21 +8,29 @@ in
   systemd.user.services.cookie-bot = {
     description = "copy cookies to archer";
 
-    path = with pkgs; [ openssh ];
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ openssh rsync ];
 
     serviceConfig.ExecStart = util.writeBash "cp-cookies" ''
       export HOME=/home/jb55
       PTH=".config/chromium/Default/Cookies"
-      scp $HOME/$PTH archer:$PTH
+      rsync -av $HOME/$PTH archer:$PTH
     '';
     unitConfig.OnFailure = "notify-failed-user@%n.service";
 
-    # youtube bot is run on the 20th at 10:24:00
-    startAt = "*-*-20 09:24:00";
+    startAt = [
+      "*-*-20 09:24:00"       # youtube bot is run on the 20th at 10:24:00
+      "Tue *-*-1..7 15:00:00" # cookies for itunes bot on the first tuesday
+    ];
   };
 
   systemd.user.services.cookie-bot-reminder = {
     description = "reminder to login";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     serviceConfig.ExecStart = util.writeBash "cookie-reminder" ''
       /run/wrappers/bin/sendmail -f bill@monstercat.com <<EOF

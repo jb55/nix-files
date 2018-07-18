@@ -8,6 +8,9 @@ in
   systemd.user.services.shopify-sales-bot = {
     description = "beatport sales bot";
 
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
     environment = {
       SHOPIFY_USER = extra.private.beatport-user;
       SHOPIFY_PASS = extra.private.beatport-pass;

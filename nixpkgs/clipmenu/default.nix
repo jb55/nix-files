@@ -1,32 +1,32 @@
-{ makeWrapper, xsel, dmenu2, eject, gawk, stdenv, fetchFromGitHub, lib }:
+{ clipnotify, makeWrapper, xsel, dmenu2, utillinux, gawk, stdenv, fetchFromGitHub, lib }:
+let
+  makeBinPath = pkgs: lib.concatStringsSep ":" (map (pkg: "${lib.getBin pkg}/bin") pkgs);
+  runtimePath = makeBinPath [ clipnotify xsel dmenu2 utillinux gawk ];
+in
 stdenv.mkDerivation rec {
   name = "clipmenu-${version}";
-  version = "git-2017-05-31";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
-    owner = "cdown";
-    repo  = "clipmenu";
-    rev   = "2cd2287612a541260e4a6973045479b354a4febf";
-    sha256 = "0pcypdnngy4yj76skyd139lvr359qsl0zvn937a69cxv21rmv2rn";
+    owner  = "cdown";
+    repo   = "clipmenu";
+    rev    = version;
+    sha256 = "1qbpca0wny6i222vbikfl2znn3fynhbl4100qs8v4wn27ra5p0mi";
   };
 
   buildInputs = [ makeWrapper ];
 
-  buildPhase = "";
-
   installPhase = ''
     mkdir -p $out/bin
-    cp clipmenu clipmenud $out/bin
+    cp clipdel clipmenu clipmenud $out/bin
 
-    wrapProgram "$out/bin/clipmenu" \
-      --prefix PATH : "${lib.getBin xsel}/bin:${lib.getBin dmenu2}/bin:${lib.getBin eject}/bin:${lib.getBin gawk}/bin"
-
-    wrapProgram "$out/bin/clipmenud" \
-      --prefix PATH : "${lib.getBin xsel}/bin:${lib.getBin dmenu2}/bin:${lib.getBin eject}/bin:${lib.getBin gawk}/bin"
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" --prefix PATH : "${runtimePath}"
+    done
   '';
 
   meta = with stdenv.lib; {
-    description = "clipboard helper";
+    description = "Clipboard management using dmenu";
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.publicDomain;

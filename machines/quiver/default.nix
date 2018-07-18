@@ -5,33 +5,35 @@ extra:
     ./hardware-configuration.nix
     (import ../../misc/msmtp extra)
     (import ./networking extra)
-    (import ./imap-notifier extra)
+    (import ../../misc/imap-notifier extra)
     (import ./timers extra)
   ];
 
-  virtualisation.docker.enable = true;
+  environment.systemPackages = with pkgs; [ acpi ];
+
+  virtualisation.docker.enable = false;
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "jb55" ];
 
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
   '';
 
-  services.hoogle = {
-    enable = true;
-    packages = pkgs.myHaskellPackages;
-    haskellPackages = pkgs.haskellPackages;
-  };
-  services.mongodb.enable = true;
-  services.redis.enable = true;
+
+  # telepathy is a garbage fire
+  services.telepathy.enable = false;
+  services.zerotierone.enable = true;
+  services.mongodb.enable = false;
+  services.redis.enable = false;
 
   services.xserver.libinput.enable = true;
   services.xserver.config = ''
     Section "InputClass"
       Identifier     "Enable libinput for TrackPoint"
-      MatchProduct   "PS/2 Generic Mouse"
+      MatchProduct   "TPPS/2 Elan TrackPoint"
       Driver         "libinput"
-      Option         "ScrollMethod" "button"
-      Option         "ScrollButton" "8"
       Option         "AccelSpeed" "1"
+      Option         "AccelProfile" "flat"
     EndSection
 
     Section "InputClass"
@@ -42,6 +44,29 @@ extra:
     EndSection
   '';
 
+
+  services.plex = {
+    enable = false;
+    openFirewall = true;
+  };
+
+  services.nginx.enable = true;
+  services.nginx.group = "www-data";
+
+  services.nginx.httpConfig = ''
+    server {
+      listen 80;
+
+      root /var/www/share;
+
+      location / {
+        autoindex on;
+      }
+    }
+  '';
+
+  users.extraGroups.www-data.members = [ "jb55" ];
+
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
 
@@ -51,18 +76,20 @@ extra:
 
   networking.wireless.enable = true;
 
-  programs.gnupg.trezor-agent = {
-    enable = true;
-    configPath = "/home/jb55/.gnupg/trezor";
-  };
+  # programs.gnupg.trezor-agent = {
+  #   enable = false;
+  #   configPath = "/home/jb55/.gnupg";
+  # };
 
   services.postgresql = {
-    dataDir = "/var/db/postgresql/9.6/";
+    dataDir = "/var/db/postgresql/10/";
     enable = true;
+    package = pkgs.postgresql100;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
       local  all all                     trust
+      host   all all  localhost          trust
     '';
     # extraConfig = ''
     #   listen_addresses = '172.24.172.226,127.0.0.1'

@@ -31,7 +31,7 @@ in
     #(import ./vidstats extra)
   ];
 
-  users.extraGroups.jb55cert.members = [ "prosody" ];
+  users.extraGroups.jb55cert.members = [ "prosody" "nginx" ];
 
   services.gitDaemon.basePath = "/var/git-public/repos";
   services.gitDaemon.enable = true;

@@ -13,25 +13,35 @@ let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; }; myPackages = with jb55pkgs
       skeletons
     ];
 in {
+  documentation.dev.enable = true;
+  documentation.man.enable = true;
+
   environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
     bc
     binutils
+    dateutils
     file
     fzf
     gitFull
     gnupg
+    haskellPackages.una
     htop
+    jq
+    libqalculate
     lsof
     nix-repl
+    nixops
+    parallel
     patchelf
     pv
+    python
+    ranger
+    ripgrep
     rsync
-    silver-searcher
-    subversion
+    shellcheck
     unzip
     vim
     wget
-    xclip
     zip
   ];
 }

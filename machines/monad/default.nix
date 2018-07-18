@@ -1,12 +1,13 @@
 extra:
 { config, lib, pkgs, ... }:
-let extras = (rec { ztip = "172.24.172.226";
-                    nix-serve = {
-                      port = 10845;
-                      bindAddress = ztip;
-                    };
-                }) // extra;
-    util = extra.util;
+let util = extra.util;
+    nix-serve = extra.machine.nix-serve;
+    zenstates = pkgs.fetchFromGitHub {
+      owner  = "r4m0n";
+      repo   = "ZenStates-Linux";
+      rev    = "0bc27f4740e382f2a2896dc1dabfec1d0ac96818";
+      sha256 = "1h1h2n50d2cwcyw3zp4lamfvrdjy1gjghffvl3qrp6arfsfa615y";
+    };
     email-notify = util.writeBash "email-notify-user" ''
       export HOME=/home/jb55
       export PATH=${lib.makeBinPath (with pkgs; [ eject libnotify muchsync notmuch openssh ])}:$PATH
@@ -23,64 +24,120 @@ in
 {
   imports = [
     ./hardware
+    (import ../../misc/msmtp extra)
     (import ./networking extra)
-    (import ./nginx extra)
+    (import ../../misc/imap-notifier extra)
   ];
 
+
   virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "jb55" ];
-  users.extraGroups.tor.members = [ "jb55" ];
+  virtualization.virtualbox.host.enableHardening = false;
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+  users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
 
-  programs.mosh.enable = false;
-  services.trezord.enable = false;
-  services.redis.enable = false;
+  programs.mosh.enable = true;
 
-  services.mongodb.enable = true;
+  # services.bitcoin.enable = true;
+  # services.bitcoin.enableTestnet = true;
+
+  # services.bitcoin.config = ''
+  #   datadir=/zbig/bitcoin
+  #   txindex=1
+  # '';
+
+  # services.bitcoin.testnetConfig = ''
+  #   datadir=/zbig/bitcoin
+  # '';
+
+  services.trezord.enable = true;
+  services.redis.enable = false;
+  services.zerotierone.enable = true;
+  services.mongodb.enable = false;
+
   services.tor.enable = true;
-  services.tor.extraConfig = extras.private.tor.extraConfig;
+  services.tor.controlPort = 9051;
+  services.tor.extraConfig = extra.private.tor.extraConfig;
+
   services.fcgiwrap.enable = true;
 
-  services.nix-serve.enable = true;
-  services.nix-serve.bindAddress = extras.nix-serve.bindAddress;
-  services.nix-serve.port = extras.nix-serve.port;
+  services.nix-serve.enable = false;
+  services.nix-serve.bindAddress = nix-serve.bindAddress;
+  services.nix-serve.port = nix-serve.port;
 
-  services.nginx.httpConfig = (if (config.services.nginx.enable && config.services.nix-serve.enable) then ''
-    server {
-      listen ${extras.nix-serve.bindAddress}:80;
-      server_name cache.monad.jb55.com;
-
-      location / {
-        proxy_pass  http://${extras.nix-serve.bindAddress}:${toString extras.nix-serve.port};
-        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_set_header        Host            $host;
-        proxy_set_header        X-Real-IP       $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+  services.nginx.enable = true;
+  services.nginx.httpConfig = ''
+      server {
+        listen      80 default_server;
+        server_name _;
+        root /www/public;
+        index index.html index.htm;
+        location / {
+          try_files $uri $uri/ =404;
+        }
       }
-    }
-  '';
+    '' + (if config.services.nix-serve.enable then ''
+      server {
+        listen ${nix-serve.bindAddress}:80;
+        server_name cache.monad.jb55.com;
+
+        location / {
+          proxy_pass  http://${nix-serve.bindAddress}:${toString nix-serve.port};
+          proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+          proxy_redirect off;
+          proxy_buffering off;
+          proxy_set_header        Host            $host;
+          proxy_set_header        X-Real-IP       $remote_addr;
+          proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+      }
+    '' else "") + (if config.services.tor.enable then extra.private.tor.nginx else "");
 
   services.footswitch = {
-    enable = true;
+    enable = false;
     enable-led = true;
     led = "input5::numlock";
   };
 
+  systemd.services.disable-c6 = {
+    description = "Ryzen Disable C6 State";
+
+    wantedBy = [ "basic.target" ];
+    after = [ "sysinit.target" "local-fs.target" ];
+
+    serviceConfig.Type = "oneshot";
+    serviceConfig.ExecStart = util.writeBash "disable-c6-state" ''
+      ${pkgs.kmod}/bin/modprobe msr
+      ${pkgs.python2}/bin/python ${zenstates}/zenstates.py --c6-disable --list
+    '';
+  };
+
   services.postgresql = {
-    dataDir = "/var/db/postgresql/9.5/";
-    enable = false;
+    dataDir = "/var/db/postgresql/100/";
+    enable = true;
+    package = pkgs.postgresql100;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
       local  all all                     trust
-      host   all all  172.24.172.226/16  trust
-      host   all all  127.0.0.1/16       trust
+      host   all all  127.0.0.1/32       trust
+      host   all all  192.168.86.0/24    trust
     '';
     extraConfig = ''
-      listen_addresses = '172.24.172.226,127.0.0.1'
+      listen_addresses = '0.0.0.0'
     '';
   };
+
+  # security.pam.u2f = {
+  #   enable = true;
+  #   interactive = true;
+  #   cue = true;
+  #   control = "sufficient";
+  #   authfile = "${pkgs.writeText "pam-u2f-config" ''
+  #     jb55:vMXUgYb1ytYmOVgqFDwVOxJmvVI9F3gdSJVbvsi1A1VA-3mftTUhgARo4Kmm_8SAH6IJJ8p3LSXPSbtTSXMIpQ,04d8c1542a7391ee83112a577db968b84351f0090a9abe7c75bedcd94777cf15727c68ce4ac8858ff2812ded3c86d978efc5893b25cf906032632019fe792d3ec4
+  #   ''}";
+  # };
 
 }

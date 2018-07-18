@@ -3,6 +3,8 @@ let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
     callPackage = pkgs.callPackage;
+    doJailbreak = pkgs.haskell.lib.doJailbreak;
+    dontCheck = pkgs.haskell.lib.dontCheck;
     regularFiles = builtins.filterSource (f: type: type == "symlink"
                                                 || type == "directory"
                                                 || type == "regular");
@@ -28,13 +30,21 @@ in {
       pkgs.urweb
     ]);
 
-    bluez = pkgs.bluez5;
+    wine = super.wine.override { wineBuild = "wineWow"; };
 
+    bluez = pkgs.bluez5;
     # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
 
-    #haskellPackages = super.haskell.packages.ghc821;
+    # haskellPackages = super.haskellPackages.override {
+    #   overrides = haskellOverrides pkgs;
+    # };
 
-    clipmenu = super.callPackage ./clipmenu {};
+    phonectl = super.python3Packages.callPackage (super.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "phonectl";
+      sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
+      rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
+    }) {};
 
     pidgin-with-plugins = super.pidgin-with-plugins.override {
       plugins = (with super; [
@@ -53,14 +63,36 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "0c1299bbcda41b0f28e1ac522e440914aa51bf58";
-        sha256 = "01950zy1w10gg4034i44kph4gxgwyn5h89067lp5rg7d3r6h243l";
+        rev    = "2ff159cb5397723cbb05bc7d05c7a55d54ba39da";
+        sha256 = "0r2zikshnby9g23hsriaxqq2bwn4lwhjb9ixyl8g48l17zdz3pqy";
       };
+
+      doCheck = false;
     });
+
+    wirelesstools =
+      let
+        patch = super.fetchurl {
+                  url    = "https://jb55.com/s/iwlist-print-scanning-info-allocation-failed.patch";
+                  sha256 = "31c97c6abf3f0073666f9f94f233fae2fcb8990aae5e7af1030af980745a8efc";
+                };
+      in
+        pkgs.lib.overrideDerivation super.wirelesstools (attrs: {
+          prePatch = ''
+            patch -p0 < ${patch}
+          '';
+        });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
       patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
                                     sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+                                  })
+                ];
+    });
+
+    htop = pkgs.lib.overrideDerivation super.htop (attrs: {
+      patches = [ (super.fetchurl { url = "https://jb55.com/s/htop-vim.patch";
+                                    sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
                                   })
                 ];
     });
@@ -118,8 +150,8 @@ in {
         rustracer
         rustracerd
         rust
-        cargo-edit
-        rustfmt
+        #cargo-edit
+        #rustfmt
         rust-bindgen
       ];
     };
@@ -186,6 +218,17 @@ in {
       ];
     };
 
+    photo-env = pkgs.buildEnv {
+      name = "photo-tools";
+      paths = with pkgs; [
+        gimp
+        darktable
+        rawtherapee
+        ufraw
+        dcraw
+      ];
+    };
+
     git-tools = pkgs.buildEnv {
       name = "git-tools";
       paths = with pkgs; [
@@ -225,6 +268,8 @@ in {
       alex
       cabal-install
       cabal2nix
+      stack2nix
+      hpack
       ghc-core
       happy
       hasktags
@@ -235,11 +280,17 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
+      (doJailbreak pandoc-lens)
+      (dontCheck (doJailbreak serialise))
+      Boolean
+      Decimal
+      HTTP
+      HUnit
+      MissingH
+      QuickCheck
+      SafeSemaphore
       aeson
-      # aeson-applicative
       aeson-qq
-      amazonka
-      amazonka-s3
       async
       attoparsec
       bifunctors
@@ -250,62 +301,50 @@ in {
       bitcoin-tx
       blaze-builder
       blaze-builder-conduit
-      # blaze-builder-enumerator
       blaze-html
       blaze-markup
       blaze-textual
-      Boolean
-      # bound
       bson-lens
       bytestring-show
       cased
-      clientsession
       cassava
       cereal
       clientsession
+      clientsession
+      colour
       comonad
       comonad-transformers
       compact-string-fix
-      cryptonite
-      cryptonite-conduit
+      cryptohash
       directory
-      diagrams
-      colour
       dlist
       dlist-instances
       doctest
       either
       elm-export
       elm-export-persistent
-      # envy
       exceptions
-      #failure
       filepath
       fingertree
       foldl
       formatting
       free
       generics-sop
-      gogol
-      gogol-core
-      gogol-sheets
-      gogol-youtube
-      gogol-youtube-reporting
       hamlet
       hashable
+      hashids
       heroku
+      hedgehog
       hspec
       hspec-expectations
       html
-      HTTP
       http-client
       http-date
       http-types
-      HUnit
+      inline-c
       io-memoize
       io-storage
       keys
-      # language-bash
       language-c
       language-javascript
       lens
@@ -320,60 +359,42 @@ in {
       list-extras
       list-t
       logict
+      mbox
       mime-mail
-      miso
       mime-types
-      MissingH
+      miso
       mmorph
       monad-control
       monad-coroutine
-      monadloc
       monad-loops
       monad-par
       monad-par-extras
       monad-stm
+      monadloc
       mongoDB
       monoid-extras
-      # monstercat-backend
+      neat-interpolation
       network
       newtype
-      neat-interpolation
       numbers
       options
       optparse-applicative
       optparse-generic
+      pandoc
       parsec
       parsers
       pcg-random
       persistent
-      #persistent-mongoDB
       persistent-postgresql
       persistent-template
-      pipes
-      # pipes-async
-      pipes-attoparsec
-      # pipes-binary
-      pipes-bytestring
-      pipes-concurrency
-      pipes-csv
-      pipes-extras
-      pipes-group
-      pipes-http
-      pipes-mongodb
-      pipes-network
-      pipes-parse
-      pipes-postgresql-simple
-      pipes-safe
-      # pipes-shell
-      pipes-text
-      pipes-wai
       posix-paths
-      postgresql-binary
+      #postgresql-binary
       postgresql-simple
-      # postgresql-simple-sop
       pretty-show
+      probability
       profunctors
-      QuickCheck
+      pwstore-fast
+      quickcheck-instances
       random
       reducers
       reflection
@@ -381,13 +402,12 @@ in {
       regex-base
       regex-compat
       regex-posix
-      # regular
       relational-record
       resourcet
       retry
       rex
+      s3-signer
       safe
-      SafeSemaphore
       sbv
       scotty
       semigroupoids
@@ -395,34 +415,28 @@ in {
       servant
       servant-cassava
       servant-client
-      pwstore-fast
       servant-docs
-      servant-elm
       servant-lucid
       servant-server
-      #servant-auth-server
-      # servant-swagger
       shake
       shakespeare
-      shelly
+      #shelly
+      shqq
       simple-reflect
       speculation
       split
-      Spock
       spoon
       stm
       stm-chans
       stm-stats
+      store
       streaming
       streaming-bytestring
       streaming-wai
-      streaming-utils
-      streaming-postgresql-simple
       strict
       stringsearch
       strptime
       syb
-      shqq
       system-fileio
       system-filepath
       tagged
@@ -440,9 +454,9 @@ in {
       test-framework-hunit
       text
       text-format
-      time
+      text-regex-replace
       thyme
-      # time-patterns
+      time
       time-units
       tinytemplate
       transformers
@@ -452,7 +466,6 @@ in {
       uniplate
       unix-compat
       unordered-containers
-      probability
       uuid
       vector
       void

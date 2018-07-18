@@ -1,8 +1,11 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  systemd.services.transaction-bot = {
+  systemd.user.services.transaction-bot = {
     description = "tc transaction bot";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     environment = {
       TUNECORE_USER = extra.private.tc-user;

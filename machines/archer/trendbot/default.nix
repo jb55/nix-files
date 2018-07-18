@@ -1,8 +1,11 @@
 extra:
 { config, lib, pkgs, ... }:
 {
-  systemd.services.trend-bot = {
+  systemd.user.services.trend-bot = {
     description = "tc trend bot";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
     environment = {
       TUNECORE_USER = extra.private.tc-user;

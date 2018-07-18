@@ -27,31 +27,47 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    gtk-engine-murrine
-    shared_mime_info
-    theme.package
-    icon-theme.package
-
+    chromium
+    clipit
     clipmenu
-    dynamic-colors
-    msmtp
+    dmenu2
     dragon-drop
-    # dropbox-cli
+    dynamic-colors
     emacs
+    feh
     gnome3.eog
-    xfce.thunar
+    gnome3.gnome-calculator
+    gtk-engine-murrine
+    icon-theme.package
+    libnotify
+    mimeo
+    msmtp
+    muchsync
+    notmuch
+    pandoc
     pavucontrol
-    pidgin-with-plugins
+    qalculate-gtk
     rxvt_unicode-with-plugins
     scrot
+    shared_mime_info
+    signal-desktop
+    simplescreenrecorder
+    skypeforlinux
     slock
-    # spotify
+    spotify
+    texlive.combined.scheme-basic
+    theme.package
+    twmn
     userConfig
     vlc
+    w3m
     weechat
+    x11vnc
     xautolock
     xbindkeys
-    xdg_utils
+    xclip
+    xdotool
+    xfce.thunar
     xlibs.xev
     xlibs.xmodmap
     xlibs.xset

@@ -25,14 +25,10 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
         os.system("systemctl restart --user home-email-notifier")
 
       def check():
-        now = datetime.datetime.now()
-        if now.isoweekday() > 5:
-          start_home()
-        else:
-          if now.hour >= 17 or now.hour < 9:
-            start_home()
-          else:
-            start_work()
+         # since we changed the notifier services to simply be fetching services,
+         # always restart home and work email fetchers
+         start_home()
+         #start_work()
 
       def handle_sleep_callback(sleeping):
         if not sleeping:
@@ -63,13 +59,13 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       until /var/run/wrappers/bin/ping -c1 $host &>/dev/null; do :; done
 
       # run it once first in case we missed any from lost connectivity
-      ${cmd} no || :
+      ${cmd} || :
       ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
     '';
 in
 with extra; {
   systemd.user.services.work-email-notifier = {
-    enable = true;
+    enable = false;
     description = "work notifier";
 
     path = with pkgs; [ twmn eject isync notmuch bash ];
@@ -81,13 +77,19 @@ with extra; {
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/work
+
+            notify() {
+              c=$(notmuch --config /home/jb55/.notmuch-config-work count 'tag:flagged and tag:inbox and date:today')
+              if [ -f ~/var/notify/work ] && [ "$c" -gt 0 ]; then
+                twmnc -i new_email -c w -s 32 --pos top_left
+              fi
+            }
+
             (
               flock -x -w 100 200 || exit 1
               mbsync gmail
               notmuch --config /home/jb55/.notmuch-config-work new
-              [ "$1" == "no" ] && \
-                twmnc -i new_email -c "lets get to work" -s 32 --pos top_left || \
-                twmnc -i new_email -c w -s 32 --pos top_left
+              notify
             ) 200>/tmp/email-notify.lock
           '';
       in notifier private.work-email-user private.work-email-pass cmd "";
@@ -102,7 +104,7 @@ with extra; {
       IMAP_NOTIFY_PORT = "12788";
     };
 
-    path = with pkgs; [ twmn eject muchsync notmuch bash openssh ];
+    path = with pkgs; [ twmn eject utillinux muchsync notmuch bash openssh ];
 
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";
@@ -111,12 +113,18 @@ with extra; {
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/personal
+
+            notify() {
+              c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
+              if [ -f ~/var/notify/home ] && [ "$c" -gt 0 ]; then
+                twmnc -i new_email -c p -s 32 --pos top_left
+              fi
+            }
+
             (
               flock -x -w 100 200 || exit 1
               muchsync -C ~/.notmuch-config-personal notmuch
-              [ "$1" == "no" ] && \
-                twmnc -i new_email -c "welcome home" -s 32 --pos top_left || \
-                twmnc -i new_email -c p -s 32 --pos top_left
+              notify
             ) 200>/tmp/email-notify.lock
           '';
       in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";

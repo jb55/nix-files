@@ -23,6 +23,7 @@ in {
     (import ./youtube-sales-bot extras)
     (import ./youtube-pub-sales-bot extras)
     (import ./shopify-sales-bot extras)
+    (import ./itunes-bots extras)
     (import ./cogs-bot extras)
     (import <nixpkgs/nixos/modules/services/misc/gitit.nix>)
   ];
