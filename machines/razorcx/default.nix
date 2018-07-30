@@ -23,20 +23,22 @@ let gitExtra = {
           port = "5000";
         };
 
+      api =
+        { host = "api.razorcx.com";
+          port = "6000";
+        };
+
       assets =
         { host = "assets.razorcx.com";
         };
 
     };
 
-    razorcx-api-staging = (pkgs.callPackage /home/jb55/RazorCX { }).razorcx-api-staging;
-
-    razorrec-dotnet-json = lib.importJSON /var/git/razorrec-dotnet/deploy.json;
-    razorrec-dotnet = (pkgs.callPackage (import (pkgs.fetchgit razorrec-dotnet-json)) {}).razorcx-recommender;
+    razorcx-api-staging-json = lib.importJSON /var/git/razorcx/deploy.json;
+    razorcx-api-staging = (pkgs.callPackage (pkgs.fetchgit razorcx-api-staging-json) {}).razorcx-api-staging;
 
     certGroup = "certs";
-    node-processor-json = lib.importJSON /var/git/razorrec/deploy.json;
-    node-processor = (import (pkgs.fetchgit node-processor-json) {}).package;
+
     httpipePort = "8899";
     httpiped = (import (pkgs.fetchgit {
       url = https://github.com/jb55/httpipe;
@@ -48,6 +50,13 @@ in
   imports = [
     ./networking
     ./hardware
+  ];
+
+  # needed for deploy hooks
+  environment.systemPackages = with pkgs; [
+    jq
+    nix-prefetch-git
+    httpiped
   ];
 
   networking.domain = endpoints.backend.host;
@@ -106,43 +115,17 @@ in
     '';
   };
 
-  systemd.services.node-processor = {
-    description = "node-processor";
-    wantedBy = [ "multi-user.target" ];
-    after    = [ "multi-user.target" ];
-    path = with pkgs; [ node-processor ];
-    environment = {
-      RAZORCX_JWT_SECRET = "RazorCx_8CFB2EC534E14D56";
-      NODEPROCPORT = endpoints.backend.port;
-      PGDATABASE = "razorcx";
-      DEBUG = "razorrec:sql";
-      PGUSER = "jb55";
-      # WARNING: development turns off authentication
-      NODE_ENV = "production";
-    };
-    serviceConfig.Restart = "always";
-    serviceConfig.ExecStart = "${node-processor}/bin/node-processor";
-  };
-
-  systemd.services.backend-staging = {
-    description = "backend-staging";
-    wantedBy = [ "multi-user.target" ];
-    after    = [ "multi-user.target" ];
-    path = with pkgs; [ razorrec-dotnet ];
-    environment = {
-      PORT = endpoints.backend-staging.port;
-      PGHOST = "localhost";
-      PGDATABASE = "razorcx";
-      PGUSER = "jb55";
-    };
-    serviceConfig.Restart = "always";
-    serviceConfig.ExecStart = "${razorrec-dotnet}/bin/RazorCx.Recommender.API-Release";
-  };
-
   systemd.services.razorcx-api-staging = {
     description = "RazorCx.Api-Staging";
     wantedBy = [ "multi-user.target" ];
     after    = [ "multi-user.target" ];
+
+    environment = {
+      PGHOST = "localhost";
+      PGDATABASE = "razorcx";
+      PGUSER = "jb55";
+    };
+
     #serviceConfig.Restart = "always";
     serviceConfig.ExecStart = "${razorcx-api-staging}/bin/RazorCx.Api-Staging";
     serviceConfig.WorkingDirectory = "${razorcx-api-staging}/bin";
@@ -159,11 +142,6 @@ in
     serviceConfig.ExecStart = "${httpiped}/bin/httpiped";
   };
 
-
-  # TODO: update to security programs
-  #security.wrappers = {
-  #  sendmail =
-  #}
 
   services.nginx.enable = true;
   services.zerotierone.enable = true;
@@ -190,44 +168,6 @@ in
       }
     }
 
-    # server {
-    #   listen       443 ssl;
-    #   server_name  ${endpoints.assets.host};
-    #   location /  {
-    #     autoindex on;
-    #     root /home/assets/files;
-    #   }
-    #   ssl_certificate /var/lib/acme/${endpoints.assets.host}/fullchain.pem;
-    #   ssl_certificate_key /var/lib/acme/${endpoints.assets.host}/key.pem;
-    # }
-
-    server {
-      listen 80;
-      server_name ${endpoints.backend-staging.host};
-
-      location /.well-known/acme-challenge {
-        root /var/www/challenges;
-      }
-
-      location / {
-        return 301 https://${endpoints.backend-staging.host}$request_uri;
-      }
-    }
-
-
-    server {
-      listen 80;
-      server_name ${endpoints.backend.host};
-
-      location /.well-known/acme-challenge {
-        root /var/www/challenges;
-      }
-
-      location / {
-        return 301 https://${endpoints.backend.host}$request_uri;
-      }
-    }
-
     server {
       listen 80;
       server_name ${endpoints.stagingapi.host};
@@ -239,6 +179,24 @@ in
       location / {
         return 301 https://${endpoints.stagingapi.host}$request_uri;
       }
+    }
+
+    server {
+      listen       443 ssl;
+      server_name  ${endpoints.stagingapi.host};
+
+      gzip on;
+      gzip_min_length 1000;
+      gzip_proxied no-cache no-store private expired auth;
+      gzip_types text/plain application/json;
+
+      location / {
+        proxy_pass http://localhost:${endpoints.stagingapi.port};
+        proxy_set_header Host $host;
+      }
+
+      ssl_certificate /var/lib/acme/${endpoints.stagingapi.host}/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/${endpoints.stagingapi.host}/key.pem;
     }
 
     server {
@@ -259,77 +217,7 @@ in
       }
     }
 
-    server {
-      listen       443 ssl;
-      server_name  ${endpoints.stagingapi.host};
 
-      gzip on;
-      gzip_min_length 1000;
-      gzip_proxied no-cache no-store private expired auth;
-      gzip_types text/plain application/json;
-
-      location / {
-        proxy_pass http://localhost:${endpoints.stagingapi.port};
-      }
-
-      ssl_certificate /var/lib/acme/${endpoints.stagingapi.host}/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/${endpoints.stagingapi.host}/key.pem;
-    }
-
-    server {
-      listen       80;
-      server_name  clientstaging.razorcx.com;
-
-      location /.well-known/acme-challenge {
-        root /var/www/challenges;
-      }
-
-      location / {
-        return 301 https://clientstaging.razorcx.com$request_uri;
-      }
-    }
-
-    server {
-      listen       443 ssl;
-      server_name  ${endpoints.backend-staging.host};
-
-      gzip on;
-      gzip_min_length 1000;
-      gzip_proxied no-cache no-store private expired auth;
-      gzip_types text/plain application/json;
-
-      location / {
-        proxy_pass http://localhost:${endpoints.backend-staging.port}/;
-      }
-
-      ssl_certificate /var/lib/acme/${endpoints.backend-staging.host}/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/${endpoints.backend-staging.host}/key.pem;
-    }
-
-    server {
-      listen       443 ssl;
-      server_name  ${endpoints.backend.host};
-
-      gzip on;
-      gzip_min_length 1000;
-      gzip_proxied no-cache no-store private expired auth;
-      gzip_types text/plain application/json;
-
-      location = / {
-        return 301  http://razorcx.com;
-      }
-
-      location = /np {
-        return 302 /np/;
-      }
-
-      location /np/  {
-        proxy_pass http://localhost:${endpoints.backend.port}/;
-      }
-
-      ssl_certificate /var/lib/acme/${endpoints.backend.host}/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/${endpoints.backend.host}/key.pem;
-    }
 
     ${gitCfg}
   '';
