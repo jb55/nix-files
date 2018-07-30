@@ -46,17 +46,6 @@ in {
       rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
     }) {};
 
-    pidgin-with-plugins = super.pidgin-with-plugins.override {
-      plugins = (with super; [
-        purple-hangouts
-        pidginotr
-        pidginwindowmerge
-        pidgin-skypeweb
-        pidgin-opensteamworks
-        pidgin-carbons
-      ]);
-    };
-
     jb55-dotfiles = regularFiles <dotfiles>;
 
     notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
