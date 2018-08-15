@@ -17,8 +17,11 @@ in
 {
   networking.extraHosts = ''
     10.0.9.1         secure.datavalet.io
+    192.168.86.26    torrents.home.
     24.244.54.234    wifisignon.shaw.ca
   '';
+
+  networking.wireless.userControlled.enable = true;
 
   networking.firewall.enable = true;
   networking.firewall.extraCommands = ''

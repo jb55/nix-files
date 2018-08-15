@@ -58,10 +58,10 @@ in
 
   services.printing.drivers = [ pkgs.samsung-unified-linux-driver_4_01_17 ];
 
-  programs.gnupg.trezor-agent = {
-    enable = false;
-    configPath = "/home/jb55/.gnupg";
-  };
+  #programs.gnupg.trezor-agent = {
+  #  enable = false;
+  #  configPath = "/home/jb55/.gnupg";
+  #};
 
   boot.blacklistedKernelModules = ["dvb_usb_rtl28xxu"];
   fileSystems."/media/kindle" =
