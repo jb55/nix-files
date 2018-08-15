@@ -38,7 +38,7 @@ in {
     gnome3.gnome-calculator
     gtk-engine-murrine
     icon-theme.package
-    lasspass-cli
+    lastpass-cli
     libnotify
     mimeo
     msmtp
