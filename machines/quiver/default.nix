@@ -9,7 +9,7 @@ extra:
     (import ./timers extra)
   ];
 
-  environment.systemPackages = with pkgs; [ acpi ];
+  environment.systemPackages = with pkgs; [ acpi xorg.xbacklight ];
 
   virtualisation.docker.enable = false;
   virtualisation.virtualbox.host.enable = true;
