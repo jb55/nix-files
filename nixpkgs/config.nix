@@ -33,7 +33,6 @@ in {
     wine = super.wine.override { wineBuild = "wineWow"; };
 
     bluez = pkgs.bluez5;
-    # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
 
     # haskellPackages = super.haskellPackages.override {
     #   overrides = haskellOverrides pkgs;
