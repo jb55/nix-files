@@ -23,15 +23,16 @@ in {
     dateutils
     file
     fzf
-    gitFull
+    git
     gnupg
     haskellPackages.una
     htop
     jq
     libqalculate
     lsof
-    nix-repl
     nixops
+    network-tools
+    nix-repl
     parallel
     patchelf
     pv

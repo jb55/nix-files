@@ -5,6 +5,8 @@ let
   iptables = "iptables -A nixos-fw";
   ipr = "${pkgs.iproute}/bin/ip";
   writeBash = extra.util.writeBash;
+  transmission-dir = "/zbig/torrents";
+  download-dir = "${transmission-dir}/Downloads";
   openTCP = dev: port: ''
     ip46tables -A nixos-fw -i ${dev} -p tcp --dport ${toString port} -j nixos-fw-accept
   '';
@@ -14,13 +16,12 @@ in
   networking.hostId = extra.machine.hostId;
 
   networking.firewall.trustedInterfaces = ["zt1"];
-  networking.firewall.allowedTCPPorts = [ 5432 9735 ];
+  networking.firewall.allowedTCPPorts = [ 5432 9735 80 ];
 
   services.transmission = {
-    enable = false;
+    enable = true;
+    home = transmission-dir;
     settings = {
-      download-dir = "/sand/torrents/downloads";
-      incomplete-dir = "/sand/torrents/.incomplete";
       incomplete-dir-enable = true;
       rpc-whitelist = "127.0.0.1";
     };
@@ -28,20 +29,21 @@ in
     port = 14325;
   };
 
-  # services.plex = {
-  #   enable = false;
-  #   group = "transmission";
-  #   openFirewall = true;
-  # };
+  services.plex = {
+    enable = false;
+    group = "transmission";
+    openFirewall = true;
+  };
 
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {
       listen 80;
       listen ${extra.machine.ztip}:80;
+      listen 192.168.86.26;
 
       # server names for this server.
       # any requests that come in that match any these names will use the proxy.
-      server_name plex.jb55.com plez.jb55.com;
+      server_name plex.jb55.com plez.jb55.com media.home plex.home;
 
       # this is where everything cool happens (you probably don't need to change anything here):
       location / {
@@ -69,7 +71,13 @@ in
     server {
       listen 80;
       listen ${extra.machine.ztip}:80;
-      server_name torrents.jb55.com torrentz.jb55.com;
+      listen 192.168.86.26;
+      server_name torrents.jb55.com torrentz.jb55.com torrents.home torrent.home;
+
+      location /download {
+        alias ${download-dir};
+        autoindex on;
+      }
 
       location / {
         proxy_read_timeout 300;

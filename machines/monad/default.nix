@@ -37,6 +37,7 @@ in
   services.xserver.videoDrivers = [ "nvidia" ];
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
+  users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
   programs.mosh.enable = true;
 
