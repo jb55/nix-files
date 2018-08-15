@@ -126,31 +126,32 @@ in {
     jb55-dev-env = pkgs.buildEnv {
       name = "jb55-dev-env";
       paths = with pkgs; [
+        haskell-tools
+        git-tools
         haskellEnv
-        gdb
-        sqlite
-        nodejs
-        dotnet-sdk
-        libxml2
-        bison
-        flex
-        autoconf
-        git
-        clang
-        libtool
-        gmp
-        tor
-        zlib
-        sqlite
-        xorg.libX11
-        xorg.libXft
+
+        gnum4
         autoconf
         autogen
-        elmPackages.elm
         automake
-        haskell-tools
-        SDL2
+        bison
+        clang-tools
+        dotnet-sdk
+        elmPackages.elm
+        flex
+        gdb
+        gmp.dev
+        libtool
+        libxml2
         mesa_glu
+        nodejs
+        pythonPackages.howdoi
+        SDL2
+        sqlite
+        tor
+        xorg.libX11
+        xorg.libXft
+        zlib
         (python3.withPackages (p: with p; [bitcoinlib pytest-forked pytest_xdist pytest ephemeral_port_reserve flaky]))
         valgrind
         asciidoc
@@ -291,11 +292,11 @@ in {
       alex
       cabal-install
       cabal2nix
-      stack2nix
+      #stack2nix
       hpack
       ghc-core
       happy
-      hasktags
+      (dontCheck hasktags)
       hindent
       hlint
       structured-haskell-mode

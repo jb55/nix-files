@@ -23,7 +23,7 @@ in {
     dateutils
     file
     fzf
-    gitFull
+    git
     gnupg
     haskellPackages.una
     htop
@@ -31,6 +31,7 @@ in {
     libqalculate
     lsof
     nixops
+    network-tools
     nix-repl
     parallel
     patchelf
