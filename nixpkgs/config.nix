@@ -30,6 +30,8 @@ in {
       pkgs.urweb
     ]);
 
+    lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
+
     wine = super.wine.override { wineBuild = "wineWow"; };
 
     bluez = pkgs.bluez5;
