@@ -27,7 +27,6 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    chromium
     clipit
     clipmenu
     dmenu2
@@ -39,6 +38,7 @@ in {
     gnome3.gnome-calculator
     gtk-engine-murrine
     icon-theme.package
+    lasspass-cli
     libnotify
     mimeo
     msmtp
@@ -47,8 +47,8 @@ in {
     pandoc
     pavucontrol
     qalculate-gtk
+    qutebrowser
     rxvt_unicode-with-plugins
-    scrot
     shared_mime_info
     signal-desktop
     simplescreenrecorder
