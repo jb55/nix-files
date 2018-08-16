@@ -61,7 +61,7 @@ in {
       ./hardware/desktop
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
-      (import ./services/desktop { inherit extra util composeKey userConfig theme icon-theme; })
+      (import ./services/desktop { inherit extra composeKey userConfig theme icon-theme; })
     ] else []);
 
   # Use the GRUB 2 boot loader.

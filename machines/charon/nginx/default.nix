@@ -64,7 +64,7 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      80;
+        listen      80 default_server;
         server_name "";
         return      444;
       }

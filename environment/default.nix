@@ -10,12 +10,9 @@ let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; }; myPackages = with jb55pkgs
        samp
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
-      skeletons
+      #skeletons
     ];
 in {
-  documentation.dev.enable = true;
-  documentation.man.enable = true;
-
   environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
     bc
     binutils

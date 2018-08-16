@@ -313,16 +313,16 @@ in
       '';
     };
 
-    users.extraUsers = optional (cfg.user == "vmail") {
-      name = "vmail";
-      uid = cfg.uid;
-      group = cfg.group;
-    };
+    # users.extraUsers = optional (cfg.user == "vmail") {
+    #   name = "vmail";
+    #   uid = cfg.uid;
+    #   group = cfg.group;
+    # };
 
-    users.extraGroups = optional (cfg.group == "vmail") {
-      name = "vmail";
-      gid = cfg.gid;
-    };
+    # users.extraGroups = optional (cfg.group == "vmail") {
+    #   name = "vmail";
+    #   gid = cfg.gid;
+    # };
 
     networking.firewall.allowedTCPPorts = [ 25 ];
   };
