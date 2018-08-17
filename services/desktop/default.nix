@@ -21,6 +21,27 @@ in
 
   services.trezord.enable = true;
 
+  services.emacs.enable = true;
+  services.emacs.install = true;
+
+  systemd.user.services.emacs.path = with pkgs; [ bash nix ];
+  systemd.user.services.emacs.serviceConfig.ExecStart =
+    let
+      cfg = config.services.emacs;
+    in
+      lib.mkForce (
+        pkgs.writeScript "start-emacs" ''
+          #!/usr/bin/env bash
+          source ${config.system.build.setEnvironment}
+
+          # hacky af
+          export NIX_PATH=dotfiles=/home/jb55/dotfiles:jb55pkgs=/home/jb55/etc/jb55pkgs:monstercatpkgs=/home/jb55/etc/monstercatpkgs:nixos-config=/home/jb55/etc/nix-files:nixpkgs=/home/jb55/nixpkgs:/home/jb55/.nix-defexpr/channels:nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
+          export NIXPKGS=/home/jb55/nixpkgs
+
+          exec /home/jb55/bin/all-dev --run 'exec ${cfg.package}/bin/emacs --daemon';
+        ''
+      );
+
   services.redshift = {
     enable = true;
     temperature.day = 5700;
