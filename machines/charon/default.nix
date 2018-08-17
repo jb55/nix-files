@@ -12,6 +12,12 @@ let adblock-hosts = pkgs.fetchurl {
       git = {projectroot = "/var/git";};
       host = "git.zero.jb55.com";
     };
+    httpipePort = "8899";
+    httpiped = (import (pkgs.fetchgit {
+      url = https://github.com/jb55/httpipe;
+      rev = "05d97c628e3be08db83dc29a80c7ea02a78bbf81";
+      sha256 = "0iy5wdb1jjx9xz90hpnrxk3h7nq0fnv5dqvmg1ac6cxs1823yh7c";
+    }) { nodejs = pkgs.nodejs; }).package;
     npmrepo = (import (pkgs.fetchFromGitHub {
       owner  = "jb55";
       repo   = "npm-repo-proxy";
@@ -48,6 +54,17 @@ in
     (import ./sheetzen extra)
     #(import ./vidstats extra)
   ];
+
+  systemd.services.httpiped = {
+    description = "httpiped";
+    wantedBy = [ "multi-user.target" ];
+    after    = [ "multi-user.target" ];
+    environment = {
+      PORT = httpipePort;
+    };
+    serviceConfig.Restart = "always";
+    serviceConfig.ExecStart = "${httpiped}/bin/httpiped";
+  };
 
   users.extraGroups.jb55cert.members = [ "prosody" "nginx" ];
 
@@ -277,6 +294,17 @@ in
 
       location / {
         try_files $uri $uri/ =404;
+      }
+
+      location /paste/ {
+        proxy_max_temp_file_size 0;
+        client_max_body_size 0;
+        proxy_request_buffering off;
+        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_pass http://127.0.0.1:${httpipePort}/;
+
+        add_header X-Content-Type-Options nosniff;
       }
 
       location /cal/ {
