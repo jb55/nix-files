@@ -40,7 +40,6 @@ in {
     icon-theme.package
     lastpass-cli
     libnotify
-    mimeo
     msmtp
     muchsync
     notmuch
