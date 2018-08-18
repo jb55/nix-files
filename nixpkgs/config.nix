@@ -124,41 +124,6 @@ in {
       ];
     };
 
-    jb55-dev-env = pkgs.buildEnv {
-      name = "jb55-dev-env";
-      paths = with pkgs; [
-        haskell-tools
-        git-tools
-        haskellEnv
-
-        gnum4
-        autoconf
-        autogen
-        automake
-        bison
-        clang-tools
-        dotnet-sdk
-        elmPackages.elm
-        flex
-        gdb
-        gmp.dev
-        libtool
-        libxml2
-        mesa_glu
-        nodejs
-        pythonPackages.howdoi
-        SDL2
-        sqlite
-        tor
-        xorg.libX11
-        xorg.libXft
-        zlib
-        (python3.withPackages (p: with p; [bitcoinlib pytest-forked pytest_xdist pytest ephemeral_port_reserve flaky]))
-        valgrind
-        asciidoc
-      ];
-    };
-
     jvm-tools-env = pkgs.buildEnv {
       name = "jvm-tools";
       paths = with pkgs; [
