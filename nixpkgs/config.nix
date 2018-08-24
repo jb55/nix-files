@@ -74,17 +74,21 @@ in {
         });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
-      patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
-                                    sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
-                                  })
-                ];
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
+            sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+          })
+        ];
     });
 
     htop = pkgs.lib.overrideDerivation super.htop (attrs: {
-      patches = [ (super.fetchurl { url = "https://jb55.com/s/htop-vim.patch";
-                                    sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
-                                  })
-                ];
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/htop-vim.patch";
+            sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
+          })
+        ];
     });
 
     ical2org = super.callPackage ./scripts/ical2org { };
