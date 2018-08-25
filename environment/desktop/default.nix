@@ -34,7 +34,6 @@ in {
     dynamic-colors
     emacs
     feh
-    gnome3.eog
     gnome3.gnome-calculator
     gtk-engine-murrine
     icon-theme.package
