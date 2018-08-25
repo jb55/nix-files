@@ -74,17 +74,21 @@ in {
         });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
-      patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
-                                    sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
-                                  })
-                ];
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
+            sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+          })
+        ];
     });
 
     htop = pkgs.lib.overrideDerivation super.htop (attrs: {
-      patches = [ (super.fetchurl { url = "https://jb55.com/s/htop-vim.patch";
-                                    sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
-                                  })
-                ];
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/htop-vim.patch";
+            sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
+          })
+        ];
     });
 
     ical2org = super.callPackage ./scripts/ical2org { };
@@ -121,41 +125,6 @@ in {
         snap
         sharefile
         samp
-      ];
-    };
-
-    jb55-dev-env = pkgs.buildEnv {
-      name = "jb55-dev-env";
-      paths = with pkgs; [
-        haskell-tools
-        git-tools
-        haskellEnv
-
-        gnum4
-        autoconf
-        autogen
-        automake
-        bison
-        clang-tools
-        dotnet-sdk
-        elmPackages.elm
-        flex
-        gdb
-        gmp.dev
-        libtool
-        libxml2
-        mesa_glu
-        nodejs
-        pythonPackages.howdoi
-        SDL2
-        sqlite
-        tor
-        xorg.libX11
-        xorg.libXft
-        zlib
-        (python3.withPackages (p: with p; [bitcoinlib pytest-forked pytest_xdist pytest ephemeral_port_reserve flaky]))
-        valgrind
-        asciidoc
       ];
     };
 

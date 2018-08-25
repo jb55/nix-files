@@ -161,7 +161,7 @@ in
     windowManager = {
       xmonad = {
         enable = true;
-        enableContribAndExtras = false;
+        enableContribAndExtras = true;
       };
       default = "xmonad";
     };
