@@ -45,6 +45,46 @@ let adblock-hosts = pkgs.fetchurl {
       collection =
       permission = r
     '';
+    jb55-activity = pkgs.writeText "jb55-custom-activity" ''
+      {
+        "@context": [
+          "https://www.w3.org/ns/activitystreams"
+        ],
+        "inbox": "https://jb55/inbox",
+        "id": "https://jb55.com",
+        "type": "Person",
+        "preferredUsername": "jb55",
+        "name": "William Casarin",
+        "summary": "This is not a real activitypub endpoint yet! I'm still building it",
+        "url": "https://jb55.com",
+        "manuallyApprovesFollowers": false,
+        "icon": {
+          "type": "Image",
+          "mediaType": "image/jpeg",
+          "url": "https://jb55.com/me.jpg"
+        }
+      }
+    '';
+    webfinger = pkgs.writeText "webfinger-acct-jb55" ''
+      {
+        "subject": "acct:jb55@jb55.com",
+        "aliases": [
+          "https://jb55.com"
+        ],
+        "links": [
+          {
+            "rel": "http://webfinger.net/rel/profile-page",
+            "type": "text/html",
+            "href": "https://jb55.com"
+          },
+          {
+            "rel": "self",
+            "type": "application/activity+json",
+            "href": "https://jb55.com"
+          }
+        ]
+      }
+    '';
 in
 {
   imports = [
@@ -293,7 +333,29 @@ in
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
       location / {
+        error_page 418 = @jb55activity;
+
+        if ( $http_accept ~ "application/activity\+json" ) { return 418; }
+
         try_files $uri $uri/ =404;
+      }
+
+      location @jb55activity {
+         root /;
+         default_type application/activity+json;
+         try_files ${jb55-activity} =404;
+      }
+
+      location = /.well-known/webfinger {
+         error_page 418 = @jb55webfinger;
+         if ( $query_string = "resource=acct:jb55@jb55.com" ) { return 418; }
+         return 404;
+      }
+
+      location @jb55webfinger {
+         root /;
+         default_type application/jrd+json;
+         try_files ${webfinger} =404;
       }
 
       location /paste/ {
