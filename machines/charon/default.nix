@@ -62,6 +62,11 @@ let adblock-hosts = pkgs.fetchurl {
           "type": "Image",
           "mediaType": "image/jpeg",
           "url": "https://jb55.com/me.jpg"
+        },
+        "publicKey": {
+          "id": "https://jb55.com#main-key",
+          "owner": "https://jb55.com",
+          "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJOPxwmRGBBQYm7YgHRu\nbTaYaKbMoEQiui+37nizXA73CRNeKblSXIaJnfOKfz/ttRG0GH43GzHTpghUDuZX\n+QBpyOk8UMmCW5gM0Y5c3IOv0zLezqLXrVEM8UXMUHE3hxf61r1NKl1+IG9MwhtH\nayx0Kaz6vT/V8nkotCSlb91lMT8X28bButwN86RCclZncecQXuVvgXnFeZCeBLM+\nqV2tBPnn14Ws+AqVvVnBW8xXwVfSPFHQchSLAusdWI7Kw/oWN/on2CqfRASoaVAS\nqKG+uPuJ+1f92iH0ZY1wLB2/ITl7HKTiIMKNikXTWcUudkMlKxc5Iqb7HMHuaPZ9\nIQIDAQAB\n-----END PUBLIC KEY-----"
         }
       }
     '';
@@ -392,7 +397,6 @@ in
         return 301 https://jb55.com$request_uri;
       }
     }
-
     server {
       listen 443 ssl;
       server_name www.jb55.com;
@@ -402,4 +406,3 @@ in
   '';
 
 }
-
