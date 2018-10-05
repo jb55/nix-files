@@ -11,7 +11,7 @@ let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
        samp
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
-      skeletons
+      #skeletons
     ];
 in {
   documentation.dev.enable = true;
@@ -23,7 +23,7 @@ in {
     dateutils
     file
     fzf
-    git
+    gitAndTools.gitFull
     gnupg
     haskellPackages.una
     htop
@@ -32,7 +32,6 @@ in {
     lsof
     nixops
     network-tools
-    nix-repl
     parallel
     patchelf
     pv
