@@ -294,6 +294,7 @@ in
           ${mailbox "Lists.emacs"}
           ${mailbox "Lists.guix"}
           ${mailbox "Lists.haskell"}
+          ${mailbox "Lists.lkml"}
           ${mailbox "Lists.nix"}
           ${mailbox "Lists.nixpkgs"}
           ${mailbox "Lists.shen"}

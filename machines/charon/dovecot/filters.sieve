@@ -29,6 +29,10 @@ if header :contains "from" "nixos1@discoursemail.com" {
   fileinto "Lists.nix";
 }
 
+if header :contains "list-id" "vger.kernel.org" {
+  fileinto "Lists.lkml";
+}
+
 if header :contains "list-id" "emacs-devel.gnu.org" {
   fileinto "Lists.emacs";
 }
