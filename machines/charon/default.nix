@@ -237,37 +237,37 @@ in
     serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
   };
 
-  # systemd.user.services.rss2email = {
-  #   description = "run rss2email";
-  #   path = with pkgs; [ rss2email ];
-  #   wantedBy = [ "default.target" ];
-  #   serviceConfig.ExecStart = "${pkgs.rss2email}/bin/r2e run";
-  # };
+  systemd.user.services.rss2email = {
+    description = "run rss2email";
+    path = with pkgs; [ rss2email ];
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.rss2email}/bin/r2e run";
+  };
 
-  # systemd.user.services.backup-rss2email = {
-  #   description = "backup rss2email";
-  #   wantedBy = [ "default.target" ];
-  #   serviceConfig.ExecStart = pkgs.writeScript "backup-rss2email" ''
-  #     #!${pkgs.bash}/bin/bash
-  #     BACKUP_DIR=/home/jb55/backups/rss2email
-  #     cp /home/jb55/.config/rss2email.cfg $BACKUP_DIR
-  #     cp /home/jb55/.local/share/rss2email.json $BACKUP_DIR
-  #     cd $BACKUP_DIR
-  #     ${pkgs.git}/bin/git add -u
-  #     ${pkgs.git}/bin/git commit -m "bump"
-  #     ${pkgs.git}/bin/git push
-  #   '';
-  # };
+  systemd.user.services.backup-rss2email = {
+    description = "backup rss2email";
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = pkgs.writeScript "backup-rss2email" ''
+      #!${pkgs.bash}/bin/bash
+      BACKUP_DIR=/home/jb55/backups/rss2email
+      cp /home/jb55/.config/rss2email.cfg $BACKUP_DIR
+      cp /home/jb55/.local/share/rss2email.json $BACKUP_DIR
+      cd $BACKUP_DIR
+      ${pkgs.git}/bin/git add -u
+      ${pkgs.git}/bin/git commit -m "bump"
+      ${pkgs.git}/bin/git push
+    '';
+  };
 
-  # systemd.user.timers.backup-rss2email = {
-  #   wantedBy = [ "timers.target" ];
-  #   timerConfig.OnCalendar = "daily";
-  # };
+  systemd.user.timers.backup-rss2email = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "daily";
+  };
 
-  # systemd.user.timers.rss2email = {
-  #   wantedBy = [ "timers.target" ];
-  #   timerConfig.OnCalendar = "hourly";
-  # };
+  systemd.user.timers.rss2email = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "hourly";
+  };
 
   # systemd.services.hearpress = {
   #   description = "Hearpress server";
