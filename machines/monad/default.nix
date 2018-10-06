@@ -35,7 +35,7 @@ in
   virtualization.virtualbox.host.enableHardening = false;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidiaBeta" ];
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
