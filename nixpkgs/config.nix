@@ -30,11 +30,29 @@ in {
       pkgs.urweb
     ]);
 
+    # steam = super.steam.override {
+    #   nativeOnly = true;
+    #   extraPkgs = pkgs: with pkgs; [
+    #     usbutils
+    #     sysvtools
+    #     qt5.qtbase
+    #     qt5.qtmultimedia
+    #   ];
+    # };
+
+    # qutebrowser = pkgs.lib.overrideDerivation super.qutebrowser (attrs: {
+    #   src = /home/jb55/dev/github/qutebrowser/qutebrowser;
+    # });
+
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
     wine = super.wine.override { wineBuild = "wineWow"; };
 
+    wineUnstable = super.wineUnstable.override { wineBuild = "wineWow"; };
+
     bluez = pkgs.bluez5;
+
+    #nvidia_x11 = super.nvidia_x11_beta;
 
     # haskellPackages = super.haskellPackages.override {
     #   overrides = haskellOverrides pkgs;
@@ -258,11 +276,18 @@ in {
         paths = [(ghcWith myHaskellPackages)];
       };
 
+    # stack2nix = import (pkgs.fetchFromGitHub {
+    #   owner = "input-output-hk";
+    #   repo  = "stack2nix";
+    #   rev   = "6f59401c0e0ca3ab5e429b90e3c30de29a499db0";
+    #   sha256 = "1ihcp3mr0s89xmc81f9hxq07jw6pm3lixr5bdamqiin1skpk8q3b";
+    # }) { inherit pkgs; };
+
     haskellTools = hp: with hp; [
       alex
       cabal-install
       cabal2nix
-      #stack2nix
+      stack2nix
       hpack
       ghc-core
       happy
@@ -270,7 +295,7 @@ in {
       hindent
       hlint
       structured-haskell-mode
-      #multi-ghc-travis
+      multi-ghc-travis
     ];
 
     myHaskellPackages = hp: with hp; [
@@ -307,7 +332,7 @@ in {
       colour
       comonad
       comonad-transformers
-      compact-string-fix
+      #compact-string-fix
       cryptohash
       directory
       dlist
@@ -326,6 +351,7 @@ in {
       hamlet
       hashable
       hashids
+      here
       heroku
       hedgehog
       hspec
@@ -451,7 +477,7 @@ in {
       thyme
       time
       time-units
-      tinytemplate
+      #tinytemplate
       transformers
       transformers-base
       turtle
