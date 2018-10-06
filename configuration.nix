@@ -73,6 +73,8 @@ in {
     DefaultTimeoutStartSec=20s
   '';
 
+  #documentation.nixos.enable = false;
+
   programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
