@@ -31,8 +31,8 @@ in
 
   #virtualisation.docker.enable = false;
 
-  virtualisation.virtualbox.host.enable = true;
-  virtualization.virtualbox.host.enableHardening = false;
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualization.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
