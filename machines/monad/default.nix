@@ -29,6 +29,7 @@ in
     (import ../../misc/imap-notifier extra)
   ];
 
+  #virtualisation.docker.enable = false;
 
   virtualisation.virtualbox.host.enable = true;
   virtualization.virtualbox.host.enableHardening = false;
