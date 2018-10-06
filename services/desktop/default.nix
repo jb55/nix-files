@@ -112,6 +112,58 @@ in
     '';
   };
 
+  hardware.pulseaudio = {
+    enable = true;
+    support32Bit = true;
+    tcp = {
+      enable = true;
+      anonymousClients.allowedIpRanges = ["127.0.0.1"];
+    };
+  };
+
+  services.mopidy.extensionPackages = with pkgs; [
+    mopidy-spotify
+    mopidy-spotify-tunigo
+    mopidy-soundcloud
+    mopidy-moped
+  ];
+  # why is all this such broken garbage
+  services.mopidy.enable = false;
+  services.mopidy.configuration = ''
+    [spotify_tunigo]
+    enabled = true
+    spotify_tunigo/region = CA
+
+    [spotify]
+    enabled = true
+    username = ${extra.private.spotify.username}
+    password = ${extra.private.spotify.password}
+    client_id = ${extra.private.spotify.client_id}
+    client_secret = ${extra.private.spotify.client_secret}
+
+    [http]
+    enabled = true
+    hostname = 127.0.0.1
+    port = 6680
+    static_dir =
+    zeroconf = Mopidy HTTP server on $hostname
+
+    [youtube]
+    enabled = false
+
+    [audio]
+    mixer = software
+    mixer_volume =
+    output = pulsesink server=127.0.0.1
+    buffer_time =
+
+    [soundcloud]
+    auth_token = ${extra.private.soundcloud.auth_token}
+
+    [mpd]
+    hostname = ::
+  '';
+
   services.udev.extraRules = ''
     # yubikey neo
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0116", MODE="0666"
