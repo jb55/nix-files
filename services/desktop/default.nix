@@ -54,7 +54,7 @@ in
 
     brightness = {
       day = "1.0";
-      night = "0.4";
+      night = "0.6";
     };
 
     latitude="49.270186";
