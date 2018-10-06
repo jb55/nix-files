@@ -324,6 +324,7 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
+      bytestring-show
       cased
       cassava
       cereal
@@ -481,6 +482,7 @@ in {
       transformers
       transformers-base
       turtle
+      unagi-chan
       uniplate
       unix-compat
       unordered-containers

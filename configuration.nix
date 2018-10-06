@@ -81,7 +81,7 @@ in {
 
   nixpkgs.config = nixpkgsConfig;
 
-  nix.useSandbox = true;
+  nix.useSandbox = machine != "charon";
   nix.trustedUsers = [ "root" "jb55" ];
 
   users.extraUsers.jb55 = user;

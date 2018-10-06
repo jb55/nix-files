@@ -21,9 +21,6 @@ let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
       #skeletons
     ];
 in {
-  documentation.dev.enable = true;
-  documentation.man.enable = true;
-
   environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
     bc
     binutils

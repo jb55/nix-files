@@ -3,10 +3,9 @@ extra:
 let sites = [./sites/jb55.com
              ./sites/npmrepo.com
              ./sites/wineparty.xyz
+             ./sites/hearpress.com
             ];
     logDir = "/var/log/nginx";
-    pokemap = import ./pokemap.nix;
-    pokemaps = map (pm: pokemap pm.subdomain pm.port) extra.private.pokemaps;
 in {
   services.logrotate.config = ''
     ${logDir}/*.log {
@@ -65,12 +64,10 @@ in {
       gzip_disable "msie6";
 
       server {
-        listen      80;
+        listen      80 default_server;
         server_name "";
         return      444;
       }
-
-      ${lib.concatStringsSep "\n\n" pokemaps}
 
       ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
     '';
