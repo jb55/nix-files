@@ -79,6 +79,18 @@ in
           try_files $uri $uri/ =404;
         }
       }
+
+      server {
+        listen 80;
+        server_name matrix.monad;
+
+        root ${pkgs.riot-web};
+        index index.html index.htm;
+        location / {
+          try_files $uri $uri/ =404;
+        }
+      }
+
     '' + (if config.services.nix-serve.enable then ''
       server {
         listen ${nix-serve.bindAddress}:80;

@@ -18,6 +18,10 @@ in
   networking.firewall.trustedInterfaces = ["zt1"];
   networking.firewall.allowedTCPPorts = [ 5432 9735 80 ];
 
+  networking.extraHosts = ''
+    matrix.monad.   127.0.0.1
+  '';
+
   services.transmission = {
     enable = true;
     home = transmission-dir;
