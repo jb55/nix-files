@@ -39,7 +39,6 @@ in {
     lsof
     nixops
     network-tools
-    nix-repl
     parallel
     patchelf
     pv
