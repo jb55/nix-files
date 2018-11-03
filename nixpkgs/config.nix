@@ -30,15 +30,15 @@ in {
       pkgs.urweb
     ]);
 
-    # steam = super.steam.override {
-    #   nativeOnly = true;
-    #   extraPkgs = pkgs: with pkgs; [
-    #     usbutils
-    #     sysvtools
-    #     qt5.qtbase
-    #     qt5.qtmultimedia
-    #   ];
-    # };
+    steam = super.steam.override {
+      nativeOnly = true;
+      extraPkgs = pkgs: with pkgs; [
+        usbutils
+        sysvtools
+        qt5.qtbase
+        qt5.qtmultimedia
+      ];
+    };
 
     # qutebrowser = pkgs.lib.overrideDerivation super.qutebrowser (attrs: {
     #   src = /home/jb55/dev/github/qutebrowser/qutebrowser;
@@ -71,8 +71,8 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "2ff159cb5397723cbb05bc7d05c7a55d54ba39da";
-        sha256 = "0r2zikshnby9g23hsriaxqq2bwn4lwhjb9ixyl8g48l17zdz3pqy";
+        rev    = "26bc7f4ffe713590ebf28f62343015bc871b9d18";
+        sha256 = "1yrnpj6n4cfm1ri0ns0vbflvxk12z0vv1svdx1wdcad86cvaz12i";
       };
 
       doCheck = false;
