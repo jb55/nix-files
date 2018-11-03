@@ -31,12 +31,13 @@ in
 
   #virtualisation.docker.enable = false;
 
-  #virtualisation.virtualbox.host.enable = true;
-  #virtualization.virtualbox.host.enableHardening = false;
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
   services.xserver.videoDrivers = [ "nvidiaBeta" ];
+
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
