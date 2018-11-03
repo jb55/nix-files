@@ -3,8 +3,8 @@ let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
     kindle-send = pkgs.callPackage (pkgs.fetchFromGitHub {
       owner = "jb55";
       repo = "kindle-send";
-      rev = "v0.1";
-      sha256 = "1mivxvnzansmyrnk8x7jn1975hwb0nqly9wdsbs2ppsajd4z97l8";
+      rev = "0.1.3";
+      sha256 = "18p8mn5qxq9blpa0d7yagiczd18inkpvfvh76vbkm42c5j86wqi3";
     }) {};
     myPackages = with jb55pkgs; [
        csv-delim
@@ -27,14 +27,14 @@ in {
     dateutils
     file
     fzf
-    git
+    gitAndTools.gitFull
     gnupg
     haskellPackages.una
     htop
     jq
     libqalculate
     lsof
-    nixops
+    manpages
     network-tools
     parallel
     patchelf
