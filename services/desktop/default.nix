@@ -204,6 +204,8 @@ in
 
   '';
 
+  hardware.opengl.enable = true;
+
   services.xserver = {
     enable = true;
     layout = "us";
