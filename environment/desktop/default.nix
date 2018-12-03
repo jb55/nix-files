@@ -53,7 +53,7 @@ in {
     skypeforlinux
     slock
     spotify
-    texlive.combined.scheme-basic
+    texlive.combined.scheme-full
     theme.package
     twmn
     userConfig
