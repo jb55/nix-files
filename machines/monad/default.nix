@@ -56,6 +56,41 @@ in
   #   datadir=/zbig/bitcoin
   # '';
 
+  services.spruned = {
+    enable = false;
+    dataDir = "/zbig/spruned";
+    network = "mainnet";
+    extraArguments = "--debug";
+  };
+
+  services.clightning.networks = {
+    testnet = {
+      dataDir = "/home/jb55/.lightning";
+
+      config = ''
+        fee-per-satoshi=9000
+        network=testnet
+        log-level=debug
+        alias=@jb55
+        rgb=ff0000
+      '';
+    };
+
+    mainnet = {
+      dataDir = "/home/jb55/.lightning-bitcoin";
+
+      config = ''
+        bitcoin-rpcuser=rpcuser
+        bitcoin-rpcpassword=rpcpassword
+        fee-per-satoshi=9000
+        network=bitcoin
+        log-level=debug
+        alias=@jb55
+        rgb=ff0000
+      '';
+    };
+  };
+
   services.trezord.enable = true;
   services.redis.enable = false;
   services.zerotierone.enable = true;
