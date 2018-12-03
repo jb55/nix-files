@@ -311,7 +311,7 @@ in {
       colour
       comonad
       comonad-transformers
-      compact-string-fix
+      #compact-string-fix
       cryptohash
       directory
       dlist
@@ -407,6 +407,8 @@ in {
       safe
       sbv
       scotty
+      sqlite-simple
+      lucid
       semigroupoids
       semigroups
       servant
@@ -455,7 +457,7 @@ in {
       thyme
       time
       time-units
-      tinytemplate
+      #tinytemplate
       transformers
       transformers-base
       turtle
@@ -466,6 +468,7 @@ in {
       vector
       void
       wai
+      wai-middleware-static
       warp
       wreq
       xhtml
