@@ -58,6 +58,10 @@ in {
     #   overrides = haskellOverrides pkgs;
     # };
 
+    # xonsh = super.xonsh.override {
+    #   extraPythonPackages = py: with py; [ numpy ];
+    # };
+
     phonectl = super.python3Packages.callPackage (super.fetchFromGitHub {
       owner  = "jb55";
       repo   = "phonectl";
@@ -430,6 +434,8 @@ in {
       safe
       sbv
       scotty
+      sqlite-simple
+      lucid
       semigroupoids
       semigroups
       servant
@@ -490,6 +496,7 @@ in {
       vector
       void
       wai
+      wai-middleware-static
       warp
       wreq
       xhtml

@@ -48,6 +48,7 @@ in
       fira-code
       fira-mono
       inconsolata
+      libertinus
       ipafont
       kochi-substitute
       noto-fonts

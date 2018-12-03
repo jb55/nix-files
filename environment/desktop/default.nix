@@ -34,7 +34,6 @@ in {
     dynamic-colors
     emacs
     feh
-    gnome3.eog
     gnome3.gnome-calculator
     gtk-engine-murrine
     icon-theme.package
@@ -54,7 +53,7 @@ in {
     skypeforlinux
     slock
     spotify
-    texlive.combined.scheme-basic
+    texlive.combined.scheme-full
     theme.package
     twmn
     userConfig
