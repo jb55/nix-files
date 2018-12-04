@@ -84,7 +84,7 @@ extra:
   services.postgresql = {
     dataDir = "/var/db/postgresql/10/";
     enable = true;
-    package = pkgs.postgresql100;
+    package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
