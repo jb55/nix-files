@@ -77,6 +77,11 @@ extra:
     '';
   };
 
+  services.hydra.enable = true;
+  services.hydra.dbi = "dbi:Pg:dbname=hydra;host=localhost;user=postgres;";
+  services.hydra.hydraURL = "localhost";
+  services.hydra.notificationSender = "jb55@jb55.com";
+
   users.extraGroups.www-data.members = [ "jb55" ];
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
