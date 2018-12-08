@@ -15,6 +15,8 @@ extra:
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 
+  documentation.nixos.enable = false;
+
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
   '';
@@ -65,6 +67,59 @@ extra:
     }
   '';
 
+   services.bitcoind.networks = {
+     testnet = {
+       testnet = true;
+       dataDir = "/var/lib/bitcoin-testnet";
+       prune = 1000;
+       extraConfig = ''
+         rpcuser=rpcuser
+         rpcpassword=rpcpass
+       '';
+     };
+
+     mainnet = {
+       dataDir = "/var/lib/bitcoin";
+       prune = 1000;
+       extraConfig = ''
+         rpcuser=rpcuser
+         rpcpassword=rpcpass
+       '';
+     };
+   };
+
+   services.clightning.networks = {
+     testnet = {
+       dataDir = "/home/jb55/.lightning";
+
+       config = ''
+         fee-per-satoshi=9000
+         bitcoin-rpcuser=rpcuser
+         bitcoin-rpcpassword=rpcpass
+         network=testnet
+         log-level=debug
+         alias=@jb55
+         rgb=ff0000
+       '';
+     };
+
+     # mainnet = {
+     #   dataDir = "/home/jb55/.lightning-bitcoin";
+
+     #   config = ''
+     #     bitcoin-rpcuser=rpcuser
+     #     bitcoin-rpcpassword=rpcpassword
+     #     fee-per-satoshi=9000
+     #     network=bitcoin
+     #     log-level=debug
+     #     alias=@jb55
+     #     rgb=ff0000
+     #   '';
+     # };
+   };
+
+
+
   users.extraGroups.www-data.members = [ "jb55" ];
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
@@ -77,14 +132,14 @@ extra:
   networking.wireless.enable = true;
 
   programs.gnupg.trezor-agent = {
-    enable = true;
+    enable = false;
     configPath = "/home/jb55/.gnupg/trezor";
   };
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/10/";
     enable = true;
-    package = pkgs.postgresql100;
+    package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
