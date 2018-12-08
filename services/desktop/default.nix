@@ -22,7 +22,7 @@ in
   services.trezord.enable = true;
 
   programs.gnupg.trezor-agent = {
-    enable = true;
+    enable = false;
     configPath = "/home/jb55/.gnupg/trezor";
   };
 

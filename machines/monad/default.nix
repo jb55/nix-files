@@ -56,6 +56,27 @@ in
   #   datadir=/zbig/bitcoin
   # '';
 
+   services.bitcoind.networks = {
+     testnet = {
+       testnet = true;
+       dataDir = "/zbig/bitcoin-testnet";
+       prune = 5000;
+       extraConfig = ''
+         rpcuser=jb55
+         rpcpassword=jb55
+       '';
+     };
+
+     mainnet = {
+       dataDir = "/zbig/bitcoin";
+       extraConfig = ''
+         rpcuser=jb55
+         rpcpassword=jb55
+         txindex=1
+       '';
+     };
+   };
+
   services.spruned = {
     enable = false;
     dataDir = "/zbig/spruned";
@@ -68,7 +89,10 @@ in
       dataDir = "/home/jb55/.lightning";
 
       config = ''
+        bitcoin-rpcuser=jb55
+        bitcoin-rpcpassword=jb55
         fee-per-satoshi=9000
+        bind-addr=0.0.0.0:9734
         network=testnet
         log-level=debug
         alias=@jb55
@@ -80,8 +104,8 @@ in
       dataDir = "/home/jb55/.lightning-bitcoin";
 
       config = ''
-        bitcoin-rpcuser=rpcuser
-        bitcoin-rpcpassword=rpcpassword
+        bitcoin-rpcuser=jb55
+        bitcoin-rpcpassword=jb55
         fee-per-satoshi=9000
         network=bitcoin
         log-level=debug
@@ -90,6 +114,8 @@ in
       '';
     };
   };
+
+  documentation.nixos.enable = false;
 
   services.trezord.enable = true;
   services.redis.enable = false;
@@ -168,7 +194,7 @@ in
   services.postgresql = {
     dataDir = "/var/db/postgresql/100/";
     enable = true;
-    package = pkgs.postgresql100;
+    package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
