@@ -299,7 +299,7 @@ in {
       hindent
       hlint
       structured-haskell-mode
-      multi-ghc-travis
+      haskell-ci
     ];
 
     myHaskellPackages = hp: with hp; [
