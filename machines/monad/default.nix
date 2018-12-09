@@ -56,6 +56,7 @@ in
       testnet = true;
       dataDir = "/var/lib/bitcoin-testnet";
       extraConfig = ''
+        txindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
         rpcallowip=1
