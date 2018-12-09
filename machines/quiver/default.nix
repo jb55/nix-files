@@ -68,24 +68,24 @@ extra:
   '';
 
    services.bitcoind.networks = {
-     testnet = {
-       testnet = true;
-       dataDir = "/var/lib/bitcoin-testnet";
-       prune = 1000;
-       extraConfig = ''
-         rpcuser=rpcuser
-         rpcpassword=rpcpass
-       '';
-     };
+     # testnet = {
+     #   testnet = true;
+     #   dataDir = "/var/lib/bitcoin-testnet";
+     #   prune = 1000;
+     #   extraConfig = ''
+     #     rpcuser=rpcuser
+     #     rpcpassword=rpcpass
+     #   '';
+     # };
 
-     mainnet = {
-       dataDir = "/var/lib/bitcoin";
-       prune = 1000;
-       extraConfig = ''
-         rpcuser=rpcuser
-         rpcpassword=rpcpass
-       '';
-     };
+     # mainnet = {
+     #   dataDir = "/var/lib/bitcoin";
+     #   prune = 1000;
+     #   extraConfig = ''
+     #     rpcuser=rpcuser
+     #     rpcpassword=rpcpass
+     #   '';
+     # };
    };
 
    services.clightning.networks = {
@@ -94,12 +94,14 @@ extra:
 
        config = ''
          fee-per-satoshi=9000
+         bitcoin-rpcconnect=172.24.242.111
+         bitcoin-rpcport=6533
          bitcoin-rpcuser=rpcuser
          bitcoin-rpcpassword=rpcpass
          network=testnet
          log-level=debug
-         alias=@jb55
-         rgb=ff0000
+         alias=quiver
+         rgb=00ff00
        '';
      };
 
