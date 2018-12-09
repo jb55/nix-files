@@ -55,8 +55,8 @@ in
     testnet = {
       testnet = true;
       dataDir = "/var/lib/bitcoin-testnet";
-      prune = 1000;
       extraConfig = ''
+        reindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
         rpcallowip=1
@@ -69,8 +69,8 @@ in
 
     mainnet = {
       dataDir = "/var/lib/bitcoin";
-      prune = 1000;
       extraConfig = ''
+        reindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
         rpcallowip=1
