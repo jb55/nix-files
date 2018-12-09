@@ -69,6 +69,7 @@ in
     mainnet = {
       dataDir = "/var/lib/bitcoin";
       extraConfig = ''
+        txindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
         rpcallowip=1
