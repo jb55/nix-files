@@ -18,6 +18,11 @@ in
   networking.firewall.trustedInterfaces = ["zt1"];
   networking.firewall.allowedTCPPorts = [ 5432 9735 80 ];
 
+  networking.firewall.extraCommands = ''
+    ${openTCP "ztrtaygmfr" 6533}
+    ${openTCP "ztrtaygmfr" 6532}
+  '';
+
   networking.extraHosts = ''
     matrix.monad.   127.0.0.1
   '';
