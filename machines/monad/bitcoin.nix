@@ -76,4 +76,14 @@
     };
   };
 
+  systemd.user.services.clightning-rpc-tunnel = {
+    description = "clightning mainnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = ''
+      ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7878,fork,reuseaddr UNIX-CONNECT:/home/jb55/.lightning-bitcoin/lightning-rpc
+    '';
+  }
+
 }

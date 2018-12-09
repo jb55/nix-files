@@ -21,6 +21,8 @@ in
   networking.firewall.extraCommands = ''
     ${openTCP "ztrtaygmfr" 6533}
     ${openTCP "ztrtaygmfr" 6532}
+    ${openTCP "ztrtaygmfr" 7878}
+    ${openTCP "ztrtaygmfr" 7879}
   '';
 
   networking.extraHosts = ''
