@@ -84,6 +84,6 @@
     serviceConfig.ExecStart = ''
       ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7878,fork,reuseaddr UNIX-CONNECT:/home/jb55/.lightning-bitcoin/lightning-rpc
     '';
-  }
+  };
 
 }
