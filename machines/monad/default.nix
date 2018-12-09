@@ -44,39 +44,6 @@ in
 
   programs.mosh.enable = true;
 
-  # services.bitcoin.enable = true;
-  # services.bitcoin.enableTestnet = true;
-
-  # services.bitcoin.config = ''
-  #   datadir=/zbig/bitcoin
-  #   txindex=1
-  # '';
-
-  # services.bitcoin.testnetConfig = ''
-  #   datadir=/zbig/bitcoin
-  # '';
-
-   services.bitcoind.networks = {
-     testnet = {
-       testnet = true;
-       dataDir = "/zbig/bitcoin-testnet";
-       prune = 5000;
-       extraConfig = ''
-         rpcuser=jb55
-         rpcpassword=jb55
-       '';
-     };
-
-     mainnet = {
-       dataDir = "/zbig/bitcoin";
-       extraConfig = ''
-         rpcuser=jb55
-         rpcpassword=jb55
-         txindex=1
-       '';
-     };
-   };
-
   services.spruned = {
     enable = false;
     dataDir = "/zbig/spruned";
@@ -84,15 +51,47 @@ in
     extraArguments = "--debug";
   };
 
+  services.bitcoind.networks = {
+    testnet = {
+      testnet = true;
+      dataDir = "/var/lib/bitcoin-testnet";
+      prune = 1000;
+      extraConfig = ''
+        rpcuser=rpcuser
+        rpcpassword=rpcpass
+        rpcallowip=1
+        rpcbind=172.24.242.111
+        rpcbind=10.147.20.220
+        rpcbind=127.0.0.1
+        rpcport=6533
+      '';
+    };
+
+    mainnet = {
+      dataDir = "/var/lib/bitcoin";
+      prune = 1000;
+      extraConfig = ''
+        rpcuser=rpcuser
+        rpcpassword=rpcpass
+        rpcallowip=1
+        rpcbind=172.24.242.111
+        rpcbind=10.147.20.220
+        rpcbind=127.0.0.1
+        rpcport=6532
+      '';
+    };
+  };
+
   services.clightning.networks = {
     testnet = {
       dataDir = "/home/jb55/.lightning";
 
       config = ''
-        bitcoin-rpcuser=jb55
-        bitcoin-rpcpassword=jb55
         fee-per-satoshi=9000
-        bind-addr=0.0.0.0:9734
+        bitcoin-rpcuser=rpcuser
+        bitcoin-rpcpassword=rpcpass
+        bind-addr=0.0.0.0:9736
+        announce-addr=24.84.152.187:9736
         network=testnet
         log-level=debug
         alias=@jb55
@@ -104,9 +103,11 @@ in
       dataDir = "/home/jb55/.lightning-bitcoin";
 
       config = ''
-        bitcoin-rpcuser=jb55
-        bitcoin-rpcpassword=jb55
+        bitcoin-rpcuser=rpcuser
+        bitcoin-rpcpassword=rpcpassword
         fee-per-satoshi=9000
+        bind-addr=0.0.0.0:9735
+        announce-addr=24.84.152.187:9735
         network=bitcoin
         log-level=debug
         alias=@jb55
