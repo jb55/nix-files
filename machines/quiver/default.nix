@@ -89,21 +89,21 @@ extra:
    };
 
    services.clightning.networks = {
-     testnet = {
-       dataDir = "/home/jb55/.lightning";
+     # testnet = {
+     #   dataDir = "/home/jb55/.lightning";
 
-       config = ''
-         fee-per-satoshi=9000
-         bitcoin-rpcconnect=172.24.242.111
-         bitcoin-rpcport=6533
-         bitcoin-rpcuser=rpcuser
-         bitcoin-rpcpassword=rpcpass
-         network=testnet
-         log-level=debug
-         alias=quiver
-         rgb=00ff00
-       '';
-     };
+     #   config = ''
+     #     fee-per-satoshi=9000
+     #     bitcoin-rpcconnect=172.24.242.111
+     #     bitcoin-rpcport=6533
+     #     bitcoin-rpcuser=rpcuser
+     #     bitcoin-rpcpassword=rpcpass
+     #     network=testnet
+     #     log-level=debug
+     #     alias=quiver
+     #     rgb=00ff00
+     #   '';
+     # };
 
      # mainnet = {
      #   dataDir = "/home/jb55/.lightning-bitcoin";
