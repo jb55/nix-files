@@ -106,7 +106,7 @@ in
 
       config = ''
         bitcoin-rpcuser=rpcuser
-        bitcoin-rpcpassword=rpcpassword
+        bitcoin-rpcpassword=rpcpass
         bitcoin-rpcconnect=127.0.0.1
         bitcoin-rpcport=6532
         fee-per-satoshi=9000
