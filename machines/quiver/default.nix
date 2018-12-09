@@ -75,6 +75,11 @@ extra:
        extraConfig = ''
          rpcuser=rpcuser
          rpcpassword=rpcpass
+         rpcallowip=1
+         rpcbind=172.24.242.111
+         rpcbind=10.147.20.220
+         rpcbind=127.0.0.1
+         rpcport=6533
        '';
      };
 
@@ -84,6 +89,11 @@ extra:
        extraConfig = ''
          rpcuser=rpcuser
          rpcpassword=rpcpass
+         rpcallowip=1
+         rpcbind=172.24.242.111
+         rpcbind=10.147.20.220
+         rpcbind=127.0.0.1
+         rpcport=6532
        '';
      };
    };
@@ -96,6 +106,8 @@ extra:
          fee-per-satoshi=9000
          bitcoin-rpcuser=rpcuser
          bitcoin-rpcpassword=rpcpass
+         bind-addr=0.0.0.0:9736
+         announce-addr=24.84.152.187:9736
          network=testnet
          log-level=debug
          alias=@jb55
@@ -103,19 +115,21 @@ extra:
        '';
      };
 
-     # mainnet = {
-     #   dataDir = "/home/jb55/.lightning-bitcoin";
+     mainnet = {
+       dataDir = "/home/jb55/.lightning-bitcoin";
 
-     #   config = ''
-     #     bitcoin-rpcuser=rpcuser
-     #     bitcoin-rpcpassword=rpcpassword
-     #     fee-per-satoshi=9000
-     #     network=bitcoin
-     #     log-level=debug
-     #     alias=@jb55
-     #     rgb=ff0000
-     #   '';
-     # };
+       config = ''
+         bitcoin-rpcuser=rpcuser
+         bitcoin-rpcpassword=rpcpassword
+         fee-per-satoshi=9000
+         bind-addr=0.0.0.0:9735
+         announce-addr=24.84.152.187:9735
+         network=bitcoin
+         log-level=debug
+         alias=@jb55
+         rgb=ff0000
+       '';
+     };
    };
 
 
