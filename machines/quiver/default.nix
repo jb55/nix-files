@@ -67,60 +67,15 @@ extra:
     }
   '';
 
-   services.bitcoind.networks = {
-     # testnet = {
-     #   testnet = true;
-     #   dataDir = "/var/lib/bitcoin-testnet";
-     #   prune = 1000;
-     #   extraConfig = ''
-     #     rpcuser=rpcuser
-     #     rpcpassword=rpcpass
-     #   '';
-     # };
+  systemd.user.services.clightning-rpc-tunnel = {
+    description = "clightning mainnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
 
-     # mainnet = {
-     #   dataDir = "/var/lib/bitcoin";
-     #   prune = 1000;
-     #   extraConfig = ''
-     #     rpcuser=rpcuser
-     #     rpcpassword=rpcpass
-     #   '';
-     # };
-   };
-
-   services.clightning.networks = {
-     # testnet = {
-     #   dataDir = "/home/jb55/.lightning";
-
-     #   config = ''
-     #     fee-per-satoshi=9000
-     #     bitcoin-rpcconnect=172.24.242.111
-     #     bitcoin-rpcport=6533
-     #     bitcoin-rpcuser=rpcuser
-     #     bitcoin-rpcpassword=rpcpass
-     #     network=testnet
-     #     log-level=debug
-     #     alias=quiver
-     #     rgb=00ff00
-     #   '';
-     # };
-
-     # mainnet = {
-     #   dataDir = "/home/jb55/.lightning-bitcoin";
-
-     #   config = ''
-     #     bitcoin-rpcuser=rpcuser
-     #     bitcoin-rpcpassword=rpcpassword
-     #     fee-per-satoshi=9000
-     #     network=bitcoin
-     #     log-level=debug
-     #     alias=@jb55
-     #     rgb=ff0000
-     #   '';
-     # };
-   };
-
-
+    serviceConfig.ExecStart = ''
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:/home/jb55/.lightning-bitcoin-rpc,reuseaddr,fork TCP:10.147.20.220:7878
+    '';
+  };
 
   users.extraGroups.www-data.members = [ "jb55" ];
 
