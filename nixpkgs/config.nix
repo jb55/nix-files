@@ -291,6 +291,7 @@ in {
       aeson-qq
       async
       attoparsec
+      base58-bytestring
       bifunctors
       bitcoin-api
       bitcoin-api-extra
