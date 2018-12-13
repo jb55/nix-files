@@ -67,6 +67,24 @@ extra:
     }
   '';
 
+  systemd.user.services.clightning-rpc-tunnel = {
+    description = "clightning mainnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = ''
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:/home/jb55/.lightning-bitcoin-rpc,reuseaddr,fork TCP:10.147.20.220:7878
+    '';
+  };
+
+  services.hydra.enable = true;
+  services.hydra.dbi = "dbi:Pg:dbname=hydra;host=localhost;user=postgres;";
+  services.hydra.hydraURL = "localhost";
+  services.hydra.notificationSender = "hydra@quiver";
+  services.hydra.buildMachinesFiles = [];
+  services.hydra.useSubstitutes = true;
+
+  users.extraGroups.hydra.members = [ "jb55" ];
   users.extraGroups.www-data.members = [ "jb55" ];
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
