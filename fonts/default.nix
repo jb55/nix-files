@@ -21,6 +21,26 @@ let mkfont = n: lesrc:
         url = "https://jb55.com/s/c8bbd8415dea995f.ttf";
         sha256 = "c4327a38270780eb03d305de3514de62534262c73f9e7235eea6ce26904c2dc5";
       };
+    Bookerly-Regular =
+      mkfont "Bookerly-Regular" {
+        url = "https://jb55.com/s/Bookerly-Regular.ttf";
+        sha256 = "1db94d4ab763f812b3fe505c02cdeb0927251c118cc65322be23eb93a70eafd7";
+      };
+    Bookerly-RegularItalic =
+      mkfont "Bookerly-RegularItalic" {
+        url = "https://jb55.com/s/Bookerly-RegularItalic.ttf";
+        sha256 = "6e364837e08fa89c0fed287a13c7149567ab5657847f666e45e523ecc9c7820b";
+      };
+    Bookerly-Bold =
+      mkfont "Bookerly-Bold" {
+        url = "https://jb55.com/s/Bookerly-Bold.ttf";
+        sha256 = "367a28ceb9b2c79dbe5956624f023a54219d89f31d6d2e81e467e202273d40da";
+      };
+    Bookerly-BoldItalic =
+      mkfont "Bookerly-BoldItalic" {
+        url = "https://jb55.com/s/Bookerly-BoldItalic.ttf";
+        sha256 = "d975e3260e26f1b33fc50b00540caece84a0800e9bc900922cf200645e79693f";
+      };
     Questrial =
       mkfont "Questrial" {
         url = "https://jb55.com/s/1ccac9ff5cb42fd7.ttf";
@@ -31,14 +51,15 @@ let mkfont = n: lesrc:
         url = "https://jb55.com/s/a266c50144cbad1a.ttf";
         sha256 = "db5133b6a09c8eba78b29dc05019d8f361f350483d679fd8c668e1c657a303fc";
       };
-    myfonts = [ aldrich VarelaRound-Regular Questrial Comfortaa-Regular ];
+    myfonts = [ aldrich VarelaRound-Regular Questrial Comfortaa-Regular
+                Bookerly-Regular Bookerly-RegularItalic Bookerly-Bold Bookerly-BoldItalic ];
 in
 {
   fonts = {
     enableFontDir = true;
     enableGhostscriptFonts = true;
     enableCoreFonts = true;
-    fontconfig.defaultFonts.serif = [ "Noto Serif" ];
+    fontconfig.defaultFonts.serif = [ "Bookerly" ];
     fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     fonts = with pkgs; [
@@ -48,11 +69,14 @@ in
       fira-code
       fira-mono
       inconsolata
-      libertinus
       ipafont
       kochi-substitute
+      libertinus
+      ibm-plex
       noto-fonts
       noto-fonts-emoji
+      opensans-ttf
+      raleway
       source-code-pro
       ubuntu_font_family
     ] ++ myfonts;
