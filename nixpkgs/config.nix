@@ -315,6 +315,8 @@ in {
       aeson-qq
       async
       attoparsec
+      base32-bytestring
+      base32string
       base58-bytestring
       bifunctors
       bitcoin-api
@@ -452,6 +454,7 @@ in {
       #speculation
       split
       spoon
+      stache
       stm
       stm-chans
       #stm-stats
