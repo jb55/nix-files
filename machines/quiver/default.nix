@@ -73,7 +73,21 @@ extra:
     after    = [ "default.target" ];
 
     serviceConfig.ExecStart = ''
-      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:/home/jb55/.lightning-bitcoin-rpc,reuseaddr,fork TCP:10.147.20.220:7878
+      socket=/home/jb55/.lightning-bitcoin-rpc
+      rm -f $socket
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.147.20.220:7878
+    '';
+  };
+
+  systemd.user.services.clightning-testnet-rpc-tunnel = {
+    description = "clightning testnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = ''
+      socket=/home/jb55/.lightning-bitcoin-rpc-testnet
+      rm -f $socket
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.147.20.220:7879
     '';
   };
 
