@@ -12,6 +12,7 @@
       testnet = true;
       dataDir = "/zbig/bitcoin-testnet";
       extraConfig = ''
+        [test]
         txindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
