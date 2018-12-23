@@ -10,7 +10,7 @@
   services.bitcoind.networks = {
     testnet = {
       testnet = true;
-      dataDir = "/var/lib/bitcoin-testnet";
+      dataDir = "/zbig/bitcoin-testnet";
       extraConfig = ''
         txindex=1
         rpcuser=rpcuser
@@ -24,7 +24,7 @@
     };
 
     mainnet = {
-      dataDir = "/var/lib/bitcoin";
+      dataDir = "/zbig/bitcoin";
       extraConfig = ''
         txindex=1
         rpcuser=rpcuser
