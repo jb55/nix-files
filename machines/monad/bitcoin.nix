@@ -76,6 +76,16 @@
     };
   };
 
+  systemd.user.services.clightning-testnet-rpc-tunnel = {
+    description = "clightning testnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = ''
+      ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7879,fork,reuseaddr UNIX-CONNECT:/home/jb55/.lightning/lightning-rpc
+    '';
+  };
+
   systemd.user.services.clightning-rpc-tunnel = {
     description = "clightning mainnet rpc tunnel";
     wantedBy = [ "default.target" ];
