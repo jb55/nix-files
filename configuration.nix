@@ -75,7 +75,7 @@ in {
 
   programs.ssh.startAgent = true;
 
-  time.timeZone = "America/Vancouver";
+  time.timeZone = "America/Toronto";
 
   nixpkgs.config = nixpkgsConfig;
 
