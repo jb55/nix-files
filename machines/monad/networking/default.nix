@@ -16,7 +16,7 @@ in
   networking.hostId = extra.machine.hostId;
 
   networking.firewall.trustedInterfaces = ["zt1"];
-  networking.firewall.allowedTCPPorts = [ 5432 9735 80 ];
+  networking.firewall.allowedTCPPorts = [ 5432 9735 9736 80 ];
 
   networking.firewall.extraCommands = ''
     ${openTCP "ztrtaygmfr" 6533}
