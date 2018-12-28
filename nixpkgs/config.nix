@@ -457,6 +457,7 @@ in {
       stm-chans
       stm-stats
       store
+      stache
       streaming
       streaming-bytestring
       streaming-wai
@@ -498,6 +499,7 @@ in {
       void
       wai
       wai-middleware-static
+      wai-extra
       warp
       wreq
       xhtml
