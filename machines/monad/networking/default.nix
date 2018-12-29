@@ -29,6 +29,8 @@ in
     matrix.monad.   127.0.0.1
   '';
 
+  services.dnsmasq.enable = true;
+
   services.transmission = {
     enable = true;
     home = transmission-dir;
