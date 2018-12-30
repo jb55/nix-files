@@ -57,8 +57,8 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "2ff159cb5397723cbb05bc7d05c7a55d54ba39da";
-        sha256 = "0r2zikshnby9g23hsriaxqq2bwn4lwhjb9ixyl8g48l17zdz3pqy";
+        rev    = "26bc7f4ffe713590ebf28f62343015bc871b9d18";
+        sha256 = "1yrnpj6n4cfm1ri0ns0vbflvxk12z0vv1svdx1wdcad86cvaz12i";
       };
 
       doCheck = false;
@@ -274,7 +274,7 @@ in {
       hindent
       hlint
       structured-haskell-mode
-      #multi-ghc-travis
+      haskell-ci
     ];
 
     myHaskellPackages = hp: with hp; [
@@ -306,6 +306,7 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
+      bytestring-show
       cased
       cassava
       cereal
@@ -333,6 +334,7 @@ in {
       hamlet
       hashable
       hashids
+      here
       heroku
       hedgehog
       hspec
@@ -433,6 +435,7 @@ in {
       stm-chans
       stm-stats
       store
+      stache
       streaming
       streaming-bytestring
       streaming-wai
@@ -465,6 +468,7 @@ in {
       transformers
       transformers-base
       turtle
+      unagi-chan
       uniplate
       unix-compat
       unordered-containers
@@ -473,6 +477,7 @@ in {
       void
       wai
       wai-middleware-static
+      wai-extra
       warp
       wreq
       xhtml

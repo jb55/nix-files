@@ -16,7 +16,20 @@ in
   networking.hostId = extra.machine.hostId;
 
   networking.firewall.trustedInterfaces = ["zt1"];
-  networking.firewall.allowedTCPPorts = [ 5432 9735 80 ];
+  networking.firewall.allowedTCPPorts = [ 5432 9735 9736 80 ];
+
+  networking.firewall.extraCommands = ''
+    ${openTCP "ztrtaygmfr" 6533}
+    ${openTCP "ztrtaygmfr" 6532}
+    ${openTCP "ztrtaygmfr" 7878}
+    ${openTCP "ztrtaygmfr" 7879}
+  '';
+
+  networking.extraHosts = ''
+    matrix.monad.   127.0.0.1
+  '';
+
+  services.dnsmasq.enable = true;
 
   services.transmission = {
     enable = true;

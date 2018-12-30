@@ -24,34 +24,28 @@ in
 {
   imports = [
     ./hardware
+    ./bitcoin.nix
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
   ];
 
+  #virtualisation.docker.enable = false;
 
   virtualisation.virtualbox.host.enable = true;
-  virtualization.virtualbox.host.enableHardening = false;
+  virtualisation.virtualbox.host.enableHardening = false;
+  #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidiaBeta" ];
+
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
   programs.mosh.enable = true;
 
-  # services.bitcoin.enable = true;
-  # services.bitcoin.enableTestnet = true;
-
-  # services.bitcoin.config = ''
-  #   datadir=/zbig/bitcoin
-  #   txindex=1
-  # '';
-
-  # services.bitcoin.testnetConfig = ''
-  #   datadir=/zbig/bitcoin
-  # '';
+  documentation.nixos.enable = false;
 
   services.trezord.enable = true;
   services.redis.enable = false;
@@ -79,6 +73,18 @@ in
           try_files $uri $uri/ =404;
         }
       }
+
+      server {
+        listen 80;
+        server_name matrix.monad;
+
+        root ${pkgs.riot-web};
+        index index.html index.htm;
+        location / {
+          try_files $uri $uri/ =404;
+        }
+      }
+
     '' + (if config.services.nix-serve.enable then ''
       server {
         listen ${nix-serve.bindAddress}:80;
@@ -118,7 +124,7 @@ in
   services.postgresql = {
     dataDir = "/var/db/postgresql/100/";
     enable = true;
-    package = pkgs.postgresql100;
+    package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
