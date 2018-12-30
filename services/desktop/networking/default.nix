@@ -22,7 +22,7 @@ let
 
 in
 {
-  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  #networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
   networking.firewall.extraCommands =
     # openvpn stuff, we only want to do this once
