@@ -15,6 +15,9 @@ let
 
 in
 {
+  # workaround for starbucks blackholing 1.1.1.1 and 8.8.8.8 dns reqs
+  networking.nameservers = [ "172.24.242.111" ];
+
   networking.extraHosts = ''
     10.0.9.1         secure.datavalet.io
     192.168.86.26    torrents.home.
