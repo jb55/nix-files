@@ -111,7 +111,7 @@ extra:
   networking.wireless.enable = true;
 
   programs.gnupg.trezor-agent = {
-    enable = false;
+    enable = true;
     configPath = "/home/jb55/.gnupg/trezor";
   };
 
