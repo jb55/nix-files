@@ -91,7 +91,7 @@ extra:
     '';
   };
 
-  services.hydra.enable = true;
+  services.hydra.enable = false;
   services.hydra.dbi = "dbi:Pg:dbname=hydra;host=localhost;user=postgres;";
   services.hydra.hydraURL = "localhost";
   services.hydra.notificationSender = "hydra@quiver";
