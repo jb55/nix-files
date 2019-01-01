@@ -306,7 +306,7 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
-      bytestring-show
+      #bytestring-show
       cased
       cassava
       cereal
