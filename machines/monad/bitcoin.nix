@@ -16,7 +16,9 @@
         txindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
-        rpcallowip=1
+        rpcallowip=172.24.242.111
+        rpcallowip=10.147.20.220
+        rpcallowip=127.0.0.1
         rpcbind=172.24.242.111
         rpcbind=10.147.20.220
         rpcbind=127.0.0.1
@@ -30,7 +32,9 @@
         txindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
-        rpcallowip=1
+        rpcallowip=172.24.242.111
+        rpcallowip=10.147.20.220
+        rpcallowip=127.0.0.1
         rpcbind=172.24.242.111
         rpcbind=10.147.20.220
         rpcbind=127.0.0.1
