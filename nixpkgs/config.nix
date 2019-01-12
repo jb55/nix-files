@@ -340,7 +340,7 @@ in {
       comonad
       comonad-transformers
       #compact-string-fix
-      cryptohash
+      #cryptohash
       directory
       dlist
       dlist-instances
