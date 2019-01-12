@@ -316,7 +316,7 @@ in {
       comonad
       comonad-transformers
       #compact-string-fix
-      cryptohash
+      #cryptohash
       directory
       dlist
       dlist-instances
@@ -437,6 +437,7 @@ in {
       store
       stache
       streaming
+      smtp-mail
       streaming-bytestring
       streaming-wai
       strict
