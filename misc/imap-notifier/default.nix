@@ -35,7 +35,6 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       )
 
       loop = gobject.MainLoop()          # define mainloop
-      check()
       loop.run()
     '';
 
