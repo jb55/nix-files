@@ -459,6 +459,7 @@ in {
       store
       stache
       streaming
+      smtp-mail
       streaming-bytestring
       streaming-wai
       strict
