@@ -8,6 +8,19 @@
   };
 
   services.bitcoind.networks = {
+    mainnet = {
+      dataDir = "/zbig/bitcoin";
+      extraConfig = ''
+        txindex=1
+        rpcuser=rpcuser
+        rpcpassword=rpcpass
+        rpcallowip=172.24.129.211
+        rpcallowip=127.0.0.1
+        rpcbind=172.24.242.111
+        rpcbind=127.0.0.1
+      '';
+    };
+
     testnet = {
       testnet = true;
       dataDir = "/zbig/bitcoin-testnet";
@@ -21,20 +34,6 @@
         rpcbind=172.24.242.111
         rpcbind=127.0.0.1
         rpcport=6533
-      '';
-    };
-
-    mainnet = {
-      dataDir = "/zbig/bitcoin";
-      extraConfig = ''
-        txindex=1
-        rpcuser=rpcuser
-        rpcpassword=rpcpass
-        rpcallowip=172.24.129.211
-        rpcallowip=127.0.0.1
-        rpcbind=172.24.242.111
-        rpcbind=127.0.0.1
-        rpcport=6532
       '';
     };
   };
@@ -65,7 +64,6 @@
         bitcoin-rpcuser=rpcuser
         bitcoin-rpcpassword=rpcpass
         bitcoin-rpcconnect=127.0.0.1
-        bitcoin-rpcport=6532
         fee-per-satoshi=9000
         bind-addr=0.0.0.0:9735
         announce-addr=24.84.152.187:9735
