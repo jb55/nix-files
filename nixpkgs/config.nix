@@ -329,7 +329,7 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
-      bytestring-show
+      #bytestring-show
       cased
       cassava
       cereal
@@ -441,8 +441,8 @@ in {
       semigroups
       servant
       servant-cassava
-      servant-client
-      servant-docs
+      #servant-client
+      #servant-docs
       servant-lucid
       servant-server
       shake
@@ -450,12 +450,12 @@ in {
       #shelly
       shqq
       simple-reflect
-      speculation
+      #speculation
       split
       spoon
       stm
       stm-chans
-      stm-stats
+      #stm-stats
       store
       stache
       streaming
