@@ -440,12 +440,12 @@ in {
       lucid
       semigroupoids
       semigroups
-      servant
-      servant-cassava
+      #servant
+      #servant-cassava
       #servant-client
       #servant-docs
-      servant-lucid
-      servant-server
+      #servant-lucid
+      #servant-server
       shake
       shakespeare
       #shelly
