@@ -416,24 +416,24 @@ in {
       lucid
       semigroupoids
       semigroups
-      servant
-      servant-cassava
-      servant-client
-      servant-docs
-      servant-lucid
-      servant-server
+      #servant
+      #servant-cassava
+      #servant-client
+      #servant-docs
+      #servant-lucid
+      #servant-server
       shake
       shakespeare
       #shelly
       shqq
       simple-reflect
-      speculation
+      #speculation
       split
       spoon
       stache
       stm
       stm-chans
-      stm-stats
+      #stm-stats
       store
       stache
       streaming
