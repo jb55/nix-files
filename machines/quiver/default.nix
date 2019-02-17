@@ -104,6 +104,9 @@ extra:
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
 
+  services.tor.enable = true;
+  services.tor.controlPort = 9051;
+
   services.autorandr.enable = true;
   services.acpid.enable = false;
   powerManagement.enable = false;
