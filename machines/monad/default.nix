@@ -25,6 +25,7 @@ in
   imports = [
     ./hardware
     ./bitcoin.nix
+    (import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
