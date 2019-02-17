@@ -8,6 +8,20 @@
   };
 
   services.bitcoind.networks = {
+    mainnet = {
+      dataDir = "/zbig/bitcoin";
+      extraConfig = ''
+        txindex=1
+        rpcuser=rpcuser
+        rpcpassword=rpcpass
+        rpcallowip=172.24.129.211
+        rpcallowip=127.0.0.1
+        rpcbind=172.24.242.111
+        rpcbind=127.0.0.1
+        rpcport=6532
+      '';
+    };
+
     testnet = {
       testnet = true;
       dataDir = "/zbig/bitcoin-testnet";
@@ -16,25 +30,11 @@
         txindex=1
         rpcuser=rpcuser
         rpcpassword=rpcpass
-        rpcallowip=1
+        rpcallowip=172.24.129.211
+        rpcallowip=127.0.0.1
         rpcbind=172.24.242.111
-        rpcbind=10.147.20.220
         rpcbind=127.0.0.1
         rpcport=6533
-      '';
-    };
-
-    mainnet = {
-      dataDir = "/zbig/bitcoin";
-      extraConfig = ''
-        txindex=1
-        rpcuser=rpcuser
-        rpcpassword=rpcpass
-        rpcallowip=1
-        rpcbind=172.24.242.111
-        rpcbind=10.147.20.220
-        rpcbind=127.0.0.1
-        rpcport=6532
       '';
     };
   };

@@ -21,6 +21,11 @@ in
 
   services.trezord.enable = true;
 
+  programs.gnupg.trezor-agent = {
+    enable = true;
+    configPath = "/home/jb55/.gnupg/trezor";
+  };
+
   services.emacs.enable = true;
   services.emacs.install = true;
 

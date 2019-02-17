@@ -25,12 +25,28 @@ in
   imports = [
     ./hardware
     ./bitcoin.nix
+    (import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
   ];
 
   #virtualisation.docker.enable = false;
+
+  # services.sourcehut.enable = true;
+  # services.sourcehut.services = ["git" "lists" "todo"];
+  # services.sourcehut.site.name = "jb55";
+  # services.sourcehut.site.info = "https://code.jb55.com";
+  # services.sourcehut.site.blurb = "jb55's code";
+  # services.sourcehut.owner.name = "jb55";
+  # services.sourcehut.owner.email = "jb55@jb55.com";
+  # services.sourcehut.secretKey = extra.private.jb55code.secret;
+  # services.sourcehut.server.protocol = "http";
+  # services.sourcehut.mail.host = "jb55.com";
+  # services.sourcehut.mail.port = 12566;
+  # services.sourcehut.mail.user = "jb55@jb55.com";
+  # services.sourcehut.mail.user = extra.private.
+
 
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = false;

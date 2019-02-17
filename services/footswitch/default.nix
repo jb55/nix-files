@@ -59,7 +59,7 @@ in {
       serviceConfig.Type = "simple";
       serviceConfig.ExecStart = pkgs.writeScript "footswitch-led" ''
         #!${pkgs.bash}/bin/bash
-        ${pkgs.evtest}/bin/evtest /dev/input/by-id/usb-RDing_FootSwitch*event-mouse | \
+        ${pkgs.evtest}/bin/evtest /dev/input/by-id/usb-RDing_FootSwitch1F1.-event-kbd | \
           stdbuf -oL grep KEY_ | \
           stdbuf -oL sed 's/.*value \(.\)$/\1/' | \
           stdbuf -oL tr '2' '1' | \
