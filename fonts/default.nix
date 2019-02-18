@@ -77,6 +77,8 @@ in
       noto-fonts-emoji
       opensans-ttf
       raleway
+      profont
+      paratype-pt-mono
       source-code-pro
       ubuntu_font_family
     ] ++ myfonts;
