@@ -11,6 +11,7 @@ let
 in
 {
   services.dnsmasq.enable = true;
+  services.dnsmasq.resolveLocalQueries = false;
   services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
   services.dnsmasq.extraConfig = ''
     addn-hosts=${adblock-hosts}
