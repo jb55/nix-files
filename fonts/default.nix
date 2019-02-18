@@ -51,8 +51,27 @@ let mkfont = n: lesrc:
         url = "https://jb55.com/s/a266c50144cbad1a.ttf";
         sha256 = "db5133b6a09c8eba78b29dc05019d8f361f350483d679fd8c668e1c657a303fc";
       };
+
+    ohsnap =
+      pkgs.stdenv.mkDerivation rec {
+        name = "ohsnap-${version}";
+        version = "1.7.9";
+
+        src = pkgs.fetchzip {
+          url = "https://sourceforge.net/projects/osnapfont/files/${name}.tar.gz";
+          sha256 = "0jvgii1sdv3gzmx8k68bd3fp2rmfsdigg67spbi2c83krb1x445v";
+        };
+
+        phases = ["unpackPhase" "installPhase"];
+
+        installPhase = ''
+          mkdir -p $out/share/fonts/ohsnap
+          cp ${src}/* $out/share/fonts/ohsnap
+        '';
+      };
+
     myfonts = [ aldrich VarelaRound-Regular Questrial Comfortaa-Regular
-                Bookerly-Regular Bookerly-RegularItalic Bookerly-Bold Bookerly-BoldItalic ];
+                Bookerly-Regular Bookerly-RegularItalic Bookerly-Bold Bookerly-BoldItalic ohsnap ];
 in
 {
   fonts = {
@@ -78,9 +97,11 @@ in
       opensans-ttf
       raleway
       profont
+      terminus_font
       paratype-pt-mono
       source-code-pro
       ubuntu_font_family
+      proggyfonts
     ] ++ myfonts;
   };
 }
