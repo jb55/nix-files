@@ -66,7 +66,7 @@
         bitcoin-rpcpassword=rpcpass
         bitcoin-rpcconnect=127.0.0.1
         bitcoin-rpcport=6532
-        fee-per-satoshi=9000
+        fee-per-satoshi=900
         bind-addr=0.0.0.0:9735
         announce-addr=24.84.152.187:9735
         network=bitcoin
