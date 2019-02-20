@@ -113,6 +113,15 @@ in
     '';
   };
 
+  hardware.pulseaudio = {
+    enable = true;
+    support32Bit = true;
+    tcp = {
+      enable = true;
+      anonymousClients.allowedIpRanges = ["127.0.0.1"];
+    };
+  };
+
   services.udev.extraRules = ''
     # yubikey neo
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0116", MODE="0666"
