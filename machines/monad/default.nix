@@ -59,7 +59,7 @@ in
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
-  programs.mosh.enable = true;
+  programs.mosh.enable = false;
 
   documentation.nixos.enable = false;
 
