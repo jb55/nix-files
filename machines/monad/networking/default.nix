@@ -26,7 +26,9 @@ in
   '';
 
   networking.extraHosts = ''
-    matrix.monad.   127.0.0.1
+    matrix.monad.   ${extra.machine.ztip}
+    torrent.home.   ${extra.machine.ztip}
+    torrents.home.  ${extra.machine.ztip}
   '';
 
   services.dnsmasq.enable = true;
