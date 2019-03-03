@@ -22,6 +22,7 @@ let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
     ];
 in {
   environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
+    bat
     bc
     binutils
     dateutils
@@ -43,10 +44,13 @@ in {
     ranger
     ripgrep
     rsync
+    screen
     shellcheck
     unzip
     vim
+    weechat
     wget
     zip
+    zstd
   ];
 }
