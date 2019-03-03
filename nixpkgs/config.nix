@@ -21,7 +21,6 @@ in {
 
   chromium = {
     enablePepperFlash = false; # Chromium's non-NSAPI alternative to Adobe Flash
-    enablePepperPDF = false;
   };
 
   packageOverrides = super: rec {
