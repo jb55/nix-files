@@ -29,6 +29,20 @@ in {
       pkgs.urweb
     ]);
 
+    # steam = super.steam.override {
+    #   nativeOnly = true;
+    #   extraPkgs = pkgs: with pkgs; [
+    #     usbutils
+    #     sysvtools
+    #     qt5.qtbase
+    #     qt5.qtmultimedia
+    #   ];
+    # };
+
+    # qutebrowser = pkgs.lib.overrideDerivation super.qutebrowser (attrs: {
+    #   src = /home/jb55/dev/github/qutebrowser/qutebrowser;
+    # });
+
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
     wine = super.wine.override { wineBuild = "wineWow"; };
