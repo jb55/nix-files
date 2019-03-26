@@ -34,6 +34,54 @@ in
 
 
 
+  services.dnsmasq.enable = true;
+  services.dnsmasq.resolveLocalQueries = true;
+  services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
+  services.dnsmasq.extraConfig = ''
+    addn-hosts=/var/hosts
+    addn-hosts=/var/distracting-hosts
+  '';
+
+
+  systemd.services.block-distracting-hosts = {
+    description = "Block Distracting Hosts";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ systemd procps ];
+
+    serviceConfig.ExecStart = util.writeBash "block-distracting-hosts" ''
+      set -e
+      mv /var/undistracting-hosts /var/distracting-hosts
+
+      # crude way to clear the cache...
+      systemctl restart dnsmasq
+      pkill qutebrowser
+    '';
+
+    startAt = "Mon..Fri *-*-* 09:00:00";
+  };
+
+
+  systemd.services.unblock-distracting-hosts = {
+    description = "Unblock Distracting Hosts";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ systemd ];
+
+    serviceConfig.ExecStart = util.writeBash "unblock-distracting-hosts" ''
+      set -e
+      mv /var/distracting-hosts /var/undistracting-hosts
+      systemctl restart dnsmasq
+    '';
+
+    startAt = "Mon..Fri *-*-* 17:00:00";
+  };
+
+
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
