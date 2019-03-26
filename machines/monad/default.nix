@@ -39,7 +39,7 @@ in
   services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
   services.dnsmasq.extraConfig = ''
     addn-hosts=/var/hosts
-    addn-hosts=/var/distracting-hosts
+    conf-file=/var/distracting-hosts
   '';
 
 
@@ -75,6 +75,7 @@ in
     serviceConfig.ExecStart = util.writeBash "unblock-distracting-hosts" ''
       set -e
       mv /var/distracting-hosts /var/undistracting-hosts
+      touch /var/distracting-hosts
       systemctl restart dnsmasq
     '';
 
