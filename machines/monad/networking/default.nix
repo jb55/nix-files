@@ -25,14 +25,6 @@ in
     ${openTCP "ztrtaygmfr" 7879}
   '';
 
-  networking.extraHosts = ''
-    matrix.monad.   ${extra.machine.ztip}
-    torrent.home.   ${extra.machine.ztip}
-    torrents.home.  ${extra.machine.ztip}
-  '';
-
-  services.dnsmasq.enable = true;
-
   services.transmission = {
     enable = true;
     home = transmission-dir;
