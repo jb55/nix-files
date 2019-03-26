@@ -74,8 +74,8 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "26bc7f4ffe713590ebf28f62343015bc871b9d18";
-        sha256 = "1yrnpj6n4cfm1ri0ns0vbflvxk12z0vv1svdx1wdcad86cvaz12i";
+        rev    = "adcc427b8356cca865479b433d4be362b1f50e38";
+        sha256 = "14l95hld7gs42p890a9r8dfw4m945iy2sf9bdyajs2yqjwmarwn7";
       };
 
       doCheck = false;
