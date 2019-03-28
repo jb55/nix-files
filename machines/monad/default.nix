@@ -39,6 +39,7 @@ in
   services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
   services.dnsmasq.extraConfig = ''
     addn-hosts=/var/hosts
+    conf-file=/var/dnsmasq-hosts
     conf-file=/var/distracting-hosts
   '';
 
@@ -53,7 +54,7 @@ in
 
     serviceConfig.ExecStart = util.writeBash "block-distracting-hosts" ''
       set -e
-      mv /var/undistracting-hosts /var/distracting-hosts
+      cp /var/undistracting-hosts /var/distracting-hosts
 
       # crude way to clear the cache...
       systemctl restart dnsmasq
@@ -74,8 +75,7 @@ in
 
     serviceConfig.ExecStart = util.writeBash "unblock-distracting-hosts" ''
       set -e
-      mv /var/distracting-hosts /var/undistracting-hosts
-      touch /var/distracting-hosts
+      echo "" > /var/distracting-hosts
       systemctl restart dnsmasq
     '';
 
