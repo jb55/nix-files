@@ -17,6 +17,7 @@ in
 
   networking.firewall.trustedInterfaces = ["zt1"];
   networking.firewall.allowedTCPPorts = [ 5432 9735 9736 80 53 ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 
   networking.firewall.extraCommands = ''
     ${openTCP "ztrtaygmfr" 6533}
