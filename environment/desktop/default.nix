@@ -70,6 +70,7 @@ in {
     xlibs.xmodmap
     xlibs.xset
     zathura
+    wmctrl
   ];
 
   security.wrappers = {
