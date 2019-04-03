@@ -38,6 +38,7 @@ in
   services.dnsmasq.resolveLocalQueries = true;
   services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
   services.dnsmasq.extraConfig = ''
+    cache-size=10000
     addn-hosts=/var/hosts
     conf-file=/var/dnsmasq-hosts
     conf-file=/var/distracting-hosts
