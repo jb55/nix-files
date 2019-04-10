@@ -302,7 +302,7 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      (doJailbreak pandoc-lens)
+      #(doJailbreak pandoc-lens)
       (dontCheck (doJailbreak serialise))
       Boolean
       Decimal
