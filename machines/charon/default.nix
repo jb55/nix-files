@@ -103,6 +103,19 @@ in
     serviceConfig.ExecStart = "${httpiped}/bin/httpiped";
   };
 
+  services.xinetd.enable = true;
+  services.xinetd.services =
+  [
+    { name = "gopher";
+      port = 70;
+      server = "${pkgs.gophernicus}/bin/in.gophernicus";
+      serverArgs = "-nf -r /var/gopher";
+      extraConfig = ''
+        disable = no
+      '';
+    }
+  ];
+
   users.extraGroups.jb55cert.members = [ "prosody" "nginx" ];
 
   services.gitDaemon.basePath = "/var/git-public/repos";
