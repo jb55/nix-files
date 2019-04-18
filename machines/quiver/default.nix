@@ -28,6 +28,18 @@ extra:
   services.mongodb.enable = false;
   services.redis.enable = false;
 
+  services.xinetd.enable = true;
+  services.xinetd.services = [
+    { name = "gopher";
+      port = 70;
+      server = "/var/gopher/in.gophernicus";
+      serverArgs = "-nf -r /var/gopher";
+      extraConfig = ''
+        disable = no
+      '';
+    }
+  ];
+
   services.xserver.libinput.enable = true;
   services.xserver.config = ''
     Section "InputClass"
