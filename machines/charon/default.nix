@@ -5,11 +5,11 @@ let gitExtra = {
       host = "git.zero.jb55.com";
     };
     httpipePort = "8899";
-    httpiped = (import (pkgs.fetchgit {
-      url = https://github.com/jb55/httpipe;
-      rev = "376de0e37bba505ba5f23c46435277bb74603acd";
-      sha256 = "1x9d98z6zbs22x38xwxjnb6mwladbah9xajyl7kk8bm418l8wac4";
-    }) { nodejs = pkgs.nodejs; }).package;
+    # httpiped = (import (pkgs.fetchgit {
+    #   url = https://github.com/jb55/httpipe;
+    #   rev = "376de0e37bba505ba5f23c46435277bb74603acd";
+    #   sha256 = "1x9d98z6zbs22x38xwxjnb6mwladbah9xajyl7kk8bm418l8wac4";
+    # }) { nodejs = pkgs.nodejs; }).package;
     npmrepo = (import (pkgs.fetchFromGitHub {
       owner  = "jb55";
       repo   = "npm-repo-proxy";
@@ -92,16 +92,16 @@ in
     #(import ./vidstats extra)
   ];
 
-  systemd.services.httpiped = {
-    description = "httpiped";
-    wantedBy = [ "multi-user.target" ];
-    after    = [ "multi-user.target" ];
-    environment = {
-      PORT = httpipePort;
-    };
-    serviceConfig.Restart = "always";
-    serviceConfig.ExecStart = "${httpiped}/bin/httpiped";
-  };
+  # systemd.services.httpiped = {
+  #   description = "httpiped";
+  #   wantedBy = [ "multi-user.target" ];
+  #   after    = [ "multi-user.target" ];
+  #   environment = {
+  #     PORT = httpipePort;
+  #   };
+  #   serviceConfig.Restart = "always";
+  #   serviceConfig.ExecStart = "${httpiped}/bin/httpiped";
+  # };
 
   services.xinetd.enable = true;
   services.xinetd.services =
