@@ -5,7 +5,7 @@ let gitwebConf = pkgs.writeText "gitweb.conf" ''
     '';
     gitweb-wrapper = pkgs.writeScript "gitweb.cgi" ''
       #!${pkgs.bash}/bin/bash
-      export PERL5LIB=$PERL5LIB:${with pkgs.perlPackages; pkgs.lib.makePerlPath [ CGI HTMLParser ]}
+      export PERL5LIB=$PERL5LIB:${with pkgs.perlPackages; makePerlPath [ CGI HTMLParser ]}
       ${pkgs.perl}/bin/perl ${pkgs.git}/share/gitweb/gitweb.cgi
     '';
     gitweb-theme = pkgs.fetchFromGitHub {
