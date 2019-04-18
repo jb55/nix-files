@@ -69,7 +69,7 @@ in
         proxy_redirect off;
 
         # include Host header
-        proxy_set_header Host $http_host;
+        proxy_set_header Host $host;
 
         # proxy request to plex server
         proxy_pass http://127.0.0.1:32400;
@@ -82,8 +82,12 @@ in
       listen 192.168.86.26;
       server_name torrents.jb55.com torrentz.jb55.com torrents.home torrent.home;
 
-      location /download {
-        alias ${download-dir};
+      location = /download {
+        return 301 " /download/";
+      }
+
+      location /download/ {
+        alias ${download-dir}/;
         autoindex on;
       }
 
