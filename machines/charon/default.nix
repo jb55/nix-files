@@ -109,7 +109,7 @@ in
     { name = "gopher";
       port = 70;
       server = "${pkgs.gophernicus}/bin/in.gophernicus";
-      serverArgs = "-nf -r /var/gopher";
+      serverArgs = "-h jb55.com -nf -r /var/gopher";
       extraConfig = ''
         disable = no
       '';
