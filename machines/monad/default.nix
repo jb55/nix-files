@@ -106,6 +106,7 @@ in
 
   services.tor.enable = true;
   services.tor.controlPort = 9051;
+  services.tor.client.enable = true;
   services.tor.extraConfig = extra.private.tor.extraConfig;
 
   services.fcgiwrap.enable = true;
