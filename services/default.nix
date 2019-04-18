@@ -4,6 +4,7 @@ extra:
   imports = [
     ./footswitch
     ./fail-notifier
+    ./mailz
   ];
 
   #services.mongodb.enable = true;
