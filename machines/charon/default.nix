@@ -13,8 +13,8 @@ let gitExtra = {
     npmrepo = (import (pkgs.fetchFromGitHub {
       owner  = "jb55";
       repo   = "npm-repo-proxy";
-      rev    = "017cd7c7d98a9cf927d73c4f5c99636e21803935";
-      sha256 = "1knrzadnlcvd779da269njhs3psf5mjbbpf95axcc02rya01fqzc";
+      rev    = "f99f1336ffb6c7ee85a0076ba3a0d31e0168ef8a";
+      sha256 = "1knrzadnlcvd779da269njhs3psf5mjbbpf95axcc02rya01fqzd";
     }) {}).package;
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
