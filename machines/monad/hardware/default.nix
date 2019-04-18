@@ -12,6 +12,7 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
   boot.kernelModules = [ "kvm-amd" ];
+  boot.loader.grub.copyKernels = true;
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
@@ -57,6 +58,6 @@
 
   hardware.enableAllFirmware = true;
 
-  boot.loader.grub.devices = [ "/dev/nvme0n1" "/dev/sda" ];
+  boot.loader.grub.devices = [ "/dev/nvme0n1" ];
   boot.supportedFilesystems = ["zfs"];
 }

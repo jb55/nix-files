@@ -7,7 +7,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
                       sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
                     }) {};
     penv = pkgs.python2.withPackages (ps: with ps; [ dbus-python pygobject2 ]);
-    email-switcher = pkgs.writeScript "email-switcher" ''
+    awake-from-sleep-fetcher = pkgs.writeScript "awake-from-sleep-fetcher" ''
       #!${penv}/bin/python2 -u
 
       import dbus
@@ -16,24 +16,14 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       import os
       from dbus.mainloop.glib import DBusGMainLoop
 
-      def start_work():
-        print("starting work notifier")
-        os.system("systemctl restart --user work-email-notifier")
-
       def start_home():
-        print("starting home notifier")
-        os.system("systemctl restart --user home-email-notifier")
-
-      def check():
-         # since we changed the notifier services to simply be fetching services,
-         # always restart home and work email fetchers
-         start_home()
-         #start_work()
+        print("starting email fetcher")
+        os.system("systemctl restart --user email-fetcher")
 
       def handle_sleep_callback(sleeping):
         if not sleeping:
           # awoke from sleep
-          check()
+          start_home()
 
       DBusGMainLoop(set_as_default=True) # integrate into main loob
       bus = dbus.SystemBus()             # connect to dbus system wide
@@ -45,7 +35,6 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       )
 
       loop = gobject.MainLoop()          # define mainloop
-      check()
       loop.run()
     '';
 
@@ -64,40 +53,9 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
     '';
 in
 with extra; {
-  systemd.user.services.work-email-notifier = {
-    enable = false;
-    description = "work notifier";
-
-    path = with pkgs; [ twmn eject isync notmuch bash ];
-
-    serviceConfig.Type = "simple";
-    serviceConfig.Restart = "always";
-    serviceConfig.ExecStart =
-      let cmd = util.writeBash "notify-cmd"  ''
-            set -e
-            export HOME=/home/jb55
-            export DATABASEDIR=$HOME/mail/work
-
-            notify() {
-              c=$(notmuch --config /home/jb55/.notmuch-config-work count 'tag:flagged and tag:inbox and date:today')
-              if [ -f ~/var/notify/work ] && [ "$c" -gt 0 ]; then
-                twmnc -i new_email -c w -s 32 --pos top_left
-              fi
-            }
-
-            (
-              flock -x -w 100 200 || exit 1
-              mbsync gmail
-              notmuch --config /home/jb55/.notmuch-config-work new
-              notify
-            ) 200>/tmp/email-notify.lock
-          '';
-      in notifier private.work-email-user private.work-email-pass cmd "";
-  };
-
-  systemd.user.services.home-email-notifier = {
+  systemd.user.services.email-fetcher = {
     enable = true;
-    description = "home notifier";
+    description = "email fetcher";
 
     environment = {
       IMAP_ALLOW_UNAUTHORIZED = "0";
@@ -109,7 +67,7 @@ with extra; {
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";
     serviceConfig.ExecStart =
-      let cmd = util.writeBash "notify-cmd" ''
+      let cmd = util.writeBash "email-fetcher" ''
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/personal
@@ -130,16 +88,16 @@ with extra; {
       in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";
   };
 
-  systemd.user.services.email-notify-switcher = {
+  systemd.user.services.awake-from-sleep-fetcher = {
     enable = true;
-    description = "switches email notifier based on time";
+    description = "";
 
     path = with pkgs; [ systemd ];
 
     wantedBy = [ "default.target" ];
     after    = [ "default.target" ];
 
-    serviceConfig.ExecStart = "${email-switcher}";
+    serviceConfig.ExecStart = "${awake-from-sleep-fetcher}";
   };
 
 }

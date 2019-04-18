@@ -21,7 +21,6 @@ in {
 
   chromium = {
     enablePepperFlash = false; # Chromium's non-NSAPI alternative to Adobe Flash
-    enablePepperPDF = false;
   };
 
   packageOverrides = super: rec {
@@ -30,13 +29,36 @@ in {
       pkgs.urweb
     ]);
 
+    # steam = super.steam.override {
+    #   nativeOnly = true;
+    #   extraPkgs = pkgs: with pkgs; [
+    #     usbutils
+    #     sysvtools
+    #     qt5.qtbase
+    #     qt5.qtmultimedia
+    #   ];
+    # };
+
+    # qutebrowser = pkgs.lib.overrideDerivation super.qutebrowser (attrs: {
+    #   src = /home/jb55/dev/github/qutebrowser/qutebrowser;
+    # });
+
+    lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
+
     wine = super.wine.override { wineBuild = "wineWow"; };
 
+    wineUnstable = super.wineUnstable.override { wineBuild = "wineWow"; };
+
     bluez = pkgs.bluez5;
-    # qt4 = pkgs.qt48Full.override { gtkStyle = true; };
+
+    #nvidia_x11 = super.nvidia_x11_beta;
 
     # haskellPackages = super.haskellPackages.override {
     #   overrides = haskellOverrides pkgs;
+    # };
+
+    # xonsh = super.xonsh.override {
+    #   extraPythonPackages = py: with py; [ numpy ];
     # };
 
     phonectl = super.python3Packages.callPackage (super.fetchFromGitHub {
@@ -46,25 +68,14 @@ in {
       rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
     }) {};
 
-    pidgin-with-plugins = super.pidgin-with-plugins.override {
-      plugins = (with super; [
-        purple-hangouts
-        pidginotr
-        pidginwindowmerge
-        pidgin-skypeweb
-        pidgin-opensteamworks
-        pidgin-carbons
-      ]);
-    };
-
     jb55-dotfiles = regularFiles <dotfiles>;
 
     notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "2ff159cb5397723cbb05bc7d05c7a55d54ba39da";
-        sha256 = "0r2zikshnby9g23hsriaxqq2bwn4lwhjb9ixyl8g48l17zdz3pqy";
+        rev    = "adcc427b8356cca865479b433d4be362b1f50e38";
+        sha256 = "14l95hld7gs42p890a9r8dfw4m945iy2sf9bdyajs2yqjwmarwn7";
       };
 
       doCheck = false;
@@ -84,17 +95,21 @@ in {
         });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
-      patches = [ (super.fetchurl { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
-                                    sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
-                                  })
-                ];
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
+            sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+          })
+        ];
     });
 
     htop = pkgs.lib.overrideDerivation super.htop (attrs: {
-      patches = [ (super.fetchurl { url = "https://jb55.com/s/htop-vim.patch";
-                                    sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
-                                  })
-                ];
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/htop-vim.patch";
+            sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
+          })
+        ];
     });
 
     ical2org = super.callPackage ./scripts/ical2org { };
@@ -264,6 +279,13 @@ in {
         paths = [(ghcWith myHaskellPackages)];
       };
 
+    # stack2nix = import (pkgs.fetchFromGitHub {
+    #   owner = "input-output-hk";
+    #   repo  = "stack2nix";
+    #   rev   = "6f59401c0e0ca3ab5e429b90e3c30de29a499db0";
+    #   sha256 = "1ihcp3mr0s89xmc81f9hxq07jw6pm3lixr5bdamqiin1skpk8q3b";
+    # }) { inherit pkgs; };
+
     haskellTools = hp: with hp; [
       alex
       cabal-install
@@ -272,15 +294,15 @@ in {
       hpack
       ghc-core
       happy
-      hasktags
+      (dontCheck hasktags)
       hindent
       hlint
       structured-haskell-mode
-      #multi-ghc-travis
+      haskell-ci
     ];
 
     myHaskellPackages = hp: with hp; [
-      (doJailbreak pandoc-lens)
+      #(doJailbreak pandoc-lens)
       (dontCheck (doJailbreak serialise))
       Boolean
       Decimal
@@ -293,6 +315,9 @@ in {
       aeson-qq
       async
       attoparsec
+      base32-bytestring
+      base32string
+      base58-bytestring
       bifunctors
       bitcoin-api
       bitcoin-api-extra
@@ -305,7 +330,7 @@ in {
       blaze-markup
       blaze-textual
       bson-lens
-      bytestring-show
+      #bytestring-show
       cased
       cassava
       cereal
@@ -314,8 +339,8 @@ in {
       colour
       comonad
       comonad-transformers
-      compact-string-fix
-      cryptohash
+      #compact-string-fix
+      #cryptohash
       directory
       dlist
       dlist-instances
@@ -333,6 +358,7 @@ in {
       hamlet
       hashable
       hashids
+      here
       heroku
       hedgehog
       hspec
@@ -410,27 +436,32 @@ in {
       safe
       sbv
       scotty
+      sqlite-simple
+      lucid
       semigroupoids
       semigroups
-      servant
-      servant-cassava
-      servant-client
-      servant-docs
-      servant-lucid
-      servant-server
+      #servant
+      #servant-cassava
+      #servant-client
+      #servant-docs
+      #servant-lucid
+      #servant-server
       shake
       shakespeare
       #shelly
       shqq
       simple-reflect
-      speculation
+      #speculation
       split
       spoon
+      stache
       stm
       stm-chans
-      stm-stats
+      #stm-stats
       store
+      stache
       streaming
+      smtp-mail
       streaming-bytestring
       streaming-wai
       strict
@@ -458,7 +489,7 @@ in {
       thyme
       time
       time-units
-      tinytemplate
+      #tinytemplate
       transformers
       transformers-base
       turtle
@@ -470,6 +501,8 @@ in {
       vector
       void
       wai
+      wai-middleware-static
+      wai-extra
       warp
       wreq
       xhtml

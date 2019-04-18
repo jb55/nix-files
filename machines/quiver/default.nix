@@ -9,11 +9,13 @@ extra:
     (import ./timers extra)
   ];
 
-  environment.systemPackages = with pkgs; [ acpi ];
+  environment.systemPackages = with pkgs; [ acpi xorg.xbacklight ];
 
   virtualisation.docker.enable = false;
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "jb55" ];
+
+  documentation.nixos.enable = false;
 
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
@@ -65,10 +67,45 @@ extra:
     }
   '';
 
+  systemd.user.services.clightning-rpc-tunnel = {
+    description = "clightning mainnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = extra.util.writeBash "lightning-tunnel" ''
+      socket=/home/jb55/.lightning-bitcoin-rpc
+      rm -f $socket
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.147.20.220:7878
+    '';
+  };
+
+  systemd.user.services.clightning-testnet-rpc-tunnel = {
+    description = "clightning testnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = extra.util.writeBash "lightning-testnet-tunnel" ''
+      socket=/home/jb55/.lightning-testnet-rpc
+      rm -f $socket
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.147.20.220:7879
+    '';
+  };
+
+  services.hydra.enable = false;
+  services.hydra.dbi = "dbi:Pg:dbname=hydra;host=localhost;user=postgres;";
+  services.hydra.hydraURL = "localhost";
+  services.hydra.notificationSender = "hydra@quiver";
+  services.hydra.buildMachinesFiles = [];
+  services.hydra.useSubstitutes = true;
+
+  users.extraGroups.hydra.members = [ "jb55" ];
   users.extraGroups.www-data.members = [ "jb55" ];
 
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
+
+  services.tor.enable = true;
+  services.tor.controlPort = 9051;
 
   services.autorandr.enable = true;
   services.acpid.enable = false;
@@ -76,15 +113,15 @@ extra:
 
   networking.wireless.enable = true;
 
-  # programs.gnupg.trezor-agent = {
-  #   enable = false;
-  #   configPath = "/home/jb55/.gnupg";
-  # };
+  programs.gnupg.trezor-agent = {
+    enable = true;
+    configPath = "/home/jb55/.gnupg/trezor";
+  };
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/10/";
     enable = true;
-    package = pkgs.postgresql100;
+    package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method

@@ -21,11 +21,36 @@ in
 
   services.trezord.enable = true;
 
+  programs.gnupg.trezor-agent = {
+    enable = true;
+    configPath = "/home/jb55/.gnupg/trezor";
+  };
+
+  services.emacs.enable = true;
+  services.emacs.install = true;
+
+  systemd.user.services.emacs.path = with pkgs; [ bash nix ];
+  systemd.user.services.emacs.serviceConfig.ExecStart =
+    let
+      cfg = config.services.emacs;
+    in
+      lib.mkForce (
+        pkgs.writeScript "start-emacs" ''
+          #!/usr/bin/env bash
+          source ${config.system.build.setEnvironment}
+
+          # hacky af
+          export NIX_PATH=dotfiles=/home/jb55/dotfiles:jb55pkgs=/home/jb55/etc/jb55pkgs:monstercatpkgs=/home/jb55/etc/monstercatpkgs:nixos-config=/home/jb55/etc/nix-files:nixpkgs=/home/jb55/nixpkgs:/home/jb55/.nix-defexpr/channels:nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
+          export NIXPKGS=/home/jb55/nixpkgs
+
+          exec /home/jb55/bin/all-dev --run 'exec ${cfg.package}/bin/emacs --daemon';
+        ''
+      );
+
   services.redshift = {
     enable = true;
-    temperature.day = 5700;
-    temperature.night = 3900;
-    # gamma=0.8
+    # temperature.day = 5700;
+    # temperature.night = 3700;
 
     brightness = {
       day = "1.0";
@@ -87,6 +112,15 @@ in
     '';
   };
 
+  hardware.pulseaudio = {
+    enable = true;
+    support32Bit = true;
+    tcp = {
+      enable = true;
+      anonymousClients.allowedIpRanges = ["127.0.0.1"];
+    };
+  };
+
   services.udev.extraRules = ''
     # yubikey neo
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0116", MODE="0666"
@@ -98,7 +132,36 @@ in
     ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0004", SYMLINK+="kindle"
     ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0003", SYMLINK+="kindledx"
 
+    # HTC Vive HID Sensor naming and permissioning
+
+    # vive hmd
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="2c87", TAG+="uaccess"
+
+    # vive controller
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="2101", TAG+="uaccess"
+
+    # vive lighthouse
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="2000", TAG+="uaccess"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1043", TAG+="uaccess"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="2050", TAG+="uaccess"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="2011", TAG+="uaccess"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="2012", TAG+="uaccess"
+
+    # vive audio
+    KERNEL=="hidraw*", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0012", MODE="0666"
+
+
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="0bb4", ATTRS{idProduct}=="2c87", TAG+="uaccess"
+    # HTC Camera USB Node
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="114d", ATTRS{idProduct}=="8328", TAG+="uaccess"
+    # HTC Mass Storage Node
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="114d", ATTRS{idProduct}=="8200", TAG+="uaccess"
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="114d", ATTRS{idProduct}=="8a12", TAG+="uaccess"
+
+
   '';
+
+  hardware.opengl.enable = true;
 
   services.xserver = {
     enable = true;
@@ -140,7 +203,7 @@ in
     windowManager = {
       xmonad = {
         enable = true;
-        enableContribAndExtras = false;
+        enableContribAndExtras = true;
       };
       default = "xmonad";
     };

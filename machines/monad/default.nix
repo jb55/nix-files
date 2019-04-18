@@ -24,33 +24,80 @@ in
 {
   imports = [
     ./hardware
+    ./bitcoin.nix
+    #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
   ];
 
 
+
+
+  services.dnsmasq.enable = true;
+  services.dnsmasq.resolveLocalQueries = true;
+  services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
+  services.dnsmasq.extraConfig = ''
+    cache-size=10000
+    addn-hosts=/var/hosts
+    conf-file=/var/dnsmasq-hosts
+    conf-file=/var/distracting-hosts
+  '';
+
+
+  systemd.services.block-distracting-hosts = {
+    description = "Block Distracting Hosts";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ systemd procps ];
+
+    serviceConfig.ExecStart = util.writeBash "block-distracting-hosts" ''
+      set -e
+      cp /var/undistracting-hosts /var/distracting-hosts
+
+      # crude way to clear the cache...
+      systemctl restart dnsmasq
+      pkill qutebrowser
+    '';
+
+    startAt = "Mon..Fri *-*-* 09:00:00";
+  };
+
+
+  systemd.services.unblock-distracting-hosts = {
+    description = "Unblock Distracting Hosts";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ systemd ];
+
+    serviceConfig.ExecStart = util.writeBash "unblock-distracting-hosts" ''
+      set -e
+      echo "" > /var/distracting-hosts
+      systemctl restart dnsmasq
+    '';
+
+    startAt = "Mon..Fri *-*-* 17:00:00";
+  };
+
+
   virtualisation.virtualbox.host.enable = true;
-  virtualization.virtualbox.host.enableHardening = false;
+  virtualisation.virtualbox.host.enableHardening = true;
+  #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidiaBeta" ];
+
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.nginx.members = [ "jb55" ];
+  users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
-  programs.mosh.enable = true;
+  programs.mosh.enable = false;
 
-  # services.bitcoin.enable = true;
-  # services.bitcoin.enableTestnet = true;
-
-  # services.bitcoin.config = ''
-  #   datadir=/zbig/bitcoin
-  #   txindex=1
-  # '';
-
-  # services.bitcoin.testnetConfig = ''
-  #   datadir=/zbig/bitcoin
-  # '';
+  documentation.nixos.enable = false;
 
   services.trezord.enable = true;
   services.redis.enable = false;
@@ -59,6 +106,7 @@ in
 
   services.tor.enable = true;
   services.tor.controlPort = 9051;
+  services.tor.client.enable = true;
   services.tor.extraConfig = extra.private.tor.extraConfig;
 
   services.fcgiwrap.enable = true;
@@ -78,6 +126,19 @@ in
           try_files $uri $uri/ =404;
         }
       }
+
+      server {
+        listen 80;
+        server_name matrix.monad;
+
+        root ${pkgs.riot-web};
+        index index.html index.htm;
+        location / {
+
+          try_files $uri $uri/ =404;
+        }
+      }
+
     '' + (if config.services.nix-serve.enable then ''
       server {
         listen ${nix-serve.bindAddress}:80;
@@ -117,7 +178,7 @@ in
   services.postgresql = {
     dataDir = "/var/db/postgresql/100/";
     enable = true;
-    package = pkgs.postgresql100;
+    package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method

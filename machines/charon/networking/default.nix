@@ -6,7 +6,7 @@ let
 in
 {
   services.openssh.gatewayPorts = "yes";
-  networking.firewall.allowedTCPPorts = [ 22 443 80 12566 12788 5222 5269 3415 ];
+  networking.firewall.allowedTCPPorts = [ 22 443 80 70 12566 12788 5222 5269 3415  ];
   networking.firewall.trustedInterfaces = ["zt0"];
   networking.domain = "jb55.com";
   networking.search = [ "jb55.com" ];

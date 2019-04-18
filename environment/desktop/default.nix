@@ -27,7 +27,6 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    chromium
     clipit
     clipmenu
     dmenu2
@@ -35,33 +34,32 @@ in {
     dynamic-colors
     emacs
     feh
-    gnome3.eog
     gnome3.gnome-calculator
     gtk-engine-murrine
     icon-theme.package
+    lastpass-cli
     libnotify
-    mimeo
     msmtp
     muchsync
     notmuch
     pandoc
     pavucontrol
     qalculate-gtk
+    qutebrowser
     rxvt_unicode-with-plugins
-    scrot
     shared_mime_info
     signal-desktop
     simplescreenrecorder
     skypeforlinux
     slock
     spotify
-    texlive.combined.scheme-basic
+    texlive.combined.scheme-full
     theme.package
     twmn
     userConfig
     vlc
     w3m
-    weechat
+    wmctrl
     x11vnc
     xautolock
     xbindkeys
