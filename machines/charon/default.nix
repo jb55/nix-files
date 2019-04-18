@@ -14,7 +14,7 @@ let gitExtra = {
       owner  = "jb55";
       repo   = "npm-repo-proxy";
       rev    = "f99f1336ffb6c7ee85a0076ba3a0d31e0168ef8a";
-      sha256 = "1knrzadnlcvd779da269njhs3psf5mjbbpf95axcc02rya01fqzd";
+      sha256 = "13kahl301dgp8akga7g5ggn9y968p6vpy36ghccbj4ra6ch30qwn";
     }) {}).package;
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
