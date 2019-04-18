@@ -384,6 +384,9 @@ in
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
       location / {
+        gzip on;
+        gzip_types application/json;
+
         error_page 418 = @jb55activity;
 
         if ( $http_accept ~ "application/activity\+json" ) { return 418; }
