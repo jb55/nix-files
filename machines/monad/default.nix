@@ -25,31 +25,67 @@ in
   imports = [
     ./hardware
     ./bitcoin.nix
-    (import ../../misc/dnsmasq-adblock.nix)
+    #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
   ];
 
-  #virtualisation.docker.enable = false;
 
-  # services.sourcehut.enable = true;
-  # services.sourcehut.services = ["git" "lists" "todo"];
-  # services.sourcehut.site.name = "jb55";
-  # services.sourcehut.site.info = "https://code.jb55.com";
-  # services.sourcehut.site.blurb = "jb55's code";
-  # services.sourcehut.owner.name = "jb55";
-  # services.sourcehut.owner.email = "jb55@jb55.com";
-  # services.sourcehut.secretKey = extra.private.jb55code.secret;
-  # services.sourcehut.server.protocol = "http";
-  # services.sourcehut.mail.host = "jb55.com";
-  # services.sourcehut.mail.port = 12566;
-  # services.sourcehut.mail.user = "jb55@jb55.com";
-  # services.sourcehut.mail.user = extra.private.
+
+
+  services.dnsmasq.enable = true;
+  services.dnsmasq.resolveLocalQueries = true;
+  services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
+  services.dnsmasq.extraConfig = ''
+    cache-size=10000
+    addn-hosts=/var/hosts
+    conf-file=/var/dnsmasq-hosts
+    conf-file=/var/distracting-hosts
+  '';
+
+
+  systemd.services.block-distracting-hosts = {
+    description = "Block Distracting Hosts";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ systemd procps ];
+
+    serviceConfig.ExecStart = util.writeBash "block-distracting-hosts" ''
+      set -e
+      cp /var/undistracting-hosts /var/distracting-hosts
+
+      # crude way to clear the cache...
+      systemctl restart dnsmasq
+      pkill qutebrowser
+    '';
+
+    startAt = "Mon..Fri *-*-* 09:00:00";
+  };
+
+
+  systemd.services.unblock-distracting-hosts = {
+    description = "Unblock Distracting Hosts";
+
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ systemd ];
+
+    serviceConfig.ExecStart = util.writeBash "unblock-distracting-hosts" ''
+      set -e
+      echo "" > /var/distracting-hosts
+      systemctl restart dnsmasq
+    '';
+
+    startAt = "Mon..Fri *-*-* 17:00:00";
+  };
 
 
   virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableHardening = false;
+  virtualisation.virtualbox.host.enableHardening = true;
   #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
 
@@ -59,7 +95,7 @@ in
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
-  programs.mosh.enable = true;
+  programs.mosh.enable = false;
 
   documentation.nixos.enable = false;
 
@@ -97,6 +133,7 @@ in
         root ${pkgs.riot-web};
         index index.html index.htm;
         location / {
+
           try_files $uri $uri/ =404;
         }
       }

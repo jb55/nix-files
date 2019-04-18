@@ -57,25 +57,25 @@ in {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "notmuch";
-        rev    = "26bc7f4ffe713590ebf28f62343015bc871b9d18";
-        sha256 = "1yrnpj6n4cfm1ri0ns0vbflvxk12z0vv1svdx1wdcad86cvaz12i";
+        rev    = "adcc427b8356cca865479b433d4be362b1f50e38";
+        sha256 = "14l95hld7gs42p890a9r8dfw4m945iy2sf9bdyajs2yqjwmarwn7";
       };
 
       doCheck = false;
     });
 
-    wirelesstools =
-      let
-        patch = super.fetchurl {
-                  url    = "https://jb55.com/s/iwlist-print-scanning-info-allocation-failed.patch";
-                  sha256 = "31c97c6abf3f0073666f9f94f233fae2fcb8990aae5e7af1030af980745a8efc";
-                };
-      in
-        pkgs.lib.overrideDerivation super.wirelesstools (attrs: {
-          prePatch = ''
-            patch -p0 < ${patch}
-          '';
-        });
+    # wirelesstools =
+    #   let
+    #     patch = super.fetchurl {
+    #               url    = "https://jb55.com/s/iwlist-print-scanning-info-allocation-failed.patch";
+    #               sha256 = "31c97c6abf3f0073666f9f94f233fae2fcb8990aae5e7af1030af980745a8efc";
+    #             };
+    #   in
+    #     pkgs.lib.overrideDerivation super.wirelesstools (attrs: {
+    #       prePatch = ''
+    #         patch -p0 < ${patch}
+    #       '';
+    #     });
 
     dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
       patches =
@@ -278,7 +278,7 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      (doJailbreak pandoc-lens)
+      #(doJailbreak pandoc-lens)
       (dontCheck (doJailbreak serialise))
       Boolean
       Decimal

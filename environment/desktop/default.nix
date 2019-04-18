@@ -59,7 +59,7 @@ in {
     userConfig
     vlc
     w3m
-    weechat
+    wmctrl
     x11vnc
     xautolock
     xbindkeys
@@ -70,7 +70,6 @@ in {
     xlibs.xmodmap
     xlibs.xset
     zathura
-    wmctrl
   ];
 
   security.wrappers = {

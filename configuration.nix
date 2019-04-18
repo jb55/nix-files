@@ -60,7 +60,7 @@ in {
       (import (machinePath "") extra)
     ] ++ (if isDesktop then [
       ./hardware/desktop
-      ./wayland
+      #./wayland
       ./fonts
       (import ./environment/desktop { inherit userConfig theme icon-theme; })
       (import ./services/desktop { inherit extra util composeKey userConfig theme icon-theme; })
