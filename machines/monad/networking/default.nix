@@ -43,6 +43,21 @@ in
     openFirewall = true;
   };
 
+  services.xinetd.enable = true;
+  services.xinetd.services =
+  [
+    { name = "gopher";
+      port = 70;
+      server = "${pkgs.gophernicus}/bin/in.gophernicus";
+      serverArgs = "-nf -r /var/gopher";
+      extraConfig = ''
+        disable = no
+        env = PATH=${pkgs.coreutils}/bin:${pkgs.curl}/bin
+        passenv = PATH
+      '';
+    }
+  ];
+
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {
       listen 80;
