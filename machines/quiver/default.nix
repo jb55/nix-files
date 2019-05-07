@@ -103,6 +103,44 @@ extra:
     '';
   };
 
+  systemd.services.blink-led-battery-low = {
+    description = "blink power led when battery is low";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ gnused acpi ];
+
+    serviceConfig.ExecStart = extra.util.writeBash "battery-power" ''
+      set -e
+
+      LED=/sys/class/leds/tpacpi::power
+
+      # led will start blinking below this battery %
+      limit=10
+
+      state=""
+
+      while true
+      do
+          percent=$(acpi -b | sed -E -n 's/.* ([0-9]+)%.*/\1/p')
+
+          if [ $percent -lt $limit ] && [ "$state" != "heartbeat" ]
+          then
+              printf "battery %d%% < %d%%, setting heartbeat trigger\n" "$percent" "$limit" >&2
+              echo heartbeat > "$LED"/trigger
+              state="heartbeat"
+          elif [ $percent -ge $limit ] && [ "$state" = "heartbeat" ]
+          then
+              printf "battery %d%% >= %d%%, resetting led trigger\n" "$percent" "$limit" >&2
+              echo none > "$LED"/trigger
+              cat "$LED"/max_brightness > "$LED"/brightness
+              state=""
+          fi
+          sleep 10
+      done
+    '';
+  };
+
   services.hydra.enable = false;
   services.hydra.dbi = "dbi:Pg:dbname=hydra;host=localhost;user=postgres;";
   services.hydra.hydraURL = "localhost";
