@@ -16,7 +16,7 @@ in
   networking.hostId = extra.machine.hostId;
 
   networking.firewall.trustedInterfaces = ["zt1"];
-  networking.firewall.allowedTCPPorts = [ 5432 9735 9736 80 53 ];
+  networking.firewall.allowedTCPPorts = [ 5000 5432 9735 9736 80 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
 
   networking.firewall.extraCommands = ''
