@@ -65,6 +65,15 @@ in
     startAt = "Mon..Fri *-*-* 09:00:00";
   };
 
+  systemd.user.services.stop-spotify-bedtime = {
+    enable      = true;
+    description = "Stop spotify when Elliott goes to bed";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.dbus}/bin/dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop";
+
+    startAt = "*-*-* 19:30:00";
+  };
 
   systemd.services.unblock-distracting-hosts = {
     description = "Unblock Distracting Hosts";
