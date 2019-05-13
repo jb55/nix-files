@@ -27,6 +27,7 @@ extra:
   services.zerotierone.enable = true;
   services.mongodb.enable = false;
   services.redis.enable = false;
+  services.keybase.enable = true;
 
   services.xinetd.enable = true;
   services.xinetd.services = [
