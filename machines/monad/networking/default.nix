@@ -24,6 +24,7 @@ in
     ${openTCP "ztrtaygmfr" 6532}
     ${openTCP "ztrtaygmfr" 7878}
     ${openTCP "ztrtaygmfr" 7879}
+    ${openTCP "ztrtaygmfr" 50001}
   '';
 
   services.transmission = {
