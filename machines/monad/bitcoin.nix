@@ -1,5 +1,11 @@
 { config, lib, pkgs, ... }:
+
+let
+  bitcoinDataDir = "/zbig/bitcoin";
+
+in
 {
+
   services.spruned = {
     enable = false;
     dataDir = "/zbig/spruned";
@@ -9,7 +15,7 @@
 
   services.bitcoind.networks = {
     mainnet = {
-      dataDir = "/zbig/bitcoin";
+      dataDir = bitcoinDataDir;
       extraConfig = ''
         txindex=1
         rpcuser=rpcuser
@@ -18,45 +24,46 @@
         rpcallowip=127.0.0.1
         rpcbind=172.24.242.111
         rpcbind=127.0.0.1
-        rpcport=6532
+        rpcbind=[::1]
+        rpcport=8332
       '';
     };
 
-    testnet = {
-      testnet = true;
-      dataDir = "/zbig/bitcoin-testnet";
-      extraConfig = ''
-        [test]
-        txindex=1
-        rpcuser=rpcuser
-        rpcpassword=rpcpass
-        rpcallowip=172.24.129.211
-        rpcallowip=127.0.0.1
-        rpcbind=172.24.242.111
-        rpcbind=127.0.0.1
-        rpcport=6533
-      '';
-    };
+    # testnet = {
+    #   testnet = true;
+    #   dataDir = "/zbig/bitcoin-testnet";
+    #   extraConfig = ''
+    #     [test]
+    #     txindex=1
+    #     rpcuser=rpcuser
+    #     rpcpassword=rpcpass
+    #     rpcallowip=172.24.129.211
+    #     rpcallowip=127.0.0.1
+    #     rpcbind=172.24.242.111
+    #     rpcbind=127.0.0.1
+    #     rpcport=6533
+    #   '';
+    # };
   };
 
   services.clightning.networks = {
-    testnet = {
-      dataDir = "/home/jb55/.lightning";
+    # testnet = {
+    #   dataDir = "/home/jb55/.lightning";
 
-      config = ''
-        fee-per-satoshi=9000
-        bitcoin-rpcuser=rpcuser
-        bitcoin-rpcpassword=rpcpass
-        bitcoin-rpcconnect=127.0.0.1
-        bitcoin-rpcport=6533
-        bind-addr=0.0.0.0:9736
-        announce-addr=24.84.152.187:9736
-        network=testnet
-        log-level=debug
-        alias=bitsbacker.com
-        rgb=ff0000
-      '';
-    };
+    #   config = ''
+    #     fee-per-satoshi=9000
+    #     bitcoin-rpcuser=rpcuser
+    #     bitcoin-rpcpassword=rpcpass
+    #     bitcoin-rpcconnect=127.0.0.1
+    #     bitcoin-rpcport=6533
+    #     bind-addr=0.0.0.0:9736
+    #     announce-addr=24.84.152.187:9736
+    #     network=testnet
+    #     log-level=debug
+    #     alias=bitsbacker.com
+    #     rgb=ff0000
+    #   '';
+    # };
 
     mainnet = {
       dataDir = "/home/jb55/.lightning-bitcoin";
@@ -65,7 +72,7 @@
         bitcoin-rpcuser=rpcuser
         bitcoin-rpcpassword=rpcpass
         bitcoin-rpcconnect=127.0.0.1
-        bitcoin-rpcport=6532
+        bitcoin-rpcport=8332
         fee-per-satoshi=900
         bind-addr=0.0.0.0:9735
         announce-addr=24.84.152.187:9735
@@ -77,15 +84,20 @@
     };
   };
 
-  systemd.user.services.clightning-testnet-rpc-tunnel = {
-    description = "clightning testnet rpc tunnel";
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
+  # systemd.user.services.clightning-testnet-rpc-tunnel = {
+  #   description = "clightning testnet rpc tunnel";
+  #   wantedBy = [ "default.target" ];
+  #   after    = [ "default.target" ];
 
-    serviceConfig.ExecStart = ''
-      ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7879,fork,reuseaddr UNIX-CONNECT:/home/jb55/.lightning/lightning-rpc
-    '';
-  };
+  #   serviceConfig.ExecStart = ''
+  #     ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7879,fork,reuseaddr UNIX-CONNECT:/home/jb55/.lightning/lightning-rpc
+  #   '';
+  # };
+
+  services.electrs.enable = true;
+  services.electrs.dataDir = "/zbig/electrs";
+  services.electrs.bitcoinDataDir = bitcoinDataDir;
+  services.electrs.high-memory = true;
 
   systemd.user.services.clightning-rpc-tunnel = {
     description = "clightning mainnet rpc tunnel";

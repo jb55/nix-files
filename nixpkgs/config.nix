@@ -29,19 +29,12 @@ in {
       pkgs.urweb
     ]);
 
-    # steam = super.steam.override {
-    #   nativeOnly = true;
-    #   extraPkgs = pkgs: with pkgs; [
-    #     usbutils
-    #     sysvtools
-    #     qt5.qtbase
-    #     qt5.qtmultimedia
-    #   ];
-    # };
-
-    # qutebrowser = pkgs.lib.overrideDerivation super.qutebrowser (attrs: {
-    #   src = /home/jb55/dev/github/qutebrowser/qutebrowser;
-    # });
+    electrs = (import (pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "electrs";
+      rev = "e3bed69c17dac1af1be34d18e5be2c815c20838c";
+      sha256 = "0dqz872xiagpvk139xdfn46j5gn5njdk9qf50nq29x2flh81y1ya";
+    }) { inherit pkgs; }).rootCrate.build;
 
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
@@ -68,7 +61,7 @@ in {
       rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
     }) {};
 
-    jb55-dotfiles = regularFiles <dotfiles>;
+    #jb55-dotfiles = regularFiles <dotfiles>;
 
     notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
       src = pkgs.fetchFromGitHub {

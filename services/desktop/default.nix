@@ -23,7 +23,7 @@ in
 
   programs.gnupg.trezor-agent = {
     enable = true;
-    configPath = "/home/jb55/.gnupg/trezor";
+    configPath = "/home/jb55/.gnupg";
   };
 
   services.emacs.enable = true;
@@ -255,13 +255,13 @@ in
   };
 
   # TODO: maybe doesn't have my package env
-  systemd.user.services.xbindkeys = {
-    enable      = true;
-    description = "X key bind helper";
-    wantedBy    = [ "graphical-session.target" ];
-    after       = [ "graphical-session.target" ];
-    serviceConfig.ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
-  };
+  # systemd.user.services.xbindkeys = {
+  #   enable      = true;
+  #   description = "X key bind helper";
+  #   wantedBy    = [ "graphical-session.target" ];
+  #   after       = [ "graphical-session.target" ];
+  #   serviceConfig.ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
+  # };
 
   # TODO: maybe doesn't have my package env
   systemd.user.services.twmnd = {

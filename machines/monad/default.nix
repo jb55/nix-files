@@ -20,6 +20,7 @@ let util = extra.util;
 
       ) 200>/tmp/email-notify.lock
     '';
+
 in
 {
   imports = [
@@ -32,8 +33,6 @@ in
   ];
 
 
-
-
   services.dnsmasq.enable = true;
   services.dnsmasq.resolveLocalQueries = true;
   services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
@@ -44,6 +43,7 @@ in
     conf-file=/var/distracting-hosts
   '';
 
+  services.keybase.enable = true;
 
   systemd.services.block-distracting-hosts = {
     description = "Block Distracting Hosts";
@@ -101,6 +101,7 @@ in
   services.xserver.videoDrivers = [ "nvidiaBeta" ];
 
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
+  users.extraGroups.bitcoin.members = [ "jb55" ];
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 

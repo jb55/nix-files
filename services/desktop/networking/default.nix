@@ -168,11 +168,11 @@ in
 
   systemd.services.transmission.requires = [ "openvpn-pia.service" ];
   systemd.services.transmission.after    = [ "openvpn-pia.service" ];
-  #systemd.services.transmission.serviceConfig.User = lib.mkForce "root";
+  systemd.services.transmission.serviceConfig.User = lib.mkForce "root";
   systemd.services.transmission.serviceConfig.ExecStart = lib.mkForce (
     writeBash "start-transmission-under-vpn" ''
       ${pkgs.libcgroup}/bin/cgexec --sticky -g net_cls:pia \
-      #${pkgs.sudo}/bin/sudo -u transmission \
+      ${pkgs.sudo}/bin/sudo -u transmission \
       ${pkgs.transmission}/bin/transmission-daemon \
         -f \
         --port ${toString config.services.transmission.port};
