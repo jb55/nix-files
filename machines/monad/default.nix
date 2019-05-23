@@ -96,7 +96,7 @@ in
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = true;
   #virtualization.virtualbox.host.enableExtensionPack = true;
-  users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" ];
 
   services.xserver.videoDrivers = [ "nvidiaBeta" ];
 
