@@ -102,6 +102,11 @@ in {
           { url = "https://jb55.com/s/htop-vim.patch";
             sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
           })
+
+          (super.fetchurl
+          { url = "https://jb55.com/s/0001-Improving-Command-display-sort.patch";
+            sha256 = "2207dccce7f9de0c3c6f56d846d7e547c96f63c8a4659ef46ef90c3bd9a013d1";
+          })
         ];
     });
 
@@ -244,6 +249,7 @@ in {
         diffutils
         gist
         # git-lfs
+        git-series
         gitAndTools.diff-so-fancy
         gitAndTools.git-imerge
         gitAndTools.git-extras

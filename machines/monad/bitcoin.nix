@@ -148,10 +148,10 @@ in
   #   '';
   # };
 
-  services.electrs.enable = true;
-  services.electrs.dataDir = "/zbig/electrs";
-  services.electrs.bitcoinDataDir = bitcoinDataDir;
-  services.electrs.high-memory = true;
+  # services.electrs.enable = true;
+  # services.electrs.dataDir = "/zbig/electrs";
+  # services.electrs.bitcoinDataDir = bitcoinDataDir;
+  # services.electrs.high-memory = true;
 
   systemd.user.services.clightning-rpc-tunnel = {
     description = "clightning mainnet rpc tunnel";
