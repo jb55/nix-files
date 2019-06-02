@@ -98,7 +98,7 @@ in
   #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" ];
 
-  services.xserver.videoDrivers = [ "nouveau" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
   users.extraGroups.bitcoin.members = [ "jb55" ];
