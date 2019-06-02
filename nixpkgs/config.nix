@@ -1,7 +1,7 @@
 { pkgs }:
 let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
-    jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
+    jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     callPackage = pkgs.callPackage;
     doJailbreak = pkgs.haskell.lib.doJailbreak;
     dontCheck = pkgs.haskell.lib.dontCheck;
@@ -28,6 +28,8 @@ in {
     emacs = super.emacsWithPackages (ep: with ep; [
       pkgs.urweb
     ]);
+
+    bcalc = jb55pkgs.bcalc;
 
     electrs = (import (pkgs.fetchFromGitHub {
       owner = "jb55";

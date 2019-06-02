@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
+let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     kindle-send = pkgs.callPackage (pkgs.fetchFromGitHub {
       owner = "jb55";
       repo = "kindle-send";
