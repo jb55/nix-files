@@ -219,8 +219,8 @@ in
   systemd.user.services.urxvtd = {
     enable = true;
     description = "RXVT-Unicode Daemon";
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
+    wantedBy = [ "graphical-session.target" ];
+    after    = [ "graphical-session.target" ];
     path = [ pkgs.rxvt_unicode-with-plugins ];
     serviceConfig = {
       Restart = "always";

@@ -48,9 +48,6 @@ in
   systemd.services.block-distracting-hosts = {
     description = "Block Distracting Hosts";
 
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
-
     path = with pkgs; [ systemd procps ];
 
     serviceConfig.ExecStart = util.writeBash "block-distracting-hosts" ''
@@ -77,9 +74,6 @@ in
 
   systemd.services.unblock-distracting-hosts = {
     description = "Unblock Distracting Hosts";
-
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
 
     path = with pkgs; [ systemd ];
 
