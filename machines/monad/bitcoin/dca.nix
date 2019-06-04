@@ -15,7 +15,7 @@ pair=''${BTCDCA_PAIR:-XXBTZCAD}
 keybaseto=''${BTCDCA_KEYBASETO:-${to}}
 
 price=$(${pkgs.curl}/bin/curl -sL "https://api.kraken.com/0/public/Ticker?pair=$pair" | ${pkgs.jq}/bin/jq -r ".result.$pair.a[0]")
-invid=$(dd if=/dev/urandom bs=1 count=6 | ${pkgs.xxd}/bin/xxd -p | ${pkgs.libbitcoin-explorer}/bin/bx base58-encode)
+invid=$(dd if=/dev/urandom bs=1 count=4 | ${pkgs.xxd}/bin/xxd -p | ${pkgs.libbitcoin-explorer}/bin/bx base58-encode)
 
 address=${addr}
 
