@@ -31,7 +31,11 @@ let
   base-bitcoin-conf-file = pkgs.writeText "bitcoin-base.conf" base-bitcoin-conf;
   bitcoin-conf-file = pkgs.writeText "bitcoin.conf" bitcoin-conf;
 
-  dca = import ./dca.nix { inherit pkgs bcli; to = "jb55 ${extra.private.btc-supplier}"; };
+  dca = import ./dca.nix {
+    inherit pkgs bcli;
+    to = "jb55 ${extra.private.btc-supplier}";
+    addr = extra.private.btc-supplier-addr;
+  };
   walletemail = import ./walletemail.nix { inherit pkgs bcli; };
 in
 {

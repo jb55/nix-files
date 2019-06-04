@@ -1,4 +1,4 @@
-{ pkgs, to, bcli }:
+{ pkgs, to, bcli, addr }:
 
 pkgs.writeScript "dca"
 ''
@@ -17,7 +17,7 @@ keybaseto=''${BTCDCA_KEYBASETO:-${to}}
 price=$(${pkgs.curl}/bin/curl -sL "https://api.kraken.com/0/public/Ticker?pair=$pair" | ${pkgs.jq}/bin/jq -r ".result.$pair.a[0]")
 invid=$(dd if=/dev/urandom bs=1 count=6 | ${pkgs.xxd}/bin/xxd -p | ${pkgs.libbitcoin-explorer}/bin/bx base58-encode)
 
-address=$(${bcli} -rpcwallet=$wallet getnewaddress "$invid" bech32)
+address=${addr}
 
 satsdec=$(${pkgs.bcalc}/bin/bcalc -n --price $price $amount fiat to sats)
 sats=''${satsdec%.*}
