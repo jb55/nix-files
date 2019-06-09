@@ -19,7 +19,7 @@ time="$(date -d @$(${pkgs.jq}/bin/jq -r .blocktime <<<"$tx"))"
 
 export GNUPGHOME=/zbig/bitcoin/gpg
 
-details="$(${pkgs.jq}/bin/jq -r '["amount","address","category"],(.details[] | [.amount, .address, .category]) | @tsv' | ${pkgs.utillinux}/bin/column -t -s $'\t')"
+details="$(${pkgs.jq}/bin/jq -r '["amount","address","category"],(.details[] | [.amount, .address, .category]) | @tsv' <<<"$tx" | ${pkgs.utillinux}/bin/column -t -s $'\t')"
 
 keypath="${pkgs.jq}/bin/jq -r .hdkeypath <<<"$tx")"
 
