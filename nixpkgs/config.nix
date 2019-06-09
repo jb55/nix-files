@@ -384,6 +384,7 @@ in {
       optparse-generic
       pandoc
       parsec
+      megaparsec
       parsers
       pcg-random
       persistent
