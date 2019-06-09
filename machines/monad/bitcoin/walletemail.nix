@@ -15,8 +15,18 @@ keys="-r 0x8860420C3C135662EABEADF96342E010C44A6337 -r 0x5B2B1E4F62216BC74362AC6
 
 tx="$(${bcli} -rpcwallet=$wallet gettransaction "$txid" true)"
 
+time="$(date -d @$(${pkgs.jq}/bin/jq -r .blocktime <<<"$tx"))"
+
 export GNUPGHOME=/zbig/bitcoin/gpg
-enctx="$(printf "Content-Type: text/plain\n\n%s\n" "$tx" | ${pkgs.gnupg}/bin/gpg --yes --always-trust --encrypt --armor $keys)"
+
+details="$(${pkgs.jq}/bin/jq -r '["amount","address","category"],(.details[] | [.amount, .address, .category]) | @tsv' | ${pkgs.utillinux}/bin/column -t -s $'\t')"
+
+keypath="${pkgs.jq}/bin/jq -r .hdkeypath <<<"$tx")"
+
+msg="$(printf "txid: %s\nwallet: %s\ndate: %s\nkeypath: %s\n\ndetails: %s\n" \
+              "$txid"            "$wallet" "$time"      "$keypath"     "$details")"
+
+enctx="$(printf "Content-Type: text/plain\n\n%s\n" "$msg" | ${pkgs.gnupg}/bin/gpg --yes --always-trust --encrypt --armor $keys)"
 
 {
 cat <<EOF
