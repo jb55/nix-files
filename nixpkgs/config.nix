@@ -29,6 +29,11 @@ in {
       pkgs.urweb
     ]);
 
+    weechat = super.weechat.override {configure = {availablePlugins, ...}: {
+        scripts = with super.weechatScripts; [ wee-slack ];
+      };
+    };
+
     bcalc = jb55pkgs.bcalc;
 
     electrs = (import (pkgs.fetchFromGitHub {
