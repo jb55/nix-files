@@ -411,17 +411,6 @@ in
          try_files ${webfinger} =404;
       }
 
-      location /paste/ {
-        proxy_max_temp_file_size 0;
-        client_max_body_size 0;
-        proxy_request_buffering off;
-        proxy_buffering off;
-        proxy_http_version 1.1;
-        proxy_pass http://127.0.0.1:${httpipePort}/;
-
-        add_header X-Content-Type-Options nosniff;
-      }
-
       location /cal/ {
         proxy_pass        http://127.0.0.1:5232/;
         proxy_set_header  X-Script-Name /cal;
