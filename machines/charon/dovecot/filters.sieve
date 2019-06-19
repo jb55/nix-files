@@ -120,6 +120,10 @@ if allof (header :contains "list-id" "icnrg.irtf.org") {
 	fileinto "Lists.icn";
 }
 
+if allof (header :contains "list-id" "lists.freedesktop.org") {
+    fileinto "Lists.lkml";
+}
+
 # rule:[ICN]
 if allof (header :contains "list-id" "ccnx.ccnx.org") {
 	fileinto "Lists.icn";
