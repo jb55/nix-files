@@ -32,6 +32,9 @@ in
     (import ../../misc/imap-notifier extra)
   ];
 
+  services.bitlbee.enable = true;
+  services.bitlbee.libpurple_plugins = with pkgs; [ pidgin-skypeweb ];
+  services.bitlbee.plugins = with pkgs; [ bitlbee-discord ];
 
   services.dnsmasq.enable = true;
   services.dnsmasq.resolveLocalQueries = true;
