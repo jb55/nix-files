@@ -6,7 +6,7 @@
 , machineSessionCommands ? ""
 }:
 let
-  dotfiles = pkgs.jb55-dotfiles;
+  #dotfiles = pkgs.jb55-dotfiles;
   bgimg = fetchurl {
     url = "http://jb55.com/img/haskell-space.jpg";
     sha256 = "e08d82e184f34e6a6596faa2932ea9699da9b9a4fbbd7356c344e9fb90473482";
@@ -36,7 +36,6 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     echo "user config at '$out'"
-    # ln -s "${dotfiles}" $out/dotfiles
     cp "${xinitrc}" $out/bin/xinitrc
     cp "${xinitrc-refresh}" $out/bin/xinitrc-refresh
     ln -s $out/bin/xinitrc $out/.xinitrc

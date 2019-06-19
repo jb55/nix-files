@@ -16,7 +16,7 @@ in
   networking.hostId = extra.machine.hostId;
 
   networking.firewall.trustedInterfaces = ["zt1"];
-  networking.firewall.allowedTCPPorts = [ 5432 9735 9736 80 53 ];
+  networking.firewall.allowedTCPPorts = [ 5000 5432 9735 9736 80 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
 
   networking.firewall.extraCommands = ''
@@ -24,6 +24,7 @@ in
     ${openTCP "ztrtaygmfr" 6532}
     ${openTCP "ztrtaygmfr" 7878}
     ${openTCP "ztrtaygmfr" 7879}
+    ${openTCP "ztrtaygmfr" 50001}
   '';
 
   services.transmission = {
@@ -42,6 +43,21 @@ in
     group = "transmission";
     openFirewall = true;
   };
+
+  services.xinetd.enable = true;
+  services.xinetd.services =
+  [
+    { name = "gopher";
+      port = 70;
+      server = "${pkgs.gophernicus}/bin/in.gophernicus";
+      serverArgs = "-nf -r /var/gopher";
+      extraConfig = ''
+        disable = no
+        env = PATH=${pkgs.coreutils}/bin:${pkgs.curl}/bin
+        passenv = PATH
+      '';
+    }
+  ];
 
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {

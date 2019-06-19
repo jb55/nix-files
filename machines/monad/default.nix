@@ -20,19 +20,21 @@ let util = extra.util;
 
       ) 200>/tmp/email-notify.lock
     '';
+
 in
 {
   imports = [
     ./hardware
-    ./bitcoin.nix
+    (import ./bitcoin extra)
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
   ];
 
-
-
+  services.bitlbee.enable = true;
+  services.bitlbee.libpurple_plugins = with pkgs; [ pidgin-skypeweb ];
+  services.bitlbee.plugins = with pkgs; [ bitlbee-discord ];
 
   services.dnsmasq.enable = true;
   services.dnsmasq.resolveLocalQueries = true;
@@ -44,12 +46,10 @@ in
     conf-file=/var/distracting-hosts
   '';
 
+  services.keybase.enable = true;
 
   systemd.services.block-distracting-hosts = {
     description = "Block Distracting Hosts";
-
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
 
     path = with pkgs; [ systemd procps ];
 
@@ -65,12 +65,18 @@ in
     startAt = "Mon..Fri *-*-* 09:00:00";
   };
 
+  systemd.user.services.stop-spotify-bedtime = {
+    enable      = true;
+    description = "Stop spotify when Elliott goes to bed";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.dbus}/bin/dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop";
+
+    startAt = "*-*-* 19:30:00";
+  };
 
   systemd.services.unblock-distracting-hosts = {
     description = "Unblock Distracting Hosts";
-
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
 
     path = with pkgs; [ systemd ];
 
@@ -87,11 +93,12 @@ in
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = true;
   #virtualization.virtualbox.host.enableExtensionPack = true;
-  users.extraUsers.jb55.extraGroups = [ "vboxusers" ];
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" ];
 
-  services.xserver.videoDrivers = [ "nvidiaBeta" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   users.extraGroups.tor.members = [ "jb55" "nginx" ];
+  users.extraGroups.bitcoin.members = [ "jb55" ];
   users.extraGroups.nginx.members = [ "jb55" ];
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 

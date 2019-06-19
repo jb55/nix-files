@@ -1,7 +1,7 @@
 { pkgs }:
 let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
-    jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
+    jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     callPackage = pkgs.callPackage;
     doJailbreak = pkgs.haskell.lib.doJailbreak;
     dontCheck = pkgs.haskell.lib.dontCheck;
@@ -29,19 +29,19 @@ in {
       pkgs.urweb
     ]);
 
-    # steam = super.steam.override {
-    #   nativeOnly = true;
-    #   extraPkgs = pkgs: with pkgs; [
-    #     usbutils
-    #     sysvtools
-    #     qt5.qtbase
-    #     qt5.qtmultimedia
-    #   ];
-    # };
+    weechat = super.weechat.override {configure = {availablePlugins, ...}: {
+        scripts = with super.weechatScripts; [ wee-slack ];
+      };
+    };
 
-    # qutebrowser = pkgs.lib.overrideDerivation super.qutebrowser (attrs: {
-    #   src = /home/jb55/dev/github/qutebrowser/qutebrowser;
-    # });
+    bcalc = jb55pkgs.bcalc;
+
+    electrs = (import (pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo = "electrs";
+      rev = "e3bed69c17dac1af1be34d18e5be2c815c20838c";
+      sha256 = "0dqz872xiagpvk139xdfn46j5gn5njdk9qf50nq29x2flh81y1ya";
+    }) { inherit pkgs; }).rootCrate.build;
 
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
@@ -68,7 +68,7 @@ in {
       rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
     }) {};
 
-    jb55-dotfiles = regularFiles <dotfiles>;
+    #jb55-dotfiles = regularFiles <dotfiles>;
 
     notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
       src = pkgs.fetchFromGitHub {
@@ -108,6 +108,11 @@ in {
         [ (super.fetchurl
           { url = "https://jb55.com/s/htop-vim.patch";
             sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
+          })
+
+          (super.fetchurl
+          { url = "https://jb55.com/s/0001-Improving-Command-display-sort.patch";
+            sha256 = "2207dccce7f9de0c3c6f56d846d7e547c96f63c8a4659ef46ef90c3bd9a013d1";
           })
         ];
     });
@@ -251,6 +256,7 @@ in {
         diffutils
         gist
         # git-lfs
+        git-series
         gitAndTools.diff-so-fancy
         gitAndTools.git-imerge
         gitAndTools.git-extras

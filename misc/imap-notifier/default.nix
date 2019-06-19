@@ -49,7 +49,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
 
       # run it once first in case we missed any from lost connectivity
       ${cmd} || :
-      ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
+      exec ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
     '';
 in
 with extra; {

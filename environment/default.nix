@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
-let jb55pkgs = import <jb55pkgs> { nixpkgs = pkgs; };
+let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     kindle-send = pkgs.callPackage (pkgs.fetchFromGitHub {
       owner = "jb55";
       repo = "kindle-send";
-      rev = "0.1.3";
-      sha256 = "18p8mn5qxq9blpa0d7yagiczd18inkpvfvh76vbkm42c5j86wqi3";
+      rev = "0.2.1";
+      sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
     myPackages = with jb55pkgs; [
        csv-delim
