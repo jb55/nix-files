@@ -64,6 +64,8 @@ in {
       (import ./services/desktop { inherit extra composeKey userConfig theme icon-theme; })
     ] else []);
 
+  documentation.nixos.enable = false;
+
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
 
