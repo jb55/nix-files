@@ -21,9 +21,9 @@ export GNUPGHOME=/zbig/bitcoin/gpg
 
 details="$(${pkgs.jq}/bin/jq -r '["amount","address","category"],(.details[] | [.amount, .address, .category]) | @tsv' <<<"$tx" | ${pkgs.utillinux}/bin/column -t -s $'\t')"
 
-keypath="${pkgs.jq}/bin/jq -r .hdkeypath <<<"$tx")"
+keypath="$(${pkgs.jq}/bin/jq -r .hdkeypath <<<"$tx")"
 
-msg="$(printf "txid: %s\nwallet: %s\ndate: %s\nkeypath: %s\n\ndetails: %s\n" \
+msg="$(printf "txid: %s\n\nwallet: %s\n\ndate: %s\n\nkeypath: %s\n\n\ndetails: %s\n" \
               "$txid"            "$wallet" "$time"      "$keypath"     "$details")"
 
 enctx="$(printf "Content-Type: text/plain\n\n%s\n" "$msg" | ${pkgs.gnupg}/bin/gpg --yes --always-trust --encrypt --armor $keys)"
