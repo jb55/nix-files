@@ -393,6 +393,10 @@ in
         try_files $uri $uri/ =404;
       }
 
+      location /phlog {
+        autoindex on;
+      }
+
       location @jb55activity {
          root /;
          default_type application/activity+json;
