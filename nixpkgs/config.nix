@@ -19,10 +19,6 @@ in {
     enableAdobeFlash = true;
   };
 
-  chromium = {
-    enablePepperFlash = false; # Chromium's non-NSAPI alternative to Adobe Flash
-    enablePepperPDF = false;
-  };
 
   packageOverrides = super: rec {
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
