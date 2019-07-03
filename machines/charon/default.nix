@@ -155,11 +155,6 @@ in
     email = myemail;
   };
 
-  security.acme.certs."coretto.io" = {
-    webroot = "/var/www/challenges";
-    email = myemail;
-  };
-
   security.acme.certs."git.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
@@ -172,7 +167,7 @@ in
     email = myemail;
   };
 
-  security.acme.certs."hearpress.com" = {
+  security.acme.certs."bitcoinwizard.net" = {
     webroot = "/var/www/challenges";
     email = myemail;
   };
@@ -299,12 +294,12 @@ in
 
     server {
       listen 443 ssl;
-      server_name coretto.io;
+      server_name bitcoinwizard.net;
       root /home/jb55/www/coretto.io;
       index index.html;
 
-      ssl_certificate /var/lib/acme/coretto.io/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/coretto.io/key.pem;
+      ssl_certificate /var/lib/acme/bitcoinwizard.net/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/bitcoinwizard.net/key.pem;
 
       location / {
         try_files $uri $uri/ =404;
@@ -328,22 +323,22 @@ in
     }
 
     server {
+      listen 443 ssl;
+      server_name www.bitcoinwizard.net;
+      return 301 https://bitcoinwizard.net$request_uri;
+    }
+
+    server {
       listen 80;
-      server_name coretto.io www.coretto.io;
+      server_name bitcoinwizard.net www.bitcoinwizard.net;
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
       }
 
       location / {
-        return 301 https://coretto.io$uri;
+        return 301 https://bitcoinwizard.net$request_uri;
       }
-    }
-
-    server {
-      listen 443 ssl;
-      server_name www.coretto.io;
-      return 301 https://coretto.io$request_uri;
     }
 
     server {
