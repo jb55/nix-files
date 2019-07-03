@@ -315,7 +315,7 @@ in
         # fcgiwrap is set up to listen on this host:port
         fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
         include                       ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME /home/jb55/www/coretto.io/email.py;
+        fastcgi_param SCRIPT_FILENAME /home/jb55/www/coretto.io/emailform.py;
 
         client_max_body_size 512;
 
