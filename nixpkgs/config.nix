@@ -36,12 +36,12 @@ in {
 
     bcalc = jb55pkgs.bcalc;
 
-    electrs = (import (pkgs.fetchFromGitHub {
-      owner = "jb55";
-      repo = "electrs";
-      rev = "e3bed69c17dac1af1be34d18e5be2c815c20838c";
-      sha256 = "0dqz872xiagpvk139xdfn46j5gn5njdk9qf50nq29x2flh81y1ya";
-    }) { inherit pkgs; }).rootCrate.build;
+    # electrs = (import (pkgs.fetchFromGitHub {
+    #   owner = "jb55";
+    #   repo = "electrs";
+    #   rev = "e3bed69c17dac1af1be34d18e5be2c815c20838c";
+    #   sha256 = "0dqz872xiagpvk139xdfn46j5gn5njdk9qf50nq29x2flh81y1ya";
+    # }) { inherit pkgs; }).rootCrate.build;
 
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
