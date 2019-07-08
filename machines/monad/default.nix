@@ -33,7 +33,14 @@ in
   ];
 
   services.bitlbee.enable = true;
-  services.bitlbee.libpurple_plugins = with pkgs; [ pidgin-skypeweb ];
+  services.bitlbee.libpurple_plugins = with pkgs; [
+    pidgin-skypeweb
+    purple-facebook
+    purple-hangouts
+    telegram-purple
+    purple-matrix
+    purple-instagram
+  ];
   services.bitlbee.plugins = with pkgs; [ bitlbee-discord ];
 
   services.dnsmasq.enable = true;
