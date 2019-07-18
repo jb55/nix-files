@@ -16,6 +16,7 @@ let
     rpcport=8332
     bind=127.0.0.1
     proxy=127.0.0.1:9050
+    whitelist=127.0.0.1
     wallet=old-wallet
     wallet=trezor
     wallet=cc
