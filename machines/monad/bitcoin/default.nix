@@ -40,18 +40,17 @@ let
   walletemail = import ./walletemail.nix { inherit pkgs bcli; };
 in
 {
+  #systemd.user.services.bitcoin-dca =  {
+  #  enable = true;
+  #  description = "bitcoin dca";
 
-  systemd.user.services.bitcoin-dca =  {
-    enable = true;
-    description = "bitcoin dca";
+  #  serviceConfig = {
+  #    Type = "oneshot";
+  #    ExecStart = dca;
+  #  };
 
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = dca;
-    };
-
-    startAt = "Thu *-*-* 10:00:00";
-  };
+  #  startAt = "Thu *-*-* 10:00:00";
+  #};
 
   services.bitcoind = {
     enable = true;
