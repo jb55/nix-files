@@ -26,6 +26,10 @@ in {
       pkgs.urweb
     ]);
 
+    msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
+      patches = [ /home/jb55/dev/msmtp-1.8.3/msmtpq-custom-conn-test.patch ];
+    });
+
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
     wine = super.wine.override { wineBuild = "wineWow"; };
