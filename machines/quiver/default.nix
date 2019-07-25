@@ -115,6 +115,7 @@ extra:
       set -e
 
       LED=/sys/class/leds/tpacpi::power
+      LED2=/sys/class/leds/tpacpi::kbd_backlight
 
       # led will start blinking below this battery %
       limit=10
@@ -129,11 +130,13 @@ extra:
           then
               printf "battery %d%% < %d%%, setting heartbeat trigger\n" "$percent" "$limit" >&2
               echo heartbeat > "$LED"/trigger
+              echo heartbeat > "$LED2"/trigger
               state="heartbeat"
           elif [ $percent -ge $limit ] && [ "$state" = "heartbeat" ]
           then
               printf "battery %d%% >= %d%%, resetting led trigger\n" "$percent" "$limit" >&2
               echo none > "$LED"/trigger
+              echo none > "$LED2"/trigger
               cat "$LED"/max_brightness > "$LED"/brightness
               state=""
           fi
