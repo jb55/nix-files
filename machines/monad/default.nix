@@ -41,7 +41,11 @@ in
     purple-matrix
     purple-instagram
   ];
-  services.bitlbee.plugins = with pkgs; [ bitlbee-discord ];
+
+  services.bitlbee.plugins = with pkgs; [
+    bitlbee-discord
+    bitlbee-mastodon
+  ];
 
   services.dnsmasq.enable = true;
   services.dnsmasq.resolveLocalQueries = true;
