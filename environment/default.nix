@@ -7,15 +7,16 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
     myPackages = with jb55pkgs; [
+       bcalc
        csv-delim
        csv-scripts
        dbopen
        extname
-       mandown
-       snap
-       sharefile
-       samp
        kindle-send
+       mandown
+       samp
+       sharefile
+       snap
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
