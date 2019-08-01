@@ -44,6 +44,7 @@ in {
     notmuch
     pandoc
     pavucontrol
+    python37Packages.trezor
     qalculate-gtk
     qutebrowser
     rxvt_unicode-with-plugins
