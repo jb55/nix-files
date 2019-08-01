@@ -23,6 +23,10 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     ];
 in {
   environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
+    aspell
+    aspellDicts.en
+    aspellDicts.en-computers
+    aspellDicts.en-science
     bat
     bc
     binutils
@@ -31,9 +35,12 @@ in {
     fzf
     gitAndTools.gitFull
     gnupg
+    groff
     haskellPackages.una
     htop
+    imagemagick
     jq
+    libbitcoin-explorer
     libqalculate
     lsof
     manpages
