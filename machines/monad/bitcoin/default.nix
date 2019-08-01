@@ -95,6 +95,6 @@ in
   services.electrs.enable = false;
   services.electrs.dataDir = "/zbig/electrs";
   services.electrs.bitcoinDataDir = bitcoinDataDir;
-  services.electrs.high-memory = true;
+
 
 }
