@@ -296,7 +296,7 @@ in {
       alex
       cabal-install
       cabal2nix
-      stack2nix
+      #stack2nix
       hpack
       ghc-core
       happy
