@@ -21,6 +21,7 @@ let
     wallet=trezor
     wallet=cc
     wallet=clightning
+    wallet=bitcoinwizard
   '';
 
   bcli = "${pkgs.altcoins.bitcoind}/bin/bitcoin-cli --datadir=${bitcoinDataDir} --conf=${base-bitcoin-conf-file} --rpcuser=rpcuser --rpcpassword=rpcpass";
