@@ -42,7 +42,6 @@ in
     purple-hangouts
     telegram-purple
     purple-matrix
-    purple-instagram
   ];
 
   services.bitlbee.plugins = with pkgs; [
