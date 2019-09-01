@@ -34,6 +34,7 @@ in {
     dynamic-colors
     emacs
     feh
+    getmail # for getmail-gmail-xoauth-tokens
     gnome3.gnome-calculator
     gtk-engine-murrine
     icon-theme.package
