@@ -25,6 +25,7 @@ in
 {
   imports = [
     ./hardware
+    ./commit
     (import ./bitcoin extra)
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
