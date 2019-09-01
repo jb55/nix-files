@@ -33,7 +33,7 @@ in {
     dateutils
     file
     fzf
-    gitAndTools.gitFull
+    git-tools
     gnupg
     groff
     haskellPackages.una
