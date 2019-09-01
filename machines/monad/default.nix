@@ -33,6 +33,8 @@ in
     (import ../../misc/imap-notifier extra)
   ];
 
+  # services.guix.enable = true;
+
   services.bitlbee.enable = true;
   services.bitlbee.libpurple_plugins = with pkgs; [
     pidgin-skypeweb
