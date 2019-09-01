@@ -195,10 +195,26 @@ in
     '';
   };
 
+  # services.postgresql = {
+  #   dataDir = "/var/db/postgresql/100/";
+  #   enable = true;
+  #   package = pkgs.postgresql_10;
+  #   # extraPlugins = with pkgs; [ pgmp ];
+  #   authentication = pkgs.lib.mkForce ''
+  #     # type db  user address            method
+  #     local  all all                     trust
+  #     host   all all  127.0.0.1/32       trust
+  #     host   all all  192.168.86.0/24    trust
+  #   '';
+  #   extraConfig = ''
+  #     listen_addresses = '0.0.0.0'
+  #   '';
+  # };
+
   services.postgresql = {
-    dataDir = "/var/db/postgresql/100/";
+    dataDir = "/var/db/postgresql/96/";
     enable = true;
-    package = pkgs.postgresql_10;
+    package = pkgs.postgresql96;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
       # type db  user address            method
