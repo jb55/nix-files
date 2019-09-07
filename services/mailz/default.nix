@@ -189,8 +189,8 @@ in
         filter in chain filter-regex filter-spamassassin
         filter out chain filter-dkim-signer
 
-        pki ${cfg.domain} certificate "${config.security.acme.directory}/${cfg.domain}/fullchain.pem"
-        pki ${cfg.domain} key "${config.security.acme.directory}/${cfg.domain}/key.pem"
+        pki ${cfg.domain} certificate "/var/lib/acme/${cfg.domain}/fullchain.pem"
+        pki ${cfg.domain} key "/var/lib/acme/${cfg.domain}/key.pem"
 
         table credentials file:${files.credentials}
         table recipients file:${files.recipients}
@@ -213,8 +213,8 @@ in
       mailUser = cfg.user;
       mailGroup = cfg.group;
       modules = [ pkgs.dovecot_pigeonhole ];
-      sslServerCert = "${config.security.acme.directory}/${cfg.domain}/fullchain.pem";
-      sslServerKey = "${config.security.acme.directory}/${cfg.domain}/key.pem";
+      sslServerCert = "/var/lib/acme/${cfg.domain}/fullchain.pem";
+      sslServerKey = "/var/lib/acme/${cfg.domain}/key.pem";
       enablePAM = false;
       sieveScripts = {
         before = files.spamassassinSieve;
