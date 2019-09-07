@@ -25,7 +25,7 @@ let
     wallet=bitcoinwizard
   '';
 
-  bcli = "${pkgs.altcoins.bitcoind}/bin/bitcoin-cli --datadir=${bitcoinDataDir} --conf=${base-bitcoin-conf-file} --rpcuser=rpcuser --rpcpassword=rpcpass";
+  bcli = "${pkgs.bitcoind}/bin/bitcoin-cli --datadir=${bitcoinDataDir} --conf=${base-bitcoin-conf-file} --rpcuser=rpcuser --rpcpassword=rpcpass";
 
   bitcoin-conf = ''
     ${base-bitcoin-conf}
@@ -63,7 +63,7 @@ in
     group = "users";
   };
 
-  services.bitcoind.package = pkgs.lib.overrideDerivation pkgs.altcoins.bitcoind (attrs: {
+  services.bitcoind.package = pkgs.lib.overrideDerivation pkgs.bitcoind (attrs: {
       src = pkgs.fetchFromGitHub {
         owner  = "jb55";
         repo   = "bitcoin";
