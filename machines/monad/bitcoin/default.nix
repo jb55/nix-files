@@ -15,7 +15,8 @@ let
     rpcbind=[::1]
     rpcport=8332
     bind=127.0.0.1
-    proxy=127.0.0.1:9050
+    onion=127.0.0.1:9050
+    onlynet=onion
     whitelist=127.0.0.1
     wallet=old-wallet
     wallet=trezor
