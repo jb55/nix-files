@@ -24,6 +24,9 @@ in {
   };
 
   packageOverrides = super: rec {
+
+    linuxPackages = super.linuxPackages_testing;
+
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     emacs = super.emacsWithPackages (ep: with ep; [
       pkgs.urweb
