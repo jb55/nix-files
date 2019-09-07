@@ -62,10 +62,10 @@ in
       day = "1.0";
       night = "0.6";
     };
-
-    latitude="49.270186";
-    longitude="-123.109353";
   };
+
+  location.latitude = "49.270186";
+  location.longitude = "-123.109353";
 
   systemd.user.services.udiskie =  {
     enable = true;
