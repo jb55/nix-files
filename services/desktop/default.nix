@@ -17,6 +17,12 @@ in
     (import ./networking extra)
   ];
 
+  services.hoogle = {
+    enable = false;
+    packages = pkgs.myHaskellPackages;
+    haskellPackages = pkgs.haskellPackages;
+  };
+
   services.gnome3.gnome-keyring.enable = true;
 
   services.trezord.enable = true;

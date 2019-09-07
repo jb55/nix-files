@@ -5,12 +5,6 @@ in
 {
   boot.supportedFilesystems = ["ntfs" "exfat"];
 
-  services.hoogle = {
-    enable = true;
-    packages = pkgs.myHaskellPackages;
-    haskellPackages = pkgs.haskellPackages;
-  };
-
   services.udev.extraRules = ''
     # coldcard
     KERNEL=="hidraw*", ATTRS{idVendor}=="d13e", ATTRS{idProduct}=="cc10", GROUP="plugdev", MODE="0666", SYMLINK+="coldcard
