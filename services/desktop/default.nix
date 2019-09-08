@@ -64,8 +64,8 @@ in
     };
   };
 
-  location.latitude = "49.270186";
-  location.longitude = "-123.109353";
+  location.latitude = 49.270186;
+  location.longitude = -123.109353;
 
   systemd.user.services.udiskie =  {
     enable = true;
