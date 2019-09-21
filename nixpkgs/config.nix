@@ -411,7 +411,7 @@ in {
       rex
       s3-signer
       safe
-      sbv
+      #sbv
       scotty
       sqlite-simple
       lucid
