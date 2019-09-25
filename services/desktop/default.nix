@@ -144,7 +144,7 @@ in
 
     xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:${composeKey}";
 
-    wacom.enable = true;
+    wacom.enable = false;
 
     desktopManager = {
       default = "none";
