@@ -17,11 +17,11 @@ in {
   environment.variables = {
     LC_TIME="en_DK.UTF-8";
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-    GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
-    GTK_DATA_PREFIX = "${theme.package}";
-    GTK_EXEC_PREFIX = "${theme.package}";
+    # GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
+    # GTK_DATA_PREFIX = "${theme.package}";
+    # GTK_EXEC_PREFIX = "${theme.package}";
     GTK_IM_MODULE = "xim";
-    GTK_PATH = "${theme.package}:${pkgs.gtk3.out}";
+    # GTK_PATH = "${theme.package}:${pkgs.gtk3.out}";
     GTK_THEME = "${theme.name}";
     QT_STYLE_OVERRIDE = "GTK+";
   };
@@ -37,7 +37,7 @@ in {
     getmail # for getmail-gmail-xoauth-tokens
     gnome3.gnome-calculator
     gtk-engine-murrine
-    icon-theme.package
+    # icon-theme.package
     lastpass-cli
     libnotify
     msmtp
@@ -56,8 +56,8 @@ in {
     slock
     spotify
     #texlive.combined.scheme-full
-    theme.package
     twmn
+    # theme.package
     userConfig
     vlc
     w3m
