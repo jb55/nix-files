@@ -56,8 +56,8 @@ in {
     slock
     spotify
     #texlive.combined.scheme-full
-    twmn
     # theme.package
+    dunst
     userConfig
     vlc
     w3m
