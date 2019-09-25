@@ -153,17 +153,18 @@ in
 
     displayManager = {
       sessionCommands = "${userConfig}/bin/xinitrc";
-      lightdm = {
-        enable = true;
-        background = "${pkgs.fetchurl {
-          url = "https://jb55.com/img/haskell-space.jpg";
-          sha256 = "e08d82e184f34e6a6596faa2932ea9699da9b9a4fbbd7356c344e9fb90473482";
-        }}";
-        greeters.gtk = {
-          theme = theme;
+      slim = { enable = true; };
+      # lightdm = {
+      #   enable = false;
+      #   background = "${pkgs.fetchurl {
+      #     url = "https://jb55.com/img/haskell-space.jpg";
+      #     sha256 = "e08d82e184f34e6a6596faa2932ea9699da9b9a4fbbd7356c344e9fb90473482";
+      #   }}";
+        # greeters.gtk = {
+          # theme = theme;
           # iconTheme = icon-theme;
-        };
-      };
+        # };
+      # };
     };
 
     screenSection = ''
