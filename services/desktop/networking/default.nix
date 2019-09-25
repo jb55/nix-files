@@ -48,30 +48,30 @@ in
 
       config = ''
         client
+        comp-lzo no
         dev tun
-        proto udp
-        remote 172.83.40.224 1194
-        resolv-retry infinite
-        remote-random
-        nobind
-        tun-mtu 1500
-        tun-mtu-extra 32
         mssfix 1450
+        nobind
         persist-key
         persist-tun
         ping 15
         ping-restart 0
         ping-timer-rem
+        proto udp
+        remote 185.244.212.196 1194
+        remote-random
         reneg-sec 0
+        resolv-retry infinite
+        tun-mtu 1500
+        tun-mtu-extra 32
+
+        remote-cert-tls server
 
         auth-user-pass ${vpn.credfile}
         route-noexec
         route-up ${vpn.routeup}
 
-        remote-cert-tls server
-
         # Compress-lzo is not compactible with 2.3 clients so using deprecated comp-lzo
-        comp-lzo no
         verb 3
         pull
         fast-io
