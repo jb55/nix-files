@@ -10,8 +10,8 @@
   #   masterAddress = "127.0.0.1";
   # };
 
-  services.kubernetes.masterAddress = "127.0.0.1";
-  services.kubernetes.roles = [ "master" "node" ];
+  #services.kubernetes.masterAddress = "127.0.0.1";
+  #services.kubernetes.roles = [ "master" "node" ];
 
   services.openvpn.servers.commit = {
     autoStart = true;
