@@ -75,7 +75,7 @@ with extra; {
             notify() {
               c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
               if [ -f ~/var/notify/home ] && [ "$c" -gt 0 ]; then
-                twmnc -i new_email -c p -s 32 --pos top_left
+                ${pkgs.libnotify}/bin/notify-send "You Got Mail (inbox $c)"
               fi
             }
 
