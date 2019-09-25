@@ -102,7 +102,7 @@ in
     startAt = "Mon..Fri *-*-* 17:00:00";
   };
 
-
+  virtualisation.docker.enable = true;
   virtualisation.virtualbox.host.enable = false;
   virtualisation.virtualbox.host.enableHardening = true;
   #virtualization.virtualbox.host.enableExtensionPack = true;
