@@ -60,12 +60,12 @@ in {
     #   extraPythonPackages = py: with py; [ numpy ];
     # };
 
-    # phonectl = super.python3Packages.callPackage (super.fetchFromGitHub {
-    #   owner  = "jb55";
-    #   repo   = "phonectl";
-    #   sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
-    #   rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
-    # }) {};
+    phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "phonectl";
+      sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
+      rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
+    })) {};
 
     #jb55-dotfiles = regularFiles <dotfiles>;
 
