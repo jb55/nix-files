@@ -4,8 +4,8 @@ let
   waylandOverlay = (import (builtins.fetchTarball url));
 in
 {
-    # nixpkgs.overlays = [ waylandOverlay ];
-    programs.sway-beta.enable = false;
+    nixpkgs.overlays = [ waylandOverlay ];
+    programs.sway-beta.enable = true;
     programs.sway-beta.extraPackages = with pkgs; [
       swayidle # used for controlling idle timeouts and triggers (screen locking, etc)
       swaylock # used for locking Wayland sessions
