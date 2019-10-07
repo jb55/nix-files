@@ -12,7 +12,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        csv-scripts
        dbopen
        extname
-       kindle-send
+       #kindle-send
        mandown
        samp
        sharefile
