@@ -13,6 +13,7 @@
   hardware.firmware = [ pkgs.amdgpu-navi10-firmware ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
+  boot.kernelParams = [ "amdgpu.gpu_recovery=1" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.loader.grub.copyKernels = true;
   boot.extraModulePackages = [ ];
