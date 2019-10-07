@@ -17,6 +17,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        samp
        sharefile
        snap
+       btcs
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
