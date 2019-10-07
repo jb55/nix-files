@@ -6,14 +6,13 @@ let
 
   base-bitcoin-conf = ''
     txindex=1
-    rpcuser=rpcuser
-    rpcpassword=rpcpass
+    rpcuser=${extra.private.btc-user}
+    rpcpassword=${extra.private.btc-pass}
     rpcallowip=172.24.227.91
     rpcallowip=127.0.0.1
     rpcbind=172.24.242.111
     rpcbind=127.0.0.1
-    rpcbind=[::1]
-    rpcport=8332
+    rpcport=${extra.private.btc-rpc-port}
     bind=127.0.0.1
     onion=127.0.0.1:9050
     onlynet=onion
