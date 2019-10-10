@@ -24,7 +24,7 @@ let
     wallet=bitcoinwizard
   '';
 
-  bcli = "${pkgs.bitcoind}/bin/bitcoin-cli --datadir=${bitcoinDataDir} --conf=${base-bitcoin-conf-file} --rpcuser=rpcuser --rpcpassword=rpcpass";
+  bcli = "${pkgs.bitcoind}/bin/bitcoin-cli --datadir=${bitcoinDataDir} --conf=${base-bitcoin-conf-file} --rpcuser=${extra.private.btc-user} --rpcpassword=${extra.private.btc-pass}";
 
   bitcoin-conf = ''
     ${base-bitcoin-conf}
