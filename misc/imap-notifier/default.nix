@@ -49,7 +49,11 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
 
       # run it once first in case we missed any from lost connectivity
       ${cmd} || :
-      exec ${notify}/bin/imap-notify ${user} ${pass} ${cmd} ${host}
+      export IMAP_NOTIFY_USER=${user}
+      export IMAP_NOTIFY_PASS=${pass}
+      export IMAP_NOTIFY_CMD=${cmd}
+      export IMAP_NOTIFY_HOST=${host}
+      exec ${notify}/bin/imap-notify
     '';
 in
 with extra; {
@@ -60,6 +64,7 @@ with extra; {
     environment = {
       IMAP_ALLOW_UNAUTHORIZED = "0";
       IMAP_NOTIFY_PORT = "12788";
+      IMAP_NOTIFY_CMD = cmd;
     };
 
     path = with pkgs; [ twmn eject utillinux muchsync notmuch bash openssh ];
@@ -75,7 +80,7 @@ with extra; {
             notify() {
               c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
               if [ -f ~/var/notify/home ] && [ "$c" -gt 0 ]; then
-                ${pkgs.libnotify}/bin/notify-send "You Got Mail (inbox $c)"
+                ${pkgs.libnotify}/bin/notify-send -i email-new "You Got Mail (inbox $c)"
               fi
             }
 
