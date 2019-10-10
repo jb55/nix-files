@@ -8,8 +8,8 @@
 let
   #dotfiles = pkgs.jb55-dotfiles;
   bgimg = fetchurl {
-    url = "http://jb55.com/img/haskell-space.jpg";
-    sha256 = "e08d82e184f34e6a6596faa2932ea9699da9b9a4fbbd7356c344e9fb90473482";
+    url = "https://jb55.com/s/red-low-poly.png";
+    sha256 = "e45cc45eb084d615babfae1aae703757c814d544e056f0627d175a6ab18b35ab";
   };
   impureSessionCommands = ''
     #!${pkgs.bash}/bin/bash
