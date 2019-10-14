@@ -59,7 +59,8 @@ in
     conf-file=/var/distracting-hosts
   '';
 
-  services.keybase.enable = true;
+  # shitcoin vendor
+  services.keybase.enable = false;
 
   systemd.services.block-distracting-hosts = {
     description = "Block Distracting Hosts";
