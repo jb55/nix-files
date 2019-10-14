@@ -64,7 +64,6 @@ with extra; {
     environment = {
       IMAP_ALLOW_UNAUTHORIZED = "0";
       IMAP_NOTIFY_PORT = "12788";
-      IMAP_NOTIFY_CMD = cmd;
     };
 
     path = with pkgs; [ twmn eject utillinux muchsync notmuch bash openssh ];
@@ -78,8 +77,13 @@ with extra; {
             export DATABASEDIR=$HOME/mail/personal
 
             notify() {
-              c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
-              if [ -f ~/var/notify/home ] && [ "$c" -gt 0 ]; then
+              local c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
+              local lc=$c
+              if [ -f /tmp/last-email-count ]; then
+                lc=$(</tmp/last-email-count)
+              fi
+              echo "$c" > /tmp/last-email-count
+              if [ -f ~/var/notify/home ] && [ $c -ne $lc ]; then
                 ${pkgs.libnotify}/bin/notify-send -i email-new "You Got Mail (inbox $c)"
               fi
             }
