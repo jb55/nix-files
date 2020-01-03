@@ -68,7 +68,7 @@ in {
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-
+  environment.ld-linux = true;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
     DefaultTimeoutStartSec=20s
