@@ -21,6 +21,7 @@ in
   networking.extraHosts = ''
     10.0.9.1         secure.datavalet.io
     192.168.86.26    torrents.home.
+    172.24.242.111   securitycam.home.
     24.244.54.234    wifisignon.shaw.ca
   '';
 

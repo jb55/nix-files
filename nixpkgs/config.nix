@@ -19,10 +19,6 @@ in {
     enableAdobeFlash = true;
   };
 
-  chromium = {
-    enablePepperFlash = false; # Chromium's non-NSAPI alternative to Adobe Flash
-  };
-
   packageOverrides = super: rec {
 
     linuxPackages = super.linuxPackages_latest;
@@ -316,13 +312,6 @@ in {
         name = name;
         paths = [(ghcWith myHaskellPackages)];
       };
-
-    # stack2nix = import (pkgs.fetchFromGitHub {
-    #   owner = "input-output-hk";
-    #   repo  = "stack2nix";
-    #   rev   = "6f59401c0e0ca3ab5e429b90e3c30de29a499db0";
-    #   sha256 = "1ihcp3mr0s89xmc81f9hxq07jw6pm3lixr5bdamqiin1skpk8q3b";
-    # }) { inherit pkgs; };
 
     haskellTools = hp: with hp; [
       alex

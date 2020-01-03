@@ -42,10 +42,9 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       set -e
 
       arg="${host}"
-      host=''${arg:-8.8.8.8}
 
       # wait for connectivity
-      until /var/run/wrappers/bin/ping -c1 $host &>/dev/null; do :; done
+      until ${pkgs.libressl.nc}/bin/nc -w 1 -vz jb55.com 12566 &>/dev/null; do :; done
 
       # run it once first in case we missed any from lost connectivity
       ${cmd} || :
