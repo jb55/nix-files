@@ -77,7 +77,6 @@ in
   fonts = {
     enableFontDir = true;
     enableGhostscriptFonts = true;
-    enableCoreFonts = true;
     fontconfig.defaultFonts.serif = [ "Bookerly" ];
     fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
