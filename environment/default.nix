@@ -30,6 +30,7 @@ in {
     aspellDicts.en-science
     bat
     bc
+    direnv
     binutils
     dateutils
     file
