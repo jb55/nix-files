@@ -25,7 +25,7 @@ in {
 
   packageOverrides = super: rec {
 
-    linuxPackages = super.linuxPackages_testing;
+    linuxPackages = super.linuxPackages_latest;
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     emacs = super.emacsHead;
