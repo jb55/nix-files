@@ -62,17 +62,6 @@ in
     group = "users";
   };
 
-  services.bitcoind.package = pkgs.lib.overrideDerivation pkgs.bitcoind (attrs: {
-      src = pkgs.fetchFromGitHub {
-        owner  = "jb55";
-        repo   = "bitcoin";
-        sha256 = "078a7l7n75kfzi5k3ffg8him6w2dr9mksqyvzaypb8ccai88sp76";
-        rev    = "e45893691257e548f3836bc131a19e67e6d056bd";
-      };
-
-      enableParallelBuilding = true;
-  });
-
   services.clightning.networks = {
     mainnet = {
       dataDir = "/home/jb55/.lightning-bitcoin";
