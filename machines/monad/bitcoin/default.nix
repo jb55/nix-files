@@ -8,7 +8,7 @@ let
     txindex=1
     rpcuser=${extra.private.btc-user}
     rpcpassword=${extra.private.btc-pass}
-    rpcallowip=172.24.227.91
+    rpcallowip=172.24.129.211
     rpcallowip=127.0.0.1
     rpcbind=172.24.242.111
     rpcbind=127.0.0.1
