@@ -25,7 +25,8 @@ in
 {
   imports = [
     ./hardware
-    ./commit
+    ./contracts/commit
+    ./contracts/plastiq
     (import ./bitcoin extra)
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
@@ -121,9 +122,9 @@ in
   documentation.nixos.enable = false;
 
   services.trezord.enable = true;
-  services.redis.enable = false;
+  services.redis.enable = true;
   services.zerotierone.enable = true;
-  services.mongodb.enable = false;
+  services.mongodb.enable = true;
 
   services.tor.enable = true;
   services.tor.controlPort = 9051;
