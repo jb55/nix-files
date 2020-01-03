@@ -6,6 +6,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rev = "0.2.1";
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
+    nixify = pkgs.nur.repos.kampka.nixify;
     myPackages = with jb55pkgs; [
        bcalc
        csv-delim
@@ -30,9 +31,10 @@ in {
     aspellDicts.en-science
     bat
     bc
-    direnv
     binutils
     dateutils
+    direnv
+    nixify
     file
     fzf
     git-tools
@@ -57,7 +59,7 @@ in {
     screen
     shellcheck
     unzip
-    vim
+    neovim
     weechat
     wget
     zip

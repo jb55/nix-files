@@ -29,6 +29,12 @@ in {
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     emacs = super.emacsHead;
+    nur = import (builtins.fetchTarball {
+      url = "https://github.com/nix-community/NUR/archive/cff4dfbe6d6f4ab14560234fcf2d73332ee3ecc1.tar.gz";
+      sha256 = "01yxz6w820vryirrwkmsnxkmvp35dncjp1n8fdfsq4n0r28nw31a";
+    }) {
+      inherit pkgs;
+    };
 
     weechat = super.weechat.override {configure = {availablePlugins, ...}: {
         scripts = with super.weechatScripts; [ wee-slack ];
