@@ -34,7 +34,6 @@ in {
     binutils
     dateutils
     direnv
-    nixify
     file
     fzf
     git-tools
@@ -48,7 +47,10 @@ in {
     libqalculate
     lsof
     manpages
+    neovim
     network-tools
+    nixify
+    par
     parallel
     patchelf
     pv
@@ -59,7 +61,6 @@ in {
     screen
     shellcheck
     unzip
-    neovim
     weechat
     wget
     zip

@@ -27,17 +27,21 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    #icon-theme.package
+    #theme.package
+    #skypeforlinux
+    #texlive.combined.scheme-full
     clipit
     clipmenu
     dmenu2
     dragon-drop
+    dunst
     dynamic-colors
     emacs
     feh
     getmail # for getmail-gmail-xoauth-tokens
     gnome3.gnome-calculator
     gtk-engine-murrine
-    # icon-theme.package
     lastpass-cli
     libnotify
     msmtp
@@ -52,12 +56,8 @@ in {
     shared_mime_info
     signal-desktop
     simplescreenrecorder
-    skypeforlinux
     slock
     spotify
-    #texlive.combined.scheme-full
-    # theme.package
-    dunst
     userConfig
     vlc
     w3m
