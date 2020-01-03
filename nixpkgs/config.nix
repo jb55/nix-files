@@ -35,6 +35,25 @@ in {
       };
     };
 
+
+    bitcoind = pkgs.lib.overrideDerivation super.bitcoind (attrs: {
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/0001-wallet-Replace-w-by-wallet-name-in-walletnotify-scri.patch";
+            sha256 = "06l46ymqfgbngf59nna6dm6ghzjxpgsrsb82klh94vg1rbkmlypf";
+          })
+        ];
+    });
+
+    bitcoin = pkgs.lib.overrideDerivation super.bitcoin (attrs: {
+      patches =
+        [ (super.fetchurl
+          { url = "https://jb55.com/s/0001-wallet-Replace-w-by-wallet-name-in-walletnotify-scri.patch";
+            sha256 = "06l46ymqfgbngf59nna6dm6ghzjxpgsrsb82klh94vg1rbkmlypf";
+          })
+        ];
+    });
+
     # electrs = (import (pkgs.fetchFromGitHub {
     #   owner = "jb55";
     #   repo = "electrs";
