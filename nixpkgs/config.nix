@@ -35,6 +35,14 @@ in {
       };
     };
 
+    dunst = pkgs.lib.overrideDerivation super.dunst (attrs: {
+      src = pkgs.fetchFromGitHub {
+        owner = "jb55";
+        repo  = "dunst";
+        rev   = "138edff170e4e4a2bf6891bd634c4ec215d4b7ef";
+        sha256 = "1pf3v4mrcd0cfhvm9fk9nwvgj5dy6qlbs0mhlcyx26cbqxd62brp";
+      };
+    });
 
     bitcoind = pkgs.lib.overrideDerivation super.bitcoind (attrs: {
       patches =
