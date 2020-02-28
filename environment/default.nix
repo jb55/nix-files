@@ -30,10 +30,8 @@ in {
     fzf
     gitAndTools.gitFull
     gnupg
-    haskellPackages.una
     htop
     jq
-    libqalculate
     lsof
     manpages
     network-tools
@@ -41,14 +39,11 @@ in {
     patchelf
     pv
     python
-    ranger
     ripgrep
     rsync
     screen
-    shellcheck
     unzip
     vim
-    weechat
     wget
     zip
     zstd
