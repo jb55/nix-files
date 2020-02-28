@@ -200,15 +200,15 @@ in
     c2s_require_encryption = true
   '';
   services.prosody.ssl = {
-    cert = "${config.security.acme.directory}/jb55.com/fullchain.pem";
-    key = "${config.security.acme.directory}/jb55.com/key.pem";
+    cert = "/var/lib/acme/jb55.com/fullchain.pem";
+    key = "/var/lib/acme/jb55.com/key.pem";
   };
   services.prosody.virtualHosts.jb55 = {
     enabled = true;
     domain = "jb55.com";
     ssl = {
-      cert = "${config.security.acme.directory}/jb55.com/fullchain.pem";
-      key = "${config.security.acme.directory}/jb55.com/key.pem";
+      cert = "/var/lib/acme/jb55.com/fullchain.pem";
+      key = "/var/lib/acme/jb55.com/key.pem";
     };
   };
 
