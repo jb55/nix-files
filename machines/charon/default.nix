@@ -331,21 +331,24 @@ in
         root /var/www/challenges;
       }
 
-      location / {
-        return 301 https://git.jb55.com$request_uri;
-      }
-    }
-
-    server {
-      listen       443 ssl;
-      server_name  git.jb55.com;
-
       root /var/git-public/stagit;
       index index.html index.htm;
 
-      ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
+      # location / {
+      #   return 301 https://git.jb55.com$request_uri;
+      # }
     }
+
+    # server {
+    #   listen       443 ssl;
+    #   server_name  git.jb55.com;
+
+    #   root /var/git-public/stagit;
+    #   index index.html index.htm;
+
+    #   ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
+    #   ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
+    # }
 
     server {
       listen 443 ssl;
