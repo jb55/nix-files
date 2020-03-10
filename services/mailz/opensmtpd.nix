@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "5.7.3p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
-  buildInputs = [ libasr libevent zlib openssl db pam ];
+  buildInputs = [ libasr libevent zlib openssl db  ];
 
   src = fetchurl {
     url = "http://www.opensmtpd.org/archives/${name}.tar.gz";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./proc_path.diff ];
+
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.opensmtpd.org/;
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
-      RFC 5321, with some additional standard extensions
+      RFC 5321, with some additional standard extensions. what
     '';
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;

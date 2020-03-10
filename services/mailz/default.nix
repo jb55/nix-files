@@ -4,7 +4,22 @@
 with lib;
 
 let
+  old_nixpkgs = import (builtins.fetchTarball {
+            name = "nixos-unstable-2016-09";
+            url = https://github.com/nixos/nixpkgs/archive/bce982e0822601487f593f80549acbec0c9529be.tar.gz;
+            sha256 = "0fs087s9n29s1ic6fmq5g0x81svk7axvhywjz209xzmkiisf9vmx";
+          }) {};
+
+
+  old_nixpkgs_extras = import (builtins.fetchTarball {
+          name = "nixos-unstable-2016-09";
+          url = https://github.com/nixos/nixpkgs/archive/d7cfa87eb7344f53a3ad7a71a2ccf14e2c24cb0e.tar.gz;
+          sha256 = "18lb4qi58sz722sjb0g87mbzg1y44s4bf2mdxljan79f253h5hqd";
+        }) {};
+
+
   cfg = config.services.mailz;
+
   mailbox = name: ''
     mailbox ${name} {
       auto = subscribe
@@ -154,13 +169,11 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && cfg.users != { }) {
+  config = mkIf (cfg.enable && cfg.users != { })
+  {
     nixpkgs.config.packageOverrides = pkgs: {
-      opensmtpd = pkgs.callPackage ./opensmtpd.nix { };
-      opensmtpd-extras = pkgs.opensmtpd-extras.override {
-        # Needed to have PRNG working in chroot (for dkim-signer)
-        openssl = pkgs.libressl;
-      };
+      inherit (old_nixpkgs_extras) openstmpd-extras;
+      inherit (old_nixpkgs) opensmtpd;
     };
 
     system.activationScripts.mailz = ''
@@ -202,7 +215,7 @@ in
         accept from any for domain "${cfg.domain}" recipient <recipients> alias <aliases> deliver to lmtp localhost:24
         accept from local for any relay
       '';
-      procPackages = [ pkgs.opensmtpd-extras ];
+      procPackages = [ old_nixpkgs_extras.opensmtpd-extras ];
     };
 
     services.dovecot2 = {
