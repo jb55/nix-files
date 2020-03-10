@@ -4,20 +4,6 @@
 with lib;
 
 let
-  old_nixpkgs = import (builtins.fetchTarball {
-            name = "nixos-unstable-2016-09";
-            url = https://github.com/nixos/nixpkgs/archive/bce982e0822601487f593f80549acbec0c9529be.tar.gz;
-            sha256 = "0fs087s9n29s1ic6fmq5g0x81svk7axvhywjz209xzmkiisf9vmx";
-          }) {};
-
-
-  old_nixpkgs_extras = import (builtins.fetchTarball {
-          name = "nixos-unstable-2016-09";
-          url = https://github.com/nixos/nixpkgs/archive/d7cfa87eb7344f53a3ad7a71a2ccf14e2c24cb0e.tar.gz;
-          sha256 = "18lb4qi58sz722sjb0g87mbzg1y44s4bf2mdxljan79f253h5hqd";
-        }) {};
-
-
   cfg = config.services.mailz;
 
   mailbox = name: ''
@@ -171,11 +157,6 @@ in
 
   config = mkIf (cfg.enable && cfg.users != { })
   {
-    nixpkgs.config.packageOverrides = pkgs: {
-      inherit (old_nixpkgs_extras) openstmpd-extras;
-      inherit (old_nixpkgs) opensmtpd;
-    };
-
     system.activationScripts.mailz = ''
       # Make sure SpamAssassin database is present
       if ! [ -d /etc/spamassassin ]; then
@@ -202,7 +183,7 @@ in
         filter in chain filter-regex filter-spamassassin
         filter out chain filter-dkim-signer
 
-        pki ${cfg.domain} certificate "/var/lib/acme/${cfg.domain}/fullchain.pem"
+        pki ${cfg.domain} cert "/var/lib/acme/${cfg.domain}/fullchain.pem"
         pki ${cfg.domain} key "/var/lib/acme/${cfg.domain}/key.pem"
 
         table credentials file:${files.credentials}
@@ -212,10 +193,13 @@ in
         listen on 0.0.0.0 port 25 hostname ${cfg.domain} filter in tls pki ${cfg.domain}
         listen on 0.0.0.0 port 12566 hostname ${cfg.domain} filter out tls-require pki ${cfg.domain} auth <credentials>
 
-        accept from any for domain "${cfg.domain}" recipient <recipients> alias <aliases> deliver to lmtp localhost:24
-        accept from local for any relay
+        action act01 lmtp localhost:24 recipient <recipients> alias <aliases>
+        action forward forward-only
+
+        match from any for domain "${cfg.domain}" action act01
+        match for any from local action forward
       '';
-      procPackages = [ old_nixpkgs_extras.opensmtpd-extras ];
+      procPackages = [ pkgs.opensmtpd-extras ];
     };
 
     services.dovecot2 = {
