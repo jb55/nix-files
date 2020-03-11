@@ -48,22 +48,22 @@ in
 
       config = ''
         client
-        comp-lzo no
         dev tun
-        mssfix 1450
+        proto udp
+        remote 104.200.132.180 1194
+        resolv-retry infinite
+        remote-random
         nobind
+        tun-mtu 1500
+        tun-mtu-extra 32
+        mssfix 1450
         persist-key
         persist-tun
         ping 15
         ping-restart 0
         ping-timer-rem
-        proto udp
-        remote 185.244.212.196 1194
-        remote-random
         reneg-sec 0
-        resolv-retry infinite
-        tun-mtu 1500
-        tun-mtu-extra 32
+        comp-lzo no
 
         remote-cert-tls server
 
