@@ -35,6 +35,27 @@ in
   ] ++ (if !extra.is-minimal then [ (import ./bitcoin extra) ] else []);
 
   # services.guix.enable = true;
+  services.synergy.server.enable = if extra.is-minimal then false else true;
+  services.synergy.server.autoStart = true;
+  services.synergy.server.screenName = "desktop";
+  services.synergy.server.configFile = pkgs.writeText "synergy-cfg" ''
+    section: screens
+      desktop:
+      mac:
+    end
+    section: aliases
+        desktop:
+          192.168.86.26
+        mac:
+          192.168.86.232
+    end
+    section: links
+      desktop:
+          left = mac
+      mac:
+          right = desktop
+    end
+  '';
 
   services.bitlbee.enable = if extra.is-minimal then false else true;
   services.bitlbee.libpurple_plugins = with pkgs; [
