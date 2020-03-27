@@ -25,21 +25,35 @@ in
 
   services.gnome3.gnome-keyring.enable = true;
 
-  services.trezord.enable = true;
+  services.trezord.enable = if extra.is-minimal then false else true;
+
+  services.spotifyd.enable = if extra.is-minimal then false else true;
+  services.spotifyd.config = ''
+    [global]
+    username = bcasarin
+    password = ${secrets.spotify.password}
+    backend = pulseaudio
+    bitrate = 160
+    device_name = spotifyd
+    no_audio_cache = true
+    volume_normalisation = true
+    normalisation_pregain = -10
+  '';
 
   programs.gnupg.trezor-agent = {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     configPath = "/home/jb55/.gnupg";
   };
 
-  services.emacs.enable = true;
-  services.emacs.install = true;
+  services.emacs.enable = if extra.is-minimal then false else true;
+  services.emacs.install = if extra.is-minimal then false else true;
 
   systemd.user.services.emacs.path = with pkgs; [ bash nix ];
   systemd.user.services.emacs.serviceConfig.ExecStart =
     let
       cfg = config.services.emacs;
     in
+      lib.mkIf (!extra.is-minimal) (
       lib.mkForce (
         pkgs.writeScript "start-emacs" ''
           #!/usr/bin/env bash

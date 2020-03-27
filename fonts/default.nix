@@ -1,3 +1,4 @@
+extra:
 { config, lib, pkgs, ... }:
 let mkfont = n: lesrc:
                pkgs.stdenv.mkDerivation rec {
@@ -81,26 +82,26 @@ in
     fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     fonts = with pkgs; [
-      aldrich
-      corefonts
-      emojione
-      fira-code
-      fira-mono
-      inconsolata
-      ipafont
-      kochi-substitute
-      libertinus
-      ibm-plex
-      noto-fonts
-      noto-fonts-emoji
-      opensans-ttf
-      raleway
-      profont
+      #aldrich
+      #corefonts
+      #emojione
+      #fira-code
+      #fira-mono
+      #inconsolata
+      #ipafont
+      #kochi-substitute
+      #libertinus
+      #ibm-plex
+      #noto-fonts
+      #noto-fonts-emoji
+      #opensans-ttf
+      #raleway
+      #profont
       terminus_font
-      paratype-pt-mono
-      source-code-pro
-      ubuntu_font_family
-      proggyfonts
+      #paratype-pt-mono
+      #source-code-pro
+      #ubuntu_font_family
+      #proggyfonts
     ] ++ myfonts;
   };
 }

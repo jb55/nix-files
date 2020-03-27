@@ -1,3 +1,4 @@
+extra:
 { config, lib, pkgs, ... }:
 let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     kindle-send = pkgs.callPackage (pkgs.fetchFromGitHub {
@@ -23,47 +24,57 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
     ];
+
+    minimal-pkgs = with pkgs; [
+      git-tools
+      neovim
+      fzf
+      ripgrep
+    ];
+
+    mypkgs = with pkgs; myHaskellPackages ++ myPackages ++ [
+      aspell
+      aspellDicts.en
+      aspellDicts.en-computers
+      aspellDicts.en-science
+      bat
+      bc
+      binutils
+      dateutils
+      direnv
+      file
+      fzf
+      git-tools
+      gnupg
+      groff
+      haskellPackages.una
+      htop
+      imagemagick
+      jq
+      libbitcoin-explorer
+      libqalculate
+      lsof
+      manpages
+      neovim
+      network-tools
+      nixify
+      par
+      parallel
+      patchelf
+      pv
+      python
+      ranger
+      ripgrep
+      rsync
+      screen
+      shellcheck
+      unixtools.xxd
+      unzip
+      weechat
+      wget
+      zip
+      zstd
+    ];
 in {
-  environment.systemPackages = with pkgs; myHaskellPackages ++ myPackages ++ [
-    aspell
-    aspellDicts.en
-    aspellDicts.en-computers
-    aspellDicts.en-science
-    bat
-    bc
-    binutils
-    dateutils
-    direnv
-    file
-    fzf
-    git-tools
-    gnupg
-    groff
-    haskellPackages.una
-    htop
-    imagemagick
-    jq
-    libbitcoin-explorer
-    libqalculate
-    lsof
-    manpages
-    neovim
-    network-tools
-    nixify
-    par
-    parallel
-    patchelf
-    pv
-    python
-    ranger
-    ripgrep
-    rsync
-    screen
-    shellcheck
-    unzip
-    weechat
-    wget
-    zip
-    zstd
-  ];
+  environment.systemPackages = if extra.is-minimal then minimal-pkgs else mypkgs;
 }

@@ -27,7 +27,7 @@ in
     ./hardware
     ./contracts/commit
     ./contracts/plastiq
-    (import ./bitcoin extra)
+    (if extra.is-minimal then (import ./bitcoin extra) else [])
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
@@ -36,7 +36,7 @@ in
 
   # services.guix.enable = true;
 
-  services.bitlbee.enable = true;
+  services.bitlbee.enable = if extra.is-minimal then false else true;
   services.bitlbee.libpurple_plugins = with pkgs; [
     pidgin-skypeweb
     purple-facebook
@@ -104,9 +104,9 @@ in
     startAt = "Mon..Fri *-*-* 17:00:00";
   };
 
-  virtualisation.docker.enable = true;
-  virtualisation.virtualbox.host.enable = false;
-  virtualisation.virtualbox.host.enableHardening = true;
+  virtualisation.docker.enable = if extra.is-minimal then false else true;
+  virtualisation.virtualbox.host.enable = if extra.is-minimal then false else false;
+  virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" ];
 
@@ -121,23 +121,23 @@ in
 
   documentation.nixos.enable = false;
 
-  services.trezord.enable = true;
-  services.redis.enable = true;
-  services.zerotierone.enable = true;
-  services.mongodb.enable = true;
+  # services.trezord.enable = if extra.is-minimal then false else true;
+  services.redis.enable = if extra.is-minimal then false else true;
+  services.zerotierone.enable = if extra.is-minimal then false else true;
+  services.mongodb.enable = if extra.is-minimal then false else false;
 
-  services.tor.enable = true;
+  services.tor.enable = if extra.is-minimal then false else true;
   services.tor.controlPort = 9051;
   services.tor.client.enable = true;
   services.tor.extraConfig = extra.private.tor.extraConfig;
 
-  services.fcgiwrap.enable = true;
+  services.fcgiwrap.enable = if extra.is-minimal then false else true;
 
   services.nix-serve.enable = false;
   services.nix-serve.bindAddress = nix-serve.bindAddress;
   services.nix-serve.port = nix-serve.port;
 
-  services.nginx.enable = true;
+  services.nginx.enable = if extra.is-minimal then false else true;
   services.nginx.httpConfig = ''
       server {
         listen      80 default_server;

@@ -55,7 +55,7 @@ in
   #};
 
   services.bitcoind = {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     dataDir = bitcoinDataDir;
     configFile = bitcoin-conf-file;
     user = "jb55";

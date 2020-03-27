@@ -13,6 +13,7 @@ let machine = "monad";
       machineSessionCommands = machineConfig.sessionCommands;
     };
     extra = {
+      is-minimal = true;
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix;
@@ -55,14 +56,14 @@ in {
       ./hardware-configuration.nix
       ./certs
       (import ./services extra)
-      ./environment
+      (import ./environment extra)
       (import ./networking machine)
       (import (machinePath "") extra)
     ] ++ (if isDesktop then [
       ./hardware/desktop
       # ./wayland
-      ./fonts
-      (import ./environment/desktop { inherit userConfig theme icon-theme; })
+      (import ./fonts extra)
+      (import ./environment/desktop { inherit userConfig theme icon-theme extra; })
       (import ./services/desktop { inherit extra util composeKey userConfig theme icon-theme; })
     ] else []);
 

@@ -57,7 +57,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
 in
 with extra; {
   systemd.user.services.email-fetcher = {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     description = "email fetcher";
 
     environment = {
