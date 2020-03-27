@@ -21,10 +21,10 @@ in {
 
   packageOverrides = super: rec {
 
-    linuxPackages = super.linuxPackages_latest;
+    # linuxPackages = super.linuxPackages_latest;
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
-    emacs = super.emacsHead;
+    #emacs = super.emacsHead;
     nur = import (builtins.fetchTarball {
       url = "https://github.com/nix-community/NUR/archive/cff4dfbe6d6f4ab14560234fcf2d73332ee3ecc1.tar.gz";
       sha256 = "01yxz6w820vryirrwkmsnxkmvp35dncjp1n8fdfsq4n0r28nw31a";
@@ -50,7 +50,7 @@ in {
       patches =
         [ (super.fetchurl
           { url = "https://jb55.com/s/0001-wallet-Replace-w-by-wallet-name-in-walletnotify-scri.patch";
-            sha256 = "06l46ymqfgbngf59nna6dm6ghzjxpgsrsb82klh94vg1rbkmlypf";
+            sha256 = "764775f9987548a07e6a03c7b072f93e26bd1b8c3cdeec855e399a4ed5301311";
           })
         ];
     });
@@ -73,11 +73,15 @@ in {
 
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
-    wine = super.wine.override { wineBuild = "wineWow"; };
+    wine = wine64-unstable;
 
-    wineUnstable = super.wineUnstable.override { wineBuild = "wineWow"; };
+    wine64-unstable = super.wineWowPackages.full.override {
+      wineRelease = "unstable";
+    };
 
-    bluez = pkgs.bluez5;
+    # wineUnstable = super.wineUnstable.override { wineBuild = "wineWow"; };
+
+    #bluez = pkgs.bluez5;
 
     #nvidia_x11 = super.nvidia_x11_beta;
 
@@ -145,7 +149,7 @@ in {
         ];
     });
 
-    ical2org = super.callPackage ./scripts/ical2org { };
+    #ical2org = super.callPackage ./scripts/ical2org { };
 
     footswitch = super.callPackage ./scripts/footswitch { };
 
