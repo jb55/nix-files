@@ -238,14 +238,13 @@ in
   #   serviceConfig.ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -f ${pkgs.jb55-dotfiles}/.xbindkeysrc";
   # };
 
-  # TODO: maybe doesn't have my package env
-  systemd.user.services.twmnd = {
-    enable      = true;
+  systemd.user.services.dunst = {
+    enable      = if extra.is-minimal then false else true;
 
-    description = "tiling window manager notifier";
+    description = "dunst notifier";
     wantedBy    = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
-    serviceConfig.ExecStart = "${pkgs.twmn}/bin/twmnd";
+    serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst";
   };
 
   systemd.user.services.xinitrc = {
