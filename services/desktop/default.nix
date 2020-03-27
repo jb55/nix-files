@@ -141,11 +141,6 @@ in
     };
   };
 
-  services.udev.extraRules = ''
-
-
-  '';
-
   hardware.opengl.enable = true;
 
   services.xserver = {
@@ -160,12 +155,8 @@ in
 
     wacom.enable = false;
 
-    desktopManager = {
-      default = "none";
-      xterm.enable = false;
-    };
-
     displayManager = {
+      defaultSession = "none+xmonad";
       sessionCommands = "${userConfig}/bin/xinitrc";
       lightdm = {
         enable = true;
@@ -176,18 +167,21 @@ in
       };
     };
 
-    screenSection = ''
-      Option "metamodes" "1920x1080_144 +0+0"
-      Option "dpi" "96 x 96"
-    '';
-
     windowManager = {
       xmonad = {
         enable = true;
         enableContribAndExtras = true;
       };
-      default = "xmonad";
     };
+
+    desktopManager = {
+      xterm.enable = false;
+    };
+
+    screenSection = ''
+      Option "metamodes" "1920x1080_144 +0+0"
+      Option "dpi" "96 x 96"
+    '';
   };
 
   # Enable the OpenSSH daemon.
