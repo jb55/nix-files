@@ -23,7 +23,7 @@ in
     haskellPackages = pkgs.haskellPackages;
   };
 
-  services.gnome3.gnome-keyring.enable = true;
+  services.gnome3.gnome-keyring.enable = if extra.is-minimal then false else true;
 
   services.trezord.enable = if extra.is-minimal then false else true;
 
@@ -82,7 +82,7 @@ in
   location.longitude = -123.109353;
 
   systemd.user.services.udiskie =  {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     description = "userspace removable drive automounter";
     after    = [ "multi-user.target" ];
     wants    = [ "multi-user.target" ];
@@ -193,7 +193,7 @@ in
   # Enable the OpenSSH daemon.
   # Enable CUPS to print documents.
   services.printing = {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     drivers = [ pkgs.gutenprint ] ;
   };
 
@@ -221,7 +221,7 @@ in
 
   environment.systemPackages = [pkgs.phonectl];
   systemd.user.services.phonectl = {
-    enable      = true;
+    enable      = if extra.is-minimal then false else true;
     description = "phonectl";
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];

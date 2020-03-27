@@ -27,12 +27,12 @@ in
     ./hardware
     ./contracts/commit
     ./contracts/plastiq
-    (if extra.is-minimal then (import ./bitcoin extra) else [])
+    
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
-  ];
+  ] ++ (if !extra.is-minimal then [ (import ./bitcoin extra) ] else []);
 
   # services.guix.enable = true;
 
