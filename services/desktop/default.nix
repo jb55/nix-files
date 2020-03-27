@@ -94,7 +94,7 @@ in
   };
 
   systemd.user.services.kindle-sync3 = {
-    enable = true;
+    enable = false;
     description = "sync kindle";
     after    = [ "media-kindle.mount" ];
     requires = [ "media-kindle.mount" ];
