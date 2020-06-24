@@ -81,27 +81,28 @@ in
     fontconfig.defaultFonts.serif = [ "Bookerly" ];
     fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
-    fonts = with pkgs; [
-      #aldrich
-      #corefonts
-      #emojione
-      #fira-code
-      #fira-mono
-      #inconsolata
-      #ipafont
-      #kochi-substitute
-      #libertinus
-      #ibm-plex
-      #noto-fonts
-      #noto-fonts-emoji
-      #opensans-ttf
-      #raleway
-      #profont
+    enableDefaultFonts = if extra.is-minimal then false else true;
+    fonts = if extra.is-minimal then [pkgs.terminus_font] else (with pkgs; [
+      aldrich
+      corefonts
+      # emojione
+      fira-code
+      fira-mono
+      inconsolata
+      ipafont
+      kochi-substitute
+      libertinus
+      ibm-plex
+      noto-fonts
+      noto-fonts-emoji
+      opensans-ttf
+      raleway
+      profont
       terminus_font
-      #paratype-pt-mono
-      #source-code-pro
-      #ubuntu_font_family
-      #proggyfonts
-    ] ++ myfonts;
+      paratype-pt-mono
+      source-code-pro
+      ubuntu_font_family
+      proggyfonts
+    ] ++ myfonts);
   };
 }

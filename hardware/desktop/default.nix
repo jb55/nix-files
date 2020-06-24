@@ -1,3 +1,4 @@
+extra:
 { config, lib, pkgs, ... }:
 let
   kindle-opts = ["noatime" "user" "gid=100" "uid=1000" "utf8" "x-systemd.automount"];
@@ -50,10 +51,10 @@ in
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:054C:05C4.*", MODE="0666"
 
     # Nintendo Switch Pro Controller over USB hidraw
-    #KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0666"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0666"
 
     # Nintendo Switch Pro Controller over bluetooth hidraw
-    #KERNEL=="hidraw*", KERNELS=="*057E:2009*", MODE="0666"
+    KERNEL=="hidraw*", KERNELS=="*057E:2009*", MODE="0666"
 
     # rtl-sdr
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2832", MODE="0666", SYMLINK+="rtl_sdr"
@@ -100,7 +101,7 @@ in
   hardware = {
     bluetooth.enable = true;
     pulseaudio = {
-      package = pkgs.pulseaudioFull;
+      package = if extra.is-minimal then pkgs.pulseaudio else pkgs.pulseaudioFull;
       enable = true;
       support32Bit = true;
     };

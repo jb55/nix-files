@@ -25,14 +25,28 @@ in
 {
   imports = [
     ./hardware
-    ./contracts/commit
-    ./contracts/plastiq
-    
+    # ./contracts/commit
+    # ./contracts/plastiq
+
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
     (import ../../misc/imap-notifier extra)
   ] ++ (if !extra.is-minimal then [ (import ./bitcoin extra) ] else []);
+
+  hardware.steam-hardware.enable = true;
+
+  services.prometheus.enable = false;
+  # services.prometheus.dataDir = "/zbig/data/prometheus";
+  services.grafana.enable = false;
+  services.grafana.port = 3005;
+  services.grafana.provision.datasources = [
+    { name = "bitcoin";
+      type = "prometheus";
+      access = "direct";
+      isDefault = true;
+    }
+  ];
 
   # services.guix.enable = true;
   services.synergy.server.enable = if extra.is-minimal then false else true;
@@ -66,13 +80,43 @@ in
     purple-matrix
   ];
 
-  services.bitlbee.plugins = with pkgs; [
-    bitlbee-discord
-    bitlbee-mastodon
-  ];
+  # services.thelounge.enable = true;
+  # services.thelounge.theme = "thelounge-theme-mininapse";
+  # services.thelounge.port = 9002;
+
+  services.dnscrypt-proxy2.enable = false;
+  services.dnscrypt-proxy2.settings = {
+
+    listen_addresses = [ "127.0.0.1:43" ];
+    server_names = ["cs-ca2" "ev-to"];
+    fallback_resolver = "1.1.1.1:53";
+    sources = {
+      public-resolvers = {
+        urls = ["https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v2/public-resolvers.md"
+                "https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md"
+               ];
+        cache_file = "public-resolvers.md";
+        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+        refresh_delay = 71;
+      };
+
+      relays = {
+        urls = ["https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v2/relays.md"];
+        cache_file = "relays.md";
+        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+        refresh_delay = 71;
+      };
+    };
+    anonymized_dns.routes = [
+      { server_name="cs-ca2"; via=["anon-ev-va"]; }
+      { server_name="ev-to"; via=["anon-cs-ca2"]; }
+    ];
+  };
 
   services.dnsmasq.enable = true;
   services.dnsmasq.resolveLocalQueries = true;
+  #services.dnsmasq.servers = ["127.0.0.1#43"];
+  # services.dnsmasq.servers = ["127.0.0.1#43" "1.1.1.1" "8.8.8.8"];
   services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
   services.dnsmasq.extraConfig = ''
     cache-size=10000
@@ -80,6 +124,12 @@ in
     conf-file=/var/dnsmasq-hosts
     conf-file=/var/distracting-hosts
   '';
+
+
+  services.bitlbee.plugins = with pkgs; [
+    bitlbee-discord
+    bitlbee-mastodon
+  ];
 
   # shitcoin vendor
   services.keybase.enable = false;
@@ -102,7 +152,7 @@ in
   };
 
   systemd.user.services.stop-spotify-bedtime = {
-    enable      = true;
+    enable      = if extra.is-minimal then false else true;
     description = "Stop spotify when Elliott goes to bed";
     wantedBy    = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
@@ -112,6 +162,8 @@ in
   };
 
   systemd.services.unblock-distracting-hosts = {
+    enable = if extra.is-minimal then false else true;
+
     description = "Unblock Distracting Hosts";
 
     path = with pkgs; [ systemd ];
@@ -126,7 +178,7 @@ in
   };
 
   virtualisation.docker.enable = if extra.is-minimal then false else true;
-  virtualisation.virtualbox.host.enable = if extra.is-minimal then false else false;
+  virtualisation.virtualbox.host.enable = if extra.is-minimal then false else true;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
   users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" ];
@@ -139,6 +191,7 @@ in
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
   programs.mosh.enable = false;
+  programs.adb.enable = true;
 
   documentation.nixos.enable = false;
 
@@ -199,11 +252,11 @@ in
       }
     '' else "") + (if config.services.tor.enable then extra.private.tor.nginx else "");
 
-  services.footswitch = {
-    enable = false;
-    enable-led = true;
-    led = "input5::numlock";
-  };
+  # services.footswitch = {
+  #   enable = false;
+  #   enable-led = true;
+  #   led = "input5::numlock";
+  # };
 
   systemd.services.disable-c6 = {
     description = "Ryzen Disable C6 State";
@@ -217,6 +270,9 @@ in
       ${pkgs.python2}/bin/python ${zenstates}/zenstates.py --c6-disable --list
     '';
   };
+
+  services.mysql.enable = true;
+  services.mysql.package = pkgs.mariadb;
 
   # services.postgresql = {
   #   dataDir = "/var/db/postgresql/100/";

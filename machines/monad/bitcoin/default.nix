@@ -6,6 +6,7 @@ let
 
   base-bitcoin-conf = ''
     txindex=1
+    dbcache=32
     rpcuser=rpcuser
     rpcpassword=rpcpass
     rpcallowip=172.24.129.211

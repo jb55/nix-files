@@ -8,7 +8,6 @@ let
   clippings-pl = util.writeBash "clippings.pl" ''
     ${lib.getBin pkgs.perl}/bin/perl ${clippings-pl-file}
   '';
-  clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
 
   secrets = extra.private;
 in
@@ -18,7 +17,7 @@ in
   ];
 
   services.hoogle = {
-    enable = false;
+    enable = true;
     packages = pkgs.myHaskellPackages;
     haskellPackages = pkgs.haskellPackages;
   };
@@ -40,10 +39,13 @@ in
     normalisation_pregain = -10
   '';
 
-  programs.gnupg.trezor-agent = {
-    enable = if extra.is-minimal then false else true;
-    configPath = "/home/jb55/.gnupg";
-  };
+  programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.pinentryFlavor = "gtk2";
+
+  # programs.gnupg.trezor-agent = {
+  #   enable = if extra.is-minimal then false else true;
+  #   configPath = "/home/jb55/.gnupg";
+  # };
 
   services.emacs.enable = if extra.is-minimal then false else true;
   services.emacs.install = if extra.is-minimal then false else true;
@@ -68,7 +70,7 @@ in
       ));
 
   services.redshift = {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     temperature.day = 5500;
     temperature.night = 4300;
 
@@ -191,6 +193,15 @@ in
     drivers = [ pkgs.gutenprint ] ;
   };
 
+  systemd.user.services.standup = {
+    enable   = if extra.is-minimal then false else true;
+    description = "Standup notification";
+    wantedBy = [ "graphical-session.target" ];
+    after    = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.libnotify}/bin/notify-send -u critical standup";
+    startAt = "Mon..Fri *-*-* 9:28:00";
+  };
+
   systemd.user.services.urxvtd = {
     enable = true;
     description = "RXVT-Unicode Daemon";
@@ -208,7 +219,7 @@ in
     description = "X auto screen locker";
     wantedBy    = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
-    serviceConfig.ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker slock";
+    serviceConfig.ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker ${pkgs.slock}/bin/slock";
   };
 
   services.clipmenu.enable = true;

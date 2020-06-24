@@ -60,7 +60,7 @@ in {
       (import ./networking machine)
       (import (machinePath "") extra)
     ] ++ (if isDesktop then [
-      ./hardware/desktop
+      (import ./hardware/desktop extra)
       # ./wayland
       (import ./fonts extra)
       (import ./environment/desktop { inherit userConfig theme icon-theme extra; })

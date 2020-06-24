@@ -14,7 +14,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        csv-scripts
        dbopen
        extname
-       #kindle-send
+       kindle-send
        mandown
        samp
        sharefile
@@ -55,9 +55,11 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       libqalculate
       lsof
       manpages
+      minisign
       neovim
       network-tools
       nixify
+      nodejs
       par
       parallel
       patchelf
@@ -74,6 +76,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       wget
       zip
       zstd
+      opentimestamps-client
     ];
 in {
   environment.systemPackages = if extra.is-minimal then minimal-pkgs else mypkgs;

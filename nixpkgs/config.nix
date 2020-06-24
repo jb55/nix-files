@@ -1,6 +1,6 @@
 { pkgs }:
-let monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
-    haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
+let #monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
+    #haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     callPackage = pkgs.callPackage;
     doJailbreak = pkgs.haskell.lib.doJailbreak;
@@ -14,10 +14,10 @@ in {
   allowBroken = false;
   zathura.useMupdf = true;
 
-  firefox = {
-    enableGoogleTalkPlugin = true;
-    enableAdobeFlash = true;
-  };
+  #firefox = #{
+  #   enableGoogleTalkPlugin = false;
+  #   enableAdobeFlash = false;
+  # };
 
   packageOverrides = super: rec {
 
@@ -31,6 +31,15 @@ in {
     }) {
       inherit pkgs;
     };
+
+    # mesa = pkgs.lib.overrideDerivation super.mesa (attrs: {
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "jb55";
+    #     repo = "mesa";
+    #     rev = "8bit-aco";
+    #     sha256 = "04cbmf807vvnsjfwrngjr60b4jfy0r2lkx0m62ygxmn3iazg2606";
+    #   };
+    # });
 
     weechat = super.weechat.override {configure = {availablePlugins, ...}: {
         scripts = with super.weechatScripts; [ wee-slack ];
@@ -55,11 +64,15 @@ in {
         ];
     });
 
+    pidgin-with-plugins = super.pidgin-with-plugins.override {
+      plugins = with super; [ purple-lurch ];
+    };
+
     bitcoin = pkgs.lib.overrideDerivation super.bitcoin (attrs: {
       patches =
         [ (super.fetchurl
           { url = "https://jb55.com/s/0001-wallet-Replace-w-by-wallet-name-in-walletnotify-scri.patch";
-            sha256 = "06l46ymqfgbngf59nna6dm6ghzjxpgsrsb82klh94vg1rbkmlypf";
+            sha256 = "764775f9987548a07e6a03c7b072f93e26bd1b8c3cdeec855e399a4ed5301311";
           })
         ];
     });
@@ -73,15 +86,15 @@ in {
 
     lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
-    wine = wine64-unstable;
+    wine = super.wineWowPackages.staging;
 
-    wine64-unstable = super.wineWowPackages.full.override {
-      wineRelease = "unstable";
-    };
+    # wine = wine64-unstable;
+
+    # wine64-unstable = super.wineWowPackages.full.override {
+    #   wineRelease = "unstable";
+    # };
 
     # wineUnstable = super.wineUnstable.override { wineBuild = "wineWow"; };
-
-    #bluez = pkgs.bluez5;
 
     #nvidia_x11 = super.nvidia_x11_beta;
 
@@ -151,7 +164,7 @@ in {
 
     #ical2org = super.callPackage ./scripts/ical2org { };
 
-    footswitch = super.callPackage ./scripts/footswitch { };
+    #footswitch = super.callPackage ./scripts/footswitch { };
 
     ds4ctl = super.callPackage ./scripts/ds4ctl { };
 
@@ -195,21 +208,21 @@ in {
       ];
     };
 
-    mk-rust-env = name: rustVer: pkgs.buildEnv {
-      name = "rust-dev-${name}";
-      paths = with pkgs; with rustVer; [
-        clang
-        rustracer
-        rustracerd
-        rust
-        #cargo-edit
-        #rustfmt
-        rust-bindgen
-      ];
-    };
+    # mk-rust-env = name: rustVer: pkgs.buildEnv {
+    #   name = "rust-dev-${name}";
+    #   paths = with pkgs; with rustVer; [
+    #     clang
+    #     rustracer
+    #     rustracerd
+    #     rust
+    #     #cargo-edit
+    #     #rustfmt
+    #     rust-bindgen
+    #   ];
+    # };
 
-    rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustChannels.nightly;
-    rust-dev-env-beta = mk-rust-env "beta" pkgs.rustChannels.beta;
+    #rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustChannels.nightly;
+    #rust-dev-env-beta = mk-rust-env "beta" pkgs.rustChannels.beta;
 
     gaming-env = pkgs.buildEnv {
       name = "gaming";
@@ -287,16 +300,11 @@ in {
         diffstat
         diffutils
         gist
-        # git-lfs
         git-series
-        gitAndTools.diff-so-fancy
-        gitAndTools.git-imerge
         gitAndTools.git-extras
+        gitAndTools.git-absorb
+        gitAndTools.delta
         gitAndTools.gitFull
-        gitAndTools.hub
-        gitAndTools.tig
-        #haskPkgs.git-all
-        #haskPkgs.git-monitor
         github-release
         patch
         patchutils
@@ -346,21 +354,22 @@ in {
       aeson-qq
       async
       attoparsec
-      base32-bytestring
+      # base32-bytestring
       base32string
       base58-bytestring
       bifunctors
-      bitcoin-api
-      bitcoin-api-extra
-      bitcoin-block
-      bitcoin-script
-      bitcoin-tx
+      # bitcoin-api
+      # bitcoin-api-extra
+      unliftio
+      # bitcoin-block
+      # bitcoin-script
+      # bitcoin-tx
       blaze-builder
       blaze-builder-conduit
       blaze-html
       blaze-markup
       blaze-textual
-      bson-lens
+      # bson-lens
       #bytestring-show
       cased
       cassava
@@ -414,7 +423,7 @@ in {
       lifted-base
       linear
       list-extras
-      list-t
+      # list-t
       logict
       mbox
       mime-mail
@@ -428,7 +437,7 @@ in {
       monad-par-extras
       monad-stm
       monadloc
-      mongoDB
+      # mongoDB
       monoid-extras
       neat-interpolation
       network
@@ -515,7 +524,7 @@ in {
       test-framework
       test-framework-hunit
       text
-      text-format
+      # text-format
       text-regex-replace
       thyme
       time

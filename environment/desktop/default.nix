@@ -12,13 +12,12 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       }
       class "GtkMenuShell" binding "gtk-binding-menu"
     '';
-    clipmenu = pkgs.callPackage ../../nixpkgs/clipmenu {};
 
     mypkgs = with pkgs; [
       #icon-theme.package
       #theme.package
       #skypeforlinux
-      #texlive.combined.scheme-full
+      texlive.combined.scheme-full
       clipit
       clipmenu
       dmenu2
@@ -36,12 +35,12 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       muchsync
       notmuch
       pandoc
+      pinentry
       pavucontrol
       python37Packages.trezor
       qalculate-gtk
       qutebrowser
       rxvt_unicode-with-plugins
-      shared_mime_info
       signal-desktop
       simplescreenrecorder
       slock
@@ -55,14 +54,17 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       xbindkeys
       xclip
       xdotool
-      xfce.thunar
       xlibs.xev
       xlibs.xmodmap
       xlibs.xset
       zathura
+      colorpicker
       zoom-us
+      postgresql # psql
 
       steam
+      xboard
+      steam-run
       dolphinEmu
       wine
     ];
@@ -79,7 +81,7 @@ in {
   environment.variables = lib.mkIf (!extra.is-minimal) {
     LC_TIME="en_DK.UTF-8";
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-    #GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
+    GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
     GTK_DATA_PREFIX = "${theme.package}";
     GTK_EXEC_PREFIX = "${theme.package}";
     GTK_IM_MODULE = "xim";
@@ -89,8 +91,11 @@ in {
   };
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
-    steam 
-    rxvt_unicode-with-plugins 
+    steam
+    steam-run
+    wine
+    lastpass-cli
+    rxvt_unicode-with-plugins
   ]) else mypkgs;
 
   security.wrappers = {

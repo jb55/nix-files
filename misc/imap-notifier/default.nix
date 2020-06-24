@@ -89,6 +89,9 @@ with extra; {
 
             (
               flock -x -w 100 200 || exit 1
+              if [ -f ~/var/notify/home ]; then
+                ${pkgs.libnotify}/bin/notify-send -i email-new "Fetching new mail..."
+              fi
               muchsync -C ~/.notmuch-config-personal notmuch
               notify
             ) 200>/tmp/email-notify.lock
@@ -97,7 +100,7 @@ with extra; {
   };
 
   systemd.user.services.awake-from-sleep-fetcher = {
-    enable = true;
+    enable = if extra.is-minimal then false else true;
     description = "";
 
     path = with pkgs; [ systemd ];
