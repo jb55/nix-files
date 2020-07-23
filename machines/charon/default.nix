@@ -16,6 +16,14 @@ let gitExtra = {
       rev    = "bef839a95736588ec40c917fa63d490cd736f307";
       sha256 = "1j2xclgcmz9hbf47k4ygyzmiradfg9q30m8bzr1i2x91kz1ck946";
     }) {}).package;
+
+    gaufre = (import (pkgs.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "gaufre";
+      rev    = "fe9d3cb3a6e4616d1f2f95607cea3a0582db4872";
+      sha256 = "091lbcijfzbbr3sm4nxqzz5pdgwqlhhxsa6qy0svmk44q3nd6zvh";
+    }) {}).package;
+
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
     myemail = "jb55@jb55.com";
@@ -193,7 +201,7 @@ in
   services.prosody.extraModules = [
     # "cloud_notify"
     # "smacks"
-    # "carbons"
+    "carbons"
     # "http_upload"
   ];
   services.prosody.extraConfig = ''
@@ -235,6 +243,15 @@ in
 
     serviceConfig.Type = "simple";
     serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
+  };
+
+  systemd.services.gaufre = {
+    description = "personal gopher proxy";
+
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${gaufre}/bin/gaufre 7070";
   };
 
   #systemd.user.services.rss2email = {
@@ -373,6 +390,16 @@ in
         try_files $uri $uri/ =404;
       }
 
+      location ~ ^/[01] {
+        proxy_pass  http://localhost:7070;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+
       location /phlog {
         autoindex on;
       }
@@ -412,6 +439,16 @@ in
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
+      }
+
+      location ~ ^/[01] {
+        proxy_pass  http://localhost:7070;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
       }
 
       location / {
