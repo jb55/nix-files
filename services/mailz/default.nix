@@ -187,7 +187,7 @@ in
         listen on 0.0.0.0 port 12566 hostname ${cfg.domain} tls-require pki ${cfg.domain} auth <credentials>
 
         action "local_mail" lmtp localhost:24 alias <aliases>
-        action "outbound" relay helo "cfg.domain"
+        action "outbound" relay helo "${cfg.domain}"
 
         match from any for domain "${cfg.domain}" action "local_mail"
         match for local action "local_mail"
@@ -222,6 +222,10 @@ in
             address = 127.0.0.1 ::1
             port = 24
           }
+        }
+  
+        service imap {
+          vsz_limit = 1024 M
         }
 
         service imap-login {
