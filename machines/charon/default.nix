@@ -24,6 +24,11 @@ let gitExtra = {
       sha256 = "091lbcijfzbbr3sm4nxqzz5pdgwqlhhxsa6qy0svmk44q3nd6zvh";
     }) {}).package;
 
+    pgpkeys = pkgs.fetchurl {
+      url = "https://jb55.com/s/pgpkeys.pub";
+      sha256 = "c6ce8e29e683aea23b859d0c4205fef9ba89161e8518ad1f0d45eb0464dceecc";
+    };
+
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
     myemail = "jb55@jb55.com";
@@ -164,6 +169,13 @@ in
   };
 
   security.acme.certs."git.jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
+    email = myemail;
+  };
+
+  security.acme.certs."openpgpkey.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
     allowKeysForGroup = true;
@@ -334,6 +346,27 @@ in
     #   ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
     #   ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
     # }
+
+    server {
+      listen 80;
+      server_name openpgpkey.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+    }
+
+    server {
+      listen 443 ssl;
+      server_name openpgpkey.jb55.com;
+
+      ssl_certificate /var/lib/acme/openpgpkey.jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/openpgpkey.jb55.com/key.pem;
+
+      location /.well-known/openpgpkey/jb55.com/hu/9adqqiba8jxrhu5wf18bfapmnwjk5ybo {
+        alias ${pgpkeys};
+      }
+    }
 
     server {
       listen 443 ssl;
