@@ -159,7 +159,7 @@ in
     webroot = "/var/www/challenges";
     group = "jb55cert";
     allowKeysForGroup = true;
-    postRun = "systemctl restart prosody";
+    #postRun = "systemctl restart prosody";
     email = myemail;
   };
 
@@ -195,7 +195,7 @@ in
   };
 
   users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
-  services.prosody.enable = true;
+  services.prosody.enable = false;
   services.prosody.admins = [ "jb55@jb55.com" ];
   services.prosody.allowRegistration = false;
   services.prosody.extraModules = [
@@ -253,38 +253,6 @@ in
     serviceConfig.Type = "simple";
     serviceConfig.ExecStart = "${gaufre}/bin/gaufre 7070";
   };
-
-  #systemd.user.services.rss2email = {
-  #  description = "run rss2email";
-  #  path = with pkgs; [ rss2email ];
-  #  wantedBy = [ "default.target" ];
-  #  serviceConfig.ExecStart = "${pkgs.rss2email}/bin/r2e run";
-  #};
-
-  #systemd.user.services.backup-rss2email = {
-  #  description = "backup rss2email";
-  #  wantedBy = [ "default.target" ];
-  #  serviceConfig.ExecStart = pkgs.writeScript "backup-rss2email" ''
-  #    #!${pkgs.bash}/bin/bash
-  #    BACKUP_DIR=/home/jb55/backups/rss2email
-  #    cp /home/jb55/.config/rss2email.cfg $BACKUP_DIR
-  #    cp /home/jb55/.local/share/rss2email.json $BACKUP_DIR
-  #    cd $BACKUP_DIR
-  #    ${pkgs.git}/bin/git add -u
-  #    ${pkgs.git}/bin/git commit -m "bump"
-  #    ${pkgs.git}/bin/git push
-  #  '';
-  #};
-
-  #systemd.user.timers.backup-rss2email = {
-  #  wantedBy = [ "timers.target" ];
-  #  timerConfig.OnCalendar = "daily";
-  #};
-
-  #systemd.user.timers.rss2email = {
-  #  wantedBy = [ "timers.target" ];
-  #  timerConfig.OnCalendar = "hourly";
-  #};
 
   services.fcgiwrap.enable = true;
 
