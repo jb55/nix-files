@@ -25,8 +25,8 @@ let gitExtra = {
     }) {}).package;
 
     pgpkeys = pkgs.fetchurl {
-      url = "https://jb55.com/s/pgpkeys.pub";
-      sha256 = "c6ce8e29e683aea23b859d0c4205fef9ba89161e8518ad1f0d45eb0464dceecc";
+      url = "https://jb55.com/s/pgpkey.pub";
+      sha256 = "d264cec5342a647964f0882e444f61272768e2a885a28ba67b6a44e14d9dab28";
     };
 
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
